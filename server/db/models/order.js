@@ -32,7 +32,7 @@ const Order = db.define('order', {
     allowNull: false
   },
   state: {
-    type: Sequelize.STRING(2),
+    type: Sequelize.STRING(2), // eslint-disable-line
     allowNull: false
   },
   zip: {
