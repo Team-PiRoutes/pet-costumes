@@ -20,14 +20,19 @@ const Review = require('./review')
  * instead of: const User = require('../db/models/user')
  */
 
+
+Category.belongsToMany(Product, { through: 'ProductCategory' })
 Product.belongsToMany(Order, { through: 'lineItems' })
 Order.belongsToMany(Product, { through: 'lineItems' })
 Review.belongsTo(User, { as: 'customer' })
+
 
 module.exports = {
   User,
   Order,
   Product,
   LineItem,
-  Review
+  Review,
+  Category
 }
+
