@@ -22,7 +22,8 @@ const Product = db.define('product', {
   },
   photoUrl: {
     type: Sequelize.STRING,
-    allowNull: true
+    allowNull: true,
+    defaultValue: '/img/defaultDogCostume.jpg'
   },
   size: {
     type: Sequelize.STRING,
