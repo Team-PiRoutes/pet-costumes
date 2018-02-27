@@ -8,6 +8,9 @@ describe('Category model', () => {
     it('should have a label', () => {
       expect(Category.attributes.label).to.be.an('object')
       expect(Category.attributes.label.allowNull).to.equal(false)
+
+    })
+    it('Categories should be Unique', () => {
       expect(Category.attributes.label.unique).to.equal(true)
     })
   })
