@@ -20,14 +20,25 @@ const User = db.define('user', {
     type: Sequelize.STRING,
     // Making `.salt` act like a function hides it when serializing to JSON.
     // This is a hack to get around Sequelize's lack of a "private" option.
-    get () {
+    get() {
       return () => this.getDataValue('salt')
     }
   },
   googleId: {
     type: Sequelize.STRING
+  },
+  isAdmin: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
   }
-})
+
+},
+  {
+    /* this causes a soft delete when we .destroy
+    the 'deleteAt' collumn will get a date and time of deletion
+    to really destroy the record user.destroy({force:true}) */
+    paranoid: true
+  })
 
 module.exports = User
 
