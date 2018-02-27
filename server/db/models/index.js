@@ -2,6 +2,7 @@ const User = require('./user')
 const Order = require('./order')
 const Product = require('./product')
 const LineItem = require('./line-item')
+const Category = require('./category')
 
 
 /**
@@ -18,8 +19,8 @@ const LineItem = require('./line-item')
  * instead of: const User = require('../db/models/user')
  */
 
-Product.belongsToMany(Order, {through: 'LineItem'})
-Order.belongsToMany(Product, {through: 'LineItem'})
+Product.belongsToMany(Order, { through: 'LineItem' })
+Order.belongsToMany(Product, { through: 'LineItem' })
 
 module.exports = {
   User,
