@@ -1,25 +1,41 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
 
-//should we add order status?
-
-//should address be a separate module?
-//addressLine1
-//addressLine2
-//city
-//state
-//zipcode
-
 const Order = db.define('order', {
   userId: {
     type: Sequelize.STRING
+  },
+  orderStatus: {
+    type: Sequelize.ENUM,
+    values: ['created', 'processing', 'cancelled', 'completed']
+  },
+  isShipped: {
+    type: Sequelize.DATE
+  },
+  isDelivered: {
+    type: Sequelize.DATE
   },
   email: {
     type: Sequelize.STRING,
     allowNull: false,
     unique: true
   },
-  shippingAddress: {
+  addressLine1: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  addressLine2: {
+    type: Sequelize.STRING,
+  },
+  city: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  state: {
+    type: Sequelize.STRING(2), // eslint-disable-line
+    allowNull: false
+  },
+  zip: {
     type: Sequelize.STRING,
     allowNull: false
   }
