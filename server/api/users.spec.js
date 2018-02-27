@@ -30,4 +30,30 @@ describe('User routes', () => {
         })
     })
   }) // end describe('/api/users')
+
+  describe('/api/users/:id', () => {
+    let user = {}
+
+    beforeEach('create some users', (done) => {
+      Promise.all([
+        User.create({ email: 'cody@email.com', password: '123' }),
+        User.create({ email: 'murphy@email.com', password: '123' })
+      ])
+      .then(users => {
+        user = users[0]
+        done()
+      })
+    })
+
+    it('GET /api/users/:id', () => {
+      return request(app)
+        .get(`/api/users/${user.id}`)
+        .expect(200)
+        .then(res => {
+          expect(res.body).to.be.an('object')
+          expect(res.body.email).to.be.equal('cody@email.com')
+        })
+    })
+  })
+
 }) // end describe('User routes')
