@@ -21,10 +21,12 @@ const Category = require('./category')
 
 Product.belongsToMany(Order, { through: 'LineItem' })
 Order.belongsToMany(Product, { through: 'LineItem' })
+Category.belongsToMany(Product, { through: 'ProductCategory' })
 
 module.exports = {
   User,
   Order,
   Product,
-  LineItem
+  LineItem,
+  Category
 }
