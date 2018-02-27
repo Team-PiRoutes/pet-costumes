@@ -54,6 +54,17 @@ describe('User routes', () => {
           expect(res.body.email).to.be.equal('cody@email.com')
         })
     })
+
+    // it('PUT /api/users/:id/password-reset', () => {
+    //   return request(app)
+    //     .put(`/api/users/${user.id}/password-reset`)
+    //     .send({})
+    //     .expect(200)
+    //     .then(res => {
+    //       expect(res.body).to.be.an('object')
+    //       expect(res.body.confirmed).to.be.equal(true)
+    //     })
+    // })
   })
 
 }) // end describe('User routes')
