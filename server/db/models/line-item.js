@@ -11,7 +11,7 @@ const LineItem = db.define('lineItem', {
     type: Sequelize.INTEGER,
     allowNull: false
   },
-  userId: {
+  productId: {
     type: Sequelize.INTEGER,
     allowNull: false
   },

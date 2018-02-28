@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Product from './product'
+import CartItem from './cart-item'
 
 /**
  * COMPONENT
@@ -14,18 +14,20 @@ const Cart = (props) => {
       <h3> Your Cart </h3>
 
       {
-        cart.length === 0 ? <h4> Empty Cart</h4> :
-          <ul>
-            {
+        <ul>
+          {
+            cart.length === 0 ? <h4> Your cart is empty! Your pet needs a πRoute out fit. </h4> :
               cart.map(product => (
-                <div id={`product-${product.id}`} key={product.id}>
-                  <Product product={product} />
-                </div>
+
+                <li id={`cart-item-${product.id}`} key={product.id}>
+                  <CartItem product={product} />
+                </li>
+
               ))
-            }
-          </ul>
+          }
+        </ul>
       }
-    </div>
+    </div >
   )
 }
 
@@ -36,6 +38,7 @@ const Cart = (props) => {
 
 
 const mapStateToProps = function (state) {
+  console.log('mapStatetoProps')
   return {
     cart: state.cart
   }
@@ -43,6 +46,6 @@ const mapStateToProps = function (state) {
 
 export default connect(mapStateToProps)(Cart)
 
-/**
-* PROP TYPES
-*/
+      /**
+      * PROP TYPES
+      */

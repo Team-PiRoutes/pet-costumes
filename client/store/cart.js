@@ -1,5 +1,4 @@
 import axios from 'axios'
-import history from '../history'
 
 /**
  * ACTION TYPES
@@ -16,25 +15,26 @@ const defaultCart = []
 /**
  * ACTION CREATORS
  */
-const addToCart = (product, quantity) =>
-  ({ type: ADD_ITEM, product, quantity })
+const addToCart = (item) => ({ type: ADD_ITEM, item })
 
-const updateCartQuantity = (productID, quantity) =>
-  ({ type: CHANGE_QTY, productID, quantity })
+const updateCartQuantity = (update) => ({ type: CHANGE_QTY, update })
 
 /**
  * THUNK CREATORS
  */
-export const addProductToCart = (product, quantity) => {
-  //for ASYNC behavior when we persist.
+export const addProductToCart = (itemForCart) => {
+  //Cart persisting in these brackets here most likely
+  const { priceInCents, quantity, productId } = itemForCart
+  const cartItem = { priceInCents, quantity, productId }
   return dispatch =>
-    dispatch(addToCart(product, quantity))
+    dispatch(addToCart(cartItem))
 }
 
-export const updateCurrentQuanity = (product, quantity) => {
-  //for ASYNC behavior when we persist.
+export const updateCurrentQuanity = (update) => {
+  //Cart persisting in these brackets here most likely
+
   return dispatch =>
-    dispatch(updateCartQuantity(product, quantity))
+    dispatch(updateCartQuantity(update))
 
 }
 
@@ -45,17 +45,15 @@ export default function (state = defaultCart, action) {
 
   switch (action.type) {
     case ADD_ITEM: {
-      let newProduct = action.product
-      newProduct.quantity = action.quantity //changes quantity in stock to amount in cart
 
-      return [...state, newProduct]
+      return [...state, action.item]
     }
     case CHANGE_QTY: {
-      let indexInCart = state.findIndex(product => product.id === action.productID)
+      let indexInCart = state.findIndex(item => item.id === action.productID)
       let updatedProduct = Object.assign(
         {},
         state[indexInCart],
-        { quantity: action.quantity }
+        { quantity: action.update.quantity }
       ) //end object.assign
 
 
