@@ -8,7 +8,7 @@ const GOT_PRODUCTS = 'GOT_PRODUCTS'
 /**
  * INITIAL STATE
  */
-
+const defaultProducts = []
 
 /**
  * ACTION CREATORS
@@ -30,7 +30,7 @@ export const fetchProducts = () =>
 /**
  * REDUCER
  */
-export default function (state = [], action){
+export default function (state = defaultProducts, action){
   switch (action.type) {
     case GOT_PRODUCTS: return action.products
     default: return state
