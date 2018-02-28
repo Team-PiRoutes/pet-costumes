@@ -5,7 +5,7 @@ const { Order } = require('../db/models')
 
 router.get('/admin/list-orders', (req, res, next) => {
   Order.findAll({
-    attributes: ['id', 'email', 'city', 'state']
+    attributes: ['id', 'email', 'orderStatus', 'city', 'state']
   })
     .then((orders) => res.json(orders))
     .catch(next)
