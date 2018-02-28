@@ -18,13 +18,14 @@ const getProducts = products => ({ type: GOT_PRODUCTS, products })
 /**
  * THUNK CREATORS
  */
-export const products = () =>
+export const fetchProducts = () =>
   dispatch =>
-    axios.get('/products')
+    axios.get('/api/products')
       .then(res => res.data)
-      .then(allProducts => {
-        dispatch(getProducts(allProducts))
+      .then(products => {
+        dispatch(getProducts(products))
       })
+      .catch(err => console.error('fetching products went wrong', err))
 
 /**
  * REDUCER
