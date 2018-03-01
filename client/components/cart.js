@@ -18,7 +18,11 @@ const Cart = (props) => {
           {
             cart.length === 0 ? <h4> Your cart is empty! Your pet needs a πRoute outfit. </h4> :
               cart.map(product => (
-                <CartItem product={product} />
+
+                <li id={`cart-item-${product.id}`} key={product.id}>
+                  <CartItem product={product} />
+                </li>
+
               ))
           }
         </ul>

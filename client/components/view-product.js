@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import Reviews from './reviews'
 
 class ViewProduct extends Component {
   constructor(props) {
@@ -10,8 +11,9 @@ class ViewProduct extends Component {
   }
 
   componentDidMount() {
+
     const productId = this.props.match.params.productId
-    console.log('productId: ', productId)
+
     axios.get(`/api/products/${productId}`)
       .then(res => res.data)
       .then(product => {
@@ -23,6 +25,7 @@ class ViewProduct extends Component {
   render() {
 
     const { product } = this.state
+    const reviews = product.reviews
 
     return (
       <div>
@@ -31,6 +34,7 @@ class ViewProduct extends Component {
         <p>Price: {product.priceInCents}</p>
         <p>Quantity: {product.quantity}</p>
         <p>Size: {product.size}</p>
+        <Reviews reviews={reviews} />
         <img src={product.photoUrl} />
       </div>
     )

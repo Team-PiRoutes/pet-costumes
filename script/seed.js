@@ -10,7 +10,7 @@
  * Now that you've got the main idea, check it out in practice below!
  */
 const db = require('../server/db')
-const { User, Product, Order, Cart, CartItem } = require('../server/db/models')
+const { User, Product, Order, Cart, CartItem, Review } = require('../server/db/models')
 
 async function seed() {
   await db.sync({ force: true })
@@ -71,7 +71,7 @@ async function seed() {
     Order.create({
       email: 'whyNotALizard@gmail.com',
       orderStatus: 'created',
-      addressLine1: '123 Egon Rd',
+      addressLine1: '123 Egon Rd', s
       city: 'Coldblood Bluff',
       state: 'IL',
       zip: '99299'
@@ -110,6 +110,34 @@ async function seed() {
   // console.log(`seeded ${carts.length} carts`)
   //   Cart.create({
   //   })])
+  const reviews = await Promise.all([
+    Review.create({
+      rating: 5,
+      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris',
+      productId: '1'
+    }),
+    Review.create({
+      rating: 4,
+      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam',
+      productId: '3'
+    }),
+    Review.create({
+      rating: 3,
+      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+      productId: '2'
+    }),
+    Review.create({
+      rating: 3,
+      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris',
+      productId: '2'
+    }),
+    Review.create({
+      rating: 3,
+      message: 'Lorem ipsum dolor sit amet',
+      productId: '1'
+    }),
+  ])
+
   // Wowzers! We can even `await` on the right-hand side of the assignment operator
   // and store the result that the promise resolves to in a variable! This is nice!
   console.log(`seeded ${users.length} users`)
@@ -117,6 +145,7 @@ async function seed() {
   console.log(`seeded ${orders.length} orders`)
   console.log(`seeded ${carts.length} carts`)
   console.log(`seeded ${cartItems.length} cart items`)
+  console.log(`seeded ${reviews.length} reviews`)
   console.log(`seeded successfully`)
 }
 
