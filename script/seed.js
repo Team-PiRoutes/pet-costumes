@@ -78,7 +78,13 @@ async function seed() {
     }),
   ])
 
-
+  console.log(`seeding carts`)
+  const carts = await Promise.all([
+    Cart.create({
+    }),
+    Cart.create({
+    })
+  ])
   console.log(`seeding cartItems`)
   const cartItems = await Promise.all([
     CartItem.create({
@@ -94,17 +100,13 @@ async function seed() {
       cartId: 1
     }),
     CartItem.create({
-      productId: 2,
+      productId: 1,
       priceInCents: 1340,
       quantity: 2,
-      cartId: 1
+      cartId: 2
     })])
 
-  console.log(`seeding carts`)
-  const carts = await Promise.all([
-    Cart.create({
-    })
-  ])
+
   // console.log(`seeded ${carts.length} carts`)
   //   Cart.create({
   //   })])

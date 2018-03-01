@@ -24,9 +24,9 @@ const CartItem = require('./cart-item')
  */
 
 
-Product.belongsToMany(Cart, { through: 'cartItem' })
-Cart.belongsToMany(Product, { through: 'cartItem' })
-// User.belongsToMany(Cart, { through: 'userCarts' })
+Product.belongsToMany(Cart, { through: 'CartItem' })
+Cart.hasMany(CartItem)
+User.belongsToMany(Cart, { through: 'userCarts' })
 
 
 Category.belongsToMany(Product, { through: 'ProductCategory' })
