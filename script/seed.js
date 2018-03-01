@@ -10,7 +10,7 @@
  * Now that you've got the main idea, check it out in practice below!
  */
 const db = require('../server/db')
-const { User, Product, Order } = require('../server/db/models')
+const { User, Product, Order, Review } = require('../server/db/models')
 
 async function seed() {
   await db.sync({ force: true })
@@ -77,11 +77,41 @@ async function seed() {
       zip: '99299'
     }),
   ])
+
+  const reviews = await Promise.all([
+    Review.create({
+      rating: 5,
+      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris',
+      productId: '1'
+    }),
+    Review.create({
+      rating: 4,
+      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam',
+      productId: '3'
+    }),
+    Review.create({
+      rating: 3,
+      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+      productId: '2'
+    }),
+    Review.create({
+      rating: 3,
+      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris',
+      productId: '2'
+    }),
+    Review.create({
+      rating: 3,
+      message: 'Lorem ipsum dolor sit amet',
+      productId: '1'
+    }),
+  ])
+
   // Wowzers! We can even `await` on the right-hand side of the assignment operator
   // and store the result that the promise resolves to in a variable! This is nice!
   console.log(`seeded ${users.length} users`)
   console.log(`seeded ${products.length} products`)
   console.log(`seeded ${orders.length} orders`)
+  console.log(`seeded ${reviews.length} reviews`)
   console.log(`seeded successfully`)
 }
 
