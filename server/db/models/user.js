@@ -30,8 +30,11 @@ const User = db.define('user', {
   isAdmin: {
     type: Sequelize.BOOLEAN,
     defaultValue: false
+  },
+  shouldResetPassword: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
   }
-
 },
   {
     /* this causes a soft delete when we .destroy

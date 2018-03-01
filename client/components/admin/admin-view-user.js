@@ -7,6 +7,9 @@ class AdminViewUser extends Component {
     this.state = {
       user: {}
     }
+
+    this.handleReset = this.handleReset.bind(this)
+    this.handlePromotion = this.handlePromotion.bind(this)
   }
 
   componentDidMount () {
@@ -17,15 +20,40 @@ class AdminViewUser extends Component {
       .catch(err => console.error(err))
   }
 
+  handleReset () {
+    const userId = this.state.user.id || this.props.match.params.userId
+    axios.put(`/api/users/${userId}`, { shouldResetPassword: true })
+      .then(res => res.data)
+      .then(user => this.setState({ user }))
+      .catch(err => console.error(err))
+  }
+
+  handlePromotion () {
+    const userId = this.state.user.id || this.props.match.params.userId
+    axios.put(`/api/users/${userId}`, { isAdmin: true })
+      .then(res => res.data)
+      .then(user => this.setState({ user }))
+      .catch(err => console.error(err))
+  }
+
   render () {
     const { user } = this.state
     return (
-      <div>
+      <div className="container">
         <h2>User: {user.email}</h2>
-        {user.isAdmin ? <div><em>Admin</em></div> : <div />}
-        <button>Reset Password</button>
-        <button>Promote to Admin</button>
-        <button>Delete</button>
+        <ul>
+          {
+            !user.shouldResetPassword ?
+            <li><button onClick={this.handleReset}>Reset Password</button></li> :
+            <li>This user should reset their password</li>
+          }
+          {
+            !user.isAdmin ?
+            <li><button onClick={this.handlePromotion}>Promote to Admin</button></li> :
+            <li>User is Admin</li>
+          }
+          <li><button>Delete</button></li>
+        </ul>
       </div>
     )
   }

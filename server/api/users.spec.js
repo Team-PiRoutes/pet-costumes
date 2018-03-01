@@ -55,16 +55,31 @@ describe('User routes', () => {
         })
     })
 
-    // it('PUT /api/users/:id/password-reset', () => {
-    //   return request(app)
-    //     .put(`/api/users/${user.id}/password-reset`)
-    //     .send({})
-    //     .expect(200)
-    //     .then(res => {
-    //       expect(res.body).to.be.an('object')
-    //       expect(res.body.confirmed).to.be.equal(true)
-    //     })
-    // })
+    describe('can set boolean to encourage user to reset password', () => {
+      it('PUT /api/users/:id/', () => {
+        return request(app)
+          .put(`/api/users/${user.id}/`)
+          .send({ shouldResetPassword: true })
+          .expect(200)
+          .then(res => {
+            expect(res.body).to.be.an('object')
+            expect(res.body.shouldResetPassword).to.be.equal(true)
+          })
+      })
+    })
+
+    describe('can promote a user to an admin', () => {
+      it('PUT /api/users/:id/', () => {
+        return request(app)
+          .put(`/api/users/${user.id}/`)
+          .send({ isAdmin: true })
+          .expect(200)
+          .then(res => {
+            expect(res.body).to.be.an('object')
+            expect(res.body.isAdmin).to.be.equal(true)
+          })
+      })
+    })
   })
 
 }) // end describe('User routes')

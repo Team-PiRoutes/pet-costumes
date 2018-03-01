@@ -20,13 +20,16 @@ class AdminUsers extends Component {
   render () {
     const { users } = this.state
     return (
-      <ul>
-        {users.map(user => {
-          return (
-            <AdminUser user={user} key={user.id} />
-          )
-        })}
-      </ul>
+      <div>
+        <h2>User List:</h2>
+        <ul>
+          {users.map(user => {
+            return (
+              <AdminUser user={user} key={user.id} />
+            )
+          })}
+        </ul>
+      </div>
     )
   }
 }
