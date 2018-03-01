@@ -5,7 +5,7 @@ module.exports = router
 
 //get all products
 router.get('/', (req, res, next) => {
-  Product.findAll({ include: [ Review ] })
+  Product.findAll()
     .then(products => res.json(products))
     .catch(next)
 })

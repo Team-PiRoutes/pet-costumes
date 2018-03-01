@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import Review from './review'
 
 class ViewProduct extends Component {
   constructor(props) {
@@ -22,10 +23,9 @@ class ViewProduct extends Component {
   }
 
   render() {
+
     const { product } = this.state
-    console.log(product.reviews)
     const reviews = product.reviews
-    console.log('REVIEWS: ', reviews)
 
     return (
       <div>
@@ -35,14 +35,7 @@ class ViewProduct extends Component {
         <p>Quantity: {product.quantity}</p>
         <p>Size: {product.size}</p>
         <ul>
-        <p>Reviews:</p>
-          {
-            reviews && reviews.map(review => (
-              <div key={review.id}>
-                <p>Reviews: {review.rating} </p>
-              </div>
-            ))
-          }
+          <Review reviews={reviews} />
         </ul>
         <img src={product.photoUrl} />
       </div>
