@@ -16,7 +16,7 @@ const Cart = (props) => {
       {
         <ul>
           {
-            cart.length === 0 ? <h4> Your cart is empty! Your pet needs a πRoute out fit. </h4> :
+            cart.length === 0 ? <h4> Your cart is empty! Your pet needs a πRoute outfit. </h4> :
               cart.map(product => (
 
                 <li id={`cart-item-${product.id}`} key={product.id}>
@@ -27,7 +27,7 @@ const Cart = (props) => {
           }
         </ul>
       }
-    </div >
+    </div>
   )
 }
 
@@ -38,7 +38,7 @@ const Cart = (props) => {
 
 
 const mapStateToProps = function (state) {
-  console.log('mapStatetoProps')
+
   return {
     cart: state.cart
   }

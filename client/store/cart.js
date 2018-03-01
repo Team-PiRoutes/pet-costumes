@@ -3,8 +3,8 @@ import axios from 'axios'
 /**
  * ACTION TYPES
  */
-const ADD_ITEM = 'ADD_ITEM'
-const CHANGE_QTY = 'CHANGE_QTY'
+const UPDATE_CART_ITEM = 'UPDATE_CART_ITEM'
+
 
 /**
  * INITIAL STATE
@@ -15,28 +15,21 @@ const defaultCart = []
 /**
  * ACTION CREATORS
  */
-const addToCart = (item) => ({ type: ADD_ITEM, item })
 
-const updateCartQuantity = (update) => ({ type: CHANGE_QTY, update })
+
+const updateItem = (cartItem) => ({ type: UPDATE_CART_ITEM, cartItem })
 
 /**
  * THUNK CREATORS
  */
-export const addProductToCart = (itemForCart) => {
-  //Cart persisting in these brackets here most likely
+export const updateCartItem = (itemForCart) => {
+  //expects object passed in to have at least the  below keys
   const { priceInCents, quantity, productId } = itemForCart
   const cartItem = { priceInCents, quantity, productId }
   return dispatch =>
-    dispatch(addToCart(cartItem))
+    dispatch(updateItem(cartItem))
 }
 
-export const updateCurrentQuanity = (update) => {
-  //Cart persisting in these brackets here most likely
-
-  return dispatch =>
-    dispatch(updateCartQuantity(update))
-
-}
 
 /**
  * REDUCER
@@ -44,12 +37,9 @@ export const updateCurrentQuanity = (update) => {
 export default function (state = defaultCart, action) {
 
   switch (action.type) {
-    case ADD_ITEM: {
-
-      return [...state, action.item]
-    }
-    case CHANGE_QTY: {
-      let indexInCart = state.findIndex(item => item.id === action.productID)
+    case UPDATE_CART_ITEM: {
+      let indexInCart = state.findIndex(item => item.id === action.productId)
+      if (indexInCart < 0) return [...state, action.update]
       let updatedProduct = Object.assign(
         {},
         state[indexInCart],
