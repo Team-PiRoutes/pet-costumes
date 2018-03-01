@@ -10,7 +10,7 @@
  * Now that you've got the main idea, check it out in practice below!
  */
 const db = require('../server/db')
-const { User, Product, Order, Review } = require('../server/db/models')
+const { User, Product, Order, Cart, CartItem, Review } = require('../server/db/models')
 
 async function seed() {
   await db.sync({ force: true })
@@ -78,6 +78,38 @@ async function seed() {
     }),
   ])
 
+  console.log(`seeding carts`)
+  const carts = await Promise.all([
+    Cart.create({
+    }),
+    Cart.create({
+    })
+  ])
+  console.log(`seeding cartItems`)
+  const cartItems = await Promise.all([
+    CartItem.create({
+      productId: 1,
+      priceInCents: 1000,
+      quantity: 3,
+      cartId: 1
+    }),
+    CartItem.create({
+      productId: 1,
+      priceInCents: 4550,
+      quantity: 5,
+      cartId: 1
+    }),
+    CartItem.create({
+      productId: 1,
+      priceInCents: 1340,
+      quantity: 2,
+      cartId: 2
+    })])
+
+
+  // console.log(`seeded ${carts.length} carts`)
+  //   Cart.create({
+  //   })])
   const reviews = await Promise.all([
     Review.create({
       rating: 5,
@@ -111,6 +143,8 @@ async function seed() {
   console.log(`seeded ${users.length} users`)
   console.log(`seeded ${products.length} products`)
   console.log(`seeded ${orders.length} orders`)
+  console.log(`seeded ${carts.length} carts`)
+  console.log(`seeded ${cartItems.length} cart items`)
   console.log(`seeded ${reviews.length} reviews`)
   console.log(`seeded successfully`)
 }

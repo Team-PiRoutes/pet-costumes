@@ -8,6 +8,7 @@ import {
   Signup,
   UserHome,
   Products,
+  Cart,
   ViewProduct,
   AdminListOrders,
   AdminUsers,
@@ -34,6 +35,7 @@ class Routes extends Component {
 
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
+        <Route exact path="/cart" component={Cart} />
         <Route exact path="/products" component={Products} />
         <Route exact path="/products/:productId" component={ViewProduct} />
         <Route exact path="/admin/users" component={AdminUsers} />
