@@ -14,7 +14,7 @@
 //     const products = [
 //       { id: 1, title: 'pirate', description: 'cutest pirate ever', priceInCents: 1599, quantity: 7 },
 //       { id: 2, title: 'hotDog', description: 'yummy dog', priceInCents: 1299, quantity: 5 }
-//     ] 
+//     ]
 //     productsTest = shallow(<Products products={products} />)
 //   })
 
