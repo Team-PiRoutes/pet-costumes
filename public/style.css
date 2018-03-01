@@ -19,3 +19,16 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
+.inline-switch {
+  display: inline;
+  margin-left: 2rem;
+}
+
+.switch {
+  margin-bottom: 1rem;
+}
+
+.larger {
+  font-size: 1.5rem;
+}
