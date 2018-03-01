@@ -9,6 +9,7 @@ import {
   UserHome,
   Products,
   Cart,
+  ViewProduct,
   AdminListOrders,
   AdminUsers,
   AdminViewUser,
@@ -34,8 +35,9 @@ class Routes extends Component {
 
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
-        <Route path="/products" component={Products} />
-        <Route exact npm run spath="/cart" component={Cart} />
+        <Route exact path="/cart" component={Cart} />
+        <Route exact path="/products" component={Products} />
+        <Route exact path="/products/:productId" component={ViewProduct} />
         <Route exact path="/admin/users" component={AdminUsers} />
         <Route exact path="/admin/users/:userId" component={AdminViewUser} />
         {
@@ -53,7 +55,7 @@ class Routes extends Component {
         }
         {/* Displays our Login component as a fallback */}
         <Route component={Login} />
-      </Switch >
+      </Switch>
     )
   }
 }

@@ -1,5 +1,3 @@
-import user from '../../../client/store/user'
-
 const User = require('./user')
 const Order = require('./order')
 const Product = require('./product')

@@ -5,6 +5,13 @@ module.exports = router
 //get all products
 router.get('/', (req, res, next) => {
   Product.findAll()
-  .then(products => res.json(products))
-  .catch(next)
+    .then(products => res.json(products))
+    .catch(next)
+})
+
+//get product by id
+router.get('/:id', (req, res, next) => {
+  Product.findById(req.params.id)
+    .then(product => res.json(product))
+    .catch(next)
 })
