@@ -71,7 +71,7 @@ async function seed() {
     Order.create({
       email: 'whyNotALizard@gmail.com',
       orderStatus: 'created',
-      addressLine1: '123 Egon Rd', s
+      addressLine1: '123 Egon Rd',
       city: 'Coldblood Bluff',
       state: 'IL',
       zip: '99299'
