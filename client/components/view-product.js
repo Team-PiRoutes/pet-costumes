@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import Review from './review'
+import Reviews from './reviews'
 
 class ViewProduct extends Component {
   constructor(props) {
@@ -34,9 +34,7 @@ class ViewProduct extends Component {
         <p>Price: {product.priceInCents}</p>
         <p>Quantity: {product.quantity}</p>
         <p>Size: {product.size}</p>
-        <ul>
-          <Review reviews={reviews} />
-        </ul>
+        <Reviews reviews={reviews} />
         <img src={product.photoUrl} />
       </div>
     )

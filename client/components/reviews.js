@@ -1,12 +1,11 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
 
-const Review = (props) => {
+const Reviews = (props) => {
 
   const { reviews } = props
 
   return (
-    <li>
+    <div>
       <p>Reviews:</p>
       {
         reviews && reviews.map(review => (
@@ -16,8 +15,8 @@ const Review = (props) => {
           </div>
         ))
       }
-    </li>
+    </div>
   )
 }
 
-export default Review
+export default Reviews
