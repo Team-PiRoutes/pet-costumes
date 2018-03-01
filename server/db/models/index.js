@@ -25,6 +25,7 @@ Category.belongsToMany(Product, { through: 'ProductCategory' })
 Product.belongsToMany(Order, { through: 'lineItems' })
 Order.belongsToMany(Product, { through: 'lineItems' })
 Review.belongsTo(User, { as: 'customer' })
+Product.hasMany(Review)
 
 
 module.exports = {

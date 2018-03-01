@@ -10,8 +10,9 @@ class ViewProduct extends Component {
   }
 
   componentDidMount() {
+
     const productId = this.props.match.params.productId
-    console.log('productId: ', productId)
+
     axios.get(`/api/products/${productId}`)
       .then(res => res.data)
       .then(product => {
@@ -21,8 +22,10 @@ class ViewProduct extends Component {
   }
 
   render() {
-
     const { product } = this.state
+    console.log(product.reviews)
+    const reviews = product.reviews
+    console.log('REVIEWS: ', reviews)
 
     return (
       <div>
@@ -31,6 +34,16 @@ class ViewProduct extends Component {
         <p>Price: {product.priceInCents}</p>
         <p>Quantity: {product.quantity}</p>
         <p>Size: {product.size}</p>
+        <ul>
+        <p>Reviews:</p>
+          {
+            reviews && reviews.map(review => (
+              <div key={review.id}>
+                <p>Reviews: {review.rating} </p>
+              </div>
+            ))
+          }
+        </ul>
         <img src={product.photoUrl} />
       </div>
     )
