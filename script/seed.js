@@ -10,7 +10,6 @@
  * Now that you've got the main idea, check it out in practice below!
  */
 const db = require('../server/db')
-
 const { User, Product, Order, Cart, CartItem, Review } = require('../server/db/models')
 
 async function seed() {
