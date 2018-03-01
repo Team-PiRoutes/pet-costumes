@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import history from '../../history'
 
 class AdminViewUser extends Component {
   constructor(props) {
@@ -10,19 +11,24 @@ class AdminViewUser extends Component {
 
     this.handleReset = this.handleReset.bind(this)
     this.handlePromotion = this.handlePromotion.bind(this)
+    this.handleDelete = this.handleDelete.bind(this)
   }
 
   componentDidMount () {
     const userId = this.props.match.params.userId
     axios.get(`/api/users/${userId}`)
       .then(res => res.data)
-      .then(user => this.setState({ user }))
+      .then(user => {
+        if (!user) throw new Error(`No user found with id ${userId}`)
+        return this.setState({ user })
+      })
       .catch(err => console.error(err))
   }
 
   handleReset () {
     const userId = this.state.user.id || this.props.match.params.userId
-    axios.put(`/api/users/${userId}`, { shouldResetPassword: true })
+    const newValue = !this.state.user.shouldResetPassword
+    axios.put(`/api/users/${userId}`, { shouldResetPassword: newValue })
       .then(res => res.data)
       .then(user => this.setState({ user }))
       .catch(err => console.error(err))
@@ -30,29 +36,53 @@ class AdminViewUser extends Component {
 
   handlePromotion () {
     const userId = this.state.user.id || this.props.match.params.userId
-    axios.put(`/api/users/${userId}`, { isAdmin: true })
+    const newValue = !this.state.user.isAdmin
+    axios.put(`/api/users/${userId}`, { isAdmin: newValue })
       .then(res => res.data)
       .then(user => this.setState({ user }))
+      .catch(err => console.error(err))
+  }
+
+  handleDelete () {
+    const userId = this.state.user.id || this.props.match.params.userId
+    axios.delete(`/api/users/${userId}`)
+      .then(res => res.data)
+      .then(() => {
+        history.push('/admin/users')
+      })
       .catch(err => console.error(err))
   }
 
   render () {
     const { user } = this.state
     return (
-      <div className="container">
-        <h2>User: {user.email}</h2>
+      <div className="container larger">
+        <h4>User: {user.email}</h4>
         <ul>
-          {
-            !user.shouldResetPassword ?
-            <li><button onClick={this.handleReset}>Reset Password</button></li> :
-            <li>This user should reset their password</li>
-          }
-          {
-            !user.isAdmin ?
-            <li><button onClick={this.handlePromotion}>Promote to Admin</button></li> :
-            <li>User is Admin</li>
-          }
-          <li><button>Delete</button></li>
+          <li className="switch">'Should Reset Password' set?
+            <label className="inline-switch right">
+              No
+              <input type="checkbox" onChange={this.handleReset} />
+              <span className="lever" />
+              Yes
+            </label>
+          </li>
+          <li className="switch">Is this user an admin?
+            <label className="inline-switch right">
+              No
+              <input type="checkbox" onChange={this.handlePromotion} />
+              <span className="lever" />
+              Yes
+            </label>
+          </li>
+          <li className="switch">Has this user been deleted?
+            <label className="inline-switch right">
+              No
+              <input type="checkbox" onChange={this.handleDelete} />
+              <span className="lever" />
+              Yes
+            </label>
+          </li>
         </ul>
       </div>
     )
