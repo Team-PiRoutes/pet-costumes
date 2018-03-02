@@ -37,14 +37,11 @@ function NewProductForm(props) {
               <input onChange={handleChange} name="size" id="size" type="text" />
               <label htmlFor="size">Size</label>
             </div>
-            <div className="file-field input-field">
-              <div className="btn" />
-              <span>UPLOAD</span>
-              <input onChange={handleChange} type="file" multiple />
-            </div>
-            <div className="file-path-wrapper">
-              <input className="file-path validate" type="text" placeholder="Upload one or more photos" />
-            </div>
+            <div className="input-field col s12" >
+            <div className="row" />
+            <input onChange={handleChange} name="photoUrl" id="size" type="text" />
+            <label htmlFor="size">Photo URL</label>
+          </div>
             <div>
               <button className="waves-effect waves-light btn" type="submit">Submit</button>
             </div>
@@ -67,6 +64,7 @@ const mapDispatchToProps = dispatch => {
         priceInCents: +event.target.price.value,
         quantity: +event.target.quantity.value,
         size: event.target.size.value,
+        photoUrl: event.target.photoUrl.value
       }
       dispatch(postProduct(product))
       document.getElementById('productForm').reset()
