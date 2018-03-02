@@ -34,7 +34,7 @@ export const fetchCategories = () =>
 /**
  * REDUCER
  */
-export default function (state = defaultActiveCategories, action){
+export default function (state = defaultCategories, action){
   switch (action.type) {
     case GOT_CATEGORIES:
       return action.categories
