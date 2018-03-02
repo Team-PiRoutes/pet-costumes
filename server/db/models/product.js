@@ -28,7 +28,15 @@ const Product = db.define('product', {
   size: {
     type: Sequelize.STRING,
     allowNull: true
-  },
+  }
+}, {
+  getterMethods: {
+    priceInDollars() {
+      if (!this.priceInCents) return 'free'
+      else return `$${(this.priceInCents / 100)}`
+    }
+  }
 })
+
 
 module.exports = Product

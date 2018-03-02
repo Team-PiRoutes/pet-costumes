@@ -6,12 +6,11 @@ const Product = (props) => {
   const { product } = props
 
   return (
-    <li>
     <NavLink to={`/products/${product.id}`}>
-        <span>{product.title}</span>
-        <span>{product.photoURl}</span>
+      <img src={product.photoUrl} className="product-img" />
+      <div className="product-title">{product.title}</div>
+      <div className="product-price">{product.priceInDollars}</div>
     </NavLink>
-    </li>
   )
 }
 
