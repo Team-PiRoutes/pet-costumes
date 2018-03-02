@@ -116,10 +116,8 @@ async function seed() {
       cartId: 2
     })])
 
+console.log('seeding reviews')
 
-  // console.log(`seeded ${carts.length} carts`)
-  //   Cart.create({
-  //   })])
   const reviews = await Promise.all([
     Review.create({
       rating: 5,
@@ -148,6 +146,8 @@ async function seed() {
     }),
   ])
 
+console.log('Seeding categories')
+
   const categories = await Promise.all([
     Category.create({ label: 'Pirate' }),
     Category.create({ label: 'Superhero'}),
@@ -161,13 +161,13 @@ async function seed() {
       products[0], products[1], products[2]
     ]),
     categories[1].addProduct([
-      products[4]
+      products[3]
     ]),
     categories[2].addProduct([
       products[0], products[1], products[2]
     ]),
     categories[3].addProduct([
-      products[4]
+      products[3]
     ]),
   ])
 
