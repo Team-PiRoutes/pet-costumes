@@ -16,7 +16,7 @@ import {
 } from './components'
 
 
-import { me, fetchProducts } from './store'
+import { me, fetchProducts, fetchCategories } from './store'
 
 /**
  * COMPONENT
@@ -77,6 +77,7 @@ const mapDispatch = (dispatch) => {
     loadInitialData() {
       dispatch(me())
       dispatch(fetchProducts())
+      dispatch(fetchCategories())
     }
   }
 }

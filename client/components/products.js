@@ -8,16 +8,27 @@ import Sidebar from './sidebar'
  */
 const Products = (props) => {
 
-  const { products } = props
+  const { products, categories, activeCategories } = props
+
+  let filteredProducts = products.filter(product => {
+    const productCatIds = product.categories.map(cat => cat.id)
+    for (let i = 0; i < activeCategories.length; i++) {
+      if (productCatIds.indexOf(activeCategories[i]) === -1) return false
+    }
+    return true
+  })
+
+  // loop through active cat ids
+  // if any of them are not present in product.catids then filter out
 
   return (
     <div className="main">
-      <Sidebar />
+      <Sidebar categories={categories} />
       <div className="content">
         <h3>Our Products</h3>
         <div className="products-list">
           {
-            products.map(product => (
+            filteredProducts.map(product => (
               <div id={`product-${product.id}`} key={product.id} className="product-item z-depth-3" >
                 <Product product={product} />
               </div>
@@ -37,7 +48,8 @@ const Products = (props) => {
 const mapStateToProps = function (state) {
   return {
     products: state.products,
-    categories: state.categories
+    categories: state.categories,
+    activeCategories: state.activeCategories
   }
 }
 
