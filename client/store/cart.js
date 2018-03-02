@@ -4,7 +4,6 @@
  */
 const UPDATE_CART_ITEM = 'UPDATE_CART_ITEM'
 
-
 /**
  * INITIAL STATE
  */
@@ -23,8 +22,11 @@ const updateItem = (cartItem) => ({ type: UPDATE_CART_ITEM, cartItem })
  */
 export const updateCartItem = (itemForCart) => {
   //expects object passed in to have at least the  below keys
-  const { priceInCents, quantity, productId } = itemForCart
-  const cartItem = { priceInCents, quantity, productId }
+  const { priceInCents, quantity, productId, photoUrl
+  } = itemForCart
+  const cartItem = {
+    priceInCents, quantity, productId, photoUrl
+  }
   return dispatch =>
     dispatch(updateItem(cartItem))
 }

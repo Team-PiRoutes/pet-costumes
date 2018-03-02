@@ -106,10 +106,7 @@ async function seed() {
       cartId: 2
     })])
 
-
-  // console.log(`seeded ${carts.length} carts`)
-  //   Cart.create({
-  //   })])
+  console.log('seeding reviews')
   const reviews = await Promise.all([
     Review.create({
       rating: 5,
