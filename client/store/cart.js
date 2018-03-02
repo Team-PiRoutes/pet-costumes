@@ -1,4 +1,4 @@
-
+import axios from 'axios'
 /**
  * ACTION TYPES
  */
@@ -22,11 +22,12 @@ const updateItem = (cartItem) => ({ type: UPDATE_CART_ITEM, cartItem })
  */
 export const updateCartItem = (itemForCart) => {
   //expects object passed in to have at least the  below keys
-  const { priceInCents, quantity, productId, photoUrl
-  } = itemForCart
-  const cartItem = {
-    priceInCents, quantity, productId, photoUrl
-  }
+  const { priceInCents, quantity, productId } = itemForCart
+  const cartItem = { priceInCents, quantity, productId }
+
+  //else update
+
+
   return dispatch =>
     dispatch(updateItem(cartItem))
 }
@@ -36,15 +37,17 @@ export const updateCartItem = (itemForCart) => {
  * REDUCER
  */
 export default function (state = defaultCart, action) {
+  console.log('Reducer received action', action)
 
   switch (action.type) {
+
     case UPDATE_CART_ITEM: {
       let indexInCart = state.findIndex(item => item.id === action.productId)
-      if (indexInCart < 0) return [...state, action.update]
+      if (indexInCart < 0) return [...state, action.cartItem]
       let updatedProduct = Object.assign(
         {},
         state[indexInCart],
-        { quantity: action.update.quantity }
+        { quantity: action.cartItem.quantity }
       ) //end object.assign
 
 

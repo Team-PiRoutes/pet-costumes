@@ -10,7 +10,8 @@ class ViewProduct extends Component {
     this.state = {
       hasLoaded: false,
       product: {},
-      stockMessage: ''
+      stockMessage: '',
+      addDiabled: false
     }
     this.addToCart = this.addToCart.bind(this)
     this.enoughStock = this.enoughStock.bind(this)
@@ -30,7 +31,6 @@ class ViewProduct extends Component {
         })
       })
       .then(() => {
-        console.log(this.state)
         this.enoughStock()
       })
       .catch(err => console.error(err))
@@ -41,34 +41,43 @@ class ViewProduct extends Component {
     let qtySelected = document.getElementById('qty').value
     console.log(qtySelected)
     if (qtyInStock <= 0) {
-      document.getElementById('addItem').diabled = true
+
       this.setState({
         stockMessage: 'Out of Stock!',
-        qtySelected
+        qtySelected,
+        addDiabled: true
       })
     }
     else if (qtySelected > qtyInStock) {
       document.getElementById('addItem').diabled = true
       this.setState({
         stockMessage: 'Supply is too low to guarantee this order.',
-        qtySelected
+        qtySelected,
+        addDiabled: true
       })
     }
     else {
       document.getElementById('addItem').diabled = false
       this.setState({
-        stockMessage: 'Currently in sTock!',
-        qtySelected
+        stockMessage: 'Currently in stock!',
+        qtySelected,
+        addDiabled: false
       })
     }
-    document.getElementById('qty').value = qtySelected
-    console.dir(this.state)
   }
   addToCart() {
+
     let qty = document.getElementById('qty').value
-    const { priceInCents, productId, photoUrl } = this.state.product
-    const cartItem = { priceInCents, quantity: qty, productId, photoUrl }
-    this.props.updateCartItem(cartItem)
+    const { priceInCents, id } = this.state.product
+    console.log('id log', id)
+    console.log(priceInCents)
+    const itemToSend = {
+      priceInCents,
+      quantity: +qty,
+      productId: id
+    }
+    console.log('Add To Cart Ran! Sent:', itemToSend)
+    this.props.updateCartItem(itemToSend)
   }
 
   render() {
@@ -101,7 +110,7 @@ class ViewProduct extends Component {
               <p>Quantity: </p>
               <input id="qty" type="number" defaultValue="1" name="quantity" min="1" max={stock} onChange={() => this.enoughStock()} />
 
-              <button id="addItem" className="btn waves-effect waves-light" type="button" onClick={() => this.addToCart()} >
+              <button disabled={this.state.addDiabled} id="addItem" className="btn waves-effect waves-light" type="button" onClick={() => this.addToCart()} >
                 Add To Cart<i className="material-icons right">add_shopping_cart</i>
               </button>
             </div>
@@ -119,6 +128,6 @@ class ViewProduct extends Component {
 const mapStateToProps = null
 
 const mapDispatchToProps = (dispatch) => ({
-  updateCartItem: () => dispatch(updateCartItem)
+  updateCartItem: (item) => dispatch(updateCartItem(item))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(ViewProduct)
