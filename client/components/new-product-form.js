@@ -1,10 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { createProduct, postProduct } from '../store'
+import { postProduct } from '../store'
 
 function NewProductForm(props) {
 
-  const { handleChange, handleSubmit } = props
+  const { handleSubmit } = props
 
   return (
 
@@ -14,32 +14,32 @@ function NewProductForm(props) {
             <h3>New Product</h3>
             <div className="input-field col s12" >
               <div className="row" />
-              <input onChange={handleChange} name="title" id="title" type="text" />
+              <input name="title" id="title" type="text" />
               <label htmlFor="title">Title</label>
             </div>
             <div className="input-field col s12" >
               <div className="row" />
-              <textarea onChange={handleChange} name="description" id="textarea1" className="materialize-textarea" />
+              <textarea name="description" id="textarea1" className="materialize-textarea" />
               <label htmlFor="description">Description</label>
             </div>
             <div className="input-field col s3" >
               <div className="row" />
-              <input onChange={handleChange} name="price" id="price" type="number" />
+              <input name="price" id="price" type="number" />
               <label htmlFor="price">Price</label>
             </div>
             <div className="input-field col s3" >
               <div className="row" />
-              <input onChange={handleChange} name="quantity" id="quantity" type="number" />
+              <input name="quantity" id="quantity" type="number" />
               <label htmlFor="quantity">Quantity</label>
             </div>
             <div className="input-field col s3" >
               <div className="row" />
-              <input onChange={handleChange} name="size" id="size" type="text" />
+              <input name="size" id="size" type="text" />
               <label htmlFor="size">Size</label>
             </div>
             <div className="input-field col s12" >
             <div className="row" />
-            <input onChange={handleChange} name="photoUrl" id="photo" type="text" />
+            <input name="photoUrl" id="photo" type="text" />
             <label htmlFor="photo">Photo URL</label>
           </div>
             <div>
@@ -53,9 +53,6 @@ function NewProductForm(props) {
 
 const mapDispatchToProps = dispatch => {
   return {
-    handleChange: function (event) {
-      dispatch(createProduct(event.target.value))
-    },
     handleSubmit: function (event) {
       event.preventDefault()
       let product = {
