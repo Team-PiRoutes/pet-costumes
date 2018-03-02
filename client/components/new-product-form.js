@@ -39,8 +39,8 @@ function NewProductForm(props) {
             </div>
             <div className="input-field col s12" >
             <div className="row" />
-            <input onChange={handleChange} name="photoUrl" id="size" type="text" />
-            <label htmlFor="size">Photo URL</label>
+            <input onChange={handleChange} name="photoUrl" id="photo" type="text" />
+            <label htmlFor="photo">Photo URL</label>
           </div>
             <div>
               <button className="waves-effect waves-light btn" type="submit">Submit</button>
