@@ -54,18 +54,12 @@ function NewProductForm(props) {
   )
 }
 
-
-// const mapStateToProps = state => {
-//   return {}
-// }
-
 const mapDispatchToProps = dispatch => {
   return {
     handleChange: function (event) {
       dispatch(createProduct(event.target.value))
     },
     handleSubmit: function (event) {
-      console.log('handling submit')
       event.preventDefault()
       let product = {
         title: event.target.title.value,
