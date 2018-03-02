@@ -75,7 +75,7 @@ const mapDispatchToProps = dispatch => {
         size: event.target.size.value,
       }
       dispatch(postProduct(product))
-      document.getElementById("myForm").reset()
+      document.getElementById('productForm').reset()
     }
   }
 }
