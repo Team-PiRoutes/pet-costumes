@@ -1,15 +1,15 @@
 import React from 'react'
+import Category from './category'
 
-const Sidebar = () => {
+const Sidebar = (props) => {
+  const { categories } = props
   return (
     <div className="sidebar">
       <div className="sidebar-header">Categories</div>
       <ul>
-        <li>Superhero</li>
-        <li>Pirate</li>
-        <li>Dog</li>
-        <li>Cat</li>
-        <li>Bird</li>
+        {categories.map(category => {
+          return <Category key={category.id} category={category} />
+        })}
       </ul>
     </div>
   )

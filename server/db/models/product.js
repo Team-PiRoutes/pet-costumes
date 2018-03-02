@@ -30,6 +30,9 @@ const Product = db.define('product', {
     allowNull: true
   }
 }, {
+  defaultScope: {
+    order: Sequelize.literal('id ASC')
+  },
   getterMethods: {
     priceInDollars() {
       if (!this.priceInCents) return 'free'
