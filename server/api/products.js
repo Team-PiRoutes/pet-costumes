@@ -25,3 +25,11 @@ router.get('/:id', (req, res, next) => {
     .then(product => res.json(product))
     .catch(next)
 })
+
+//add product (admin)
+router.post('/admin/new', (req, res, next) => {
+  Product.create(req.body)
+  .then((newProduct) => res.json(newProduct))
+  .catch(next)
+})
+

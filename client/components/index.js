@@ -12,3 +12,5 @@ export { default as AdminListOrders } from './admin/admin-list-orders'
 export { default as AdminUsers } from './admin/admin-users'
 export { default as AdminViewUser } from './admin/admin-view-user'
 export { default as ViewProduct } from './view-product'
+export { default as NewProductForm } from './new-product-form'
+
