@@ -11,3 +11,12 @@ router.get('/:id', (req, res, next) => {
     .then(cart => res.json(cart))
     .catch(next)
 })
+
+router.put('/:id', (req, res, next) => {
+  Cart.findOrCreate(req.params.id,
+    { include: 'cartItem' })
+    .then(cart => {
+      cart.dir(cart)
+    })
+
+})

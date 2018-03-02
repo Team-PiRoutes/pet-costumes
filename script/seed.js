@@ -10,7 +10,7 @@
  * Now that you've got the main idea, check it out in practice below!
  */
 const db = require('../server/db')
-const { User, Product, Order, Cart, CartItem, Review } = require('../server/db/models')
+const { User, Product, Order, Cart, CartItem, Review, Category } = require('../server/db/models')
 
 async function seed() {
   await db.sync({ force: true })
@@ -46,6 +46,16 @@ async function seed() {
         title: 'Dog pirate suit',
         description: 'Turn your pup into an adorable pirate!',
         priceInCents: 1999,
+        quantity: 7,
+        size: 'L'
+      }
+    ),
+    Product.create(
+      {
+        title: 'Wonder Kitty',
+        description: 'It\'s a cat! It\'s a plane! It\'s a Wonder Kitty!',
+        priceInCents: 1399,
+        photoUrl: '/img/wonder-kitty.jpg',
         quantity: 7,
         size: 'L'
       }
@@ -106,10 +116,8 @@ async function seed() {
       cartId: 2
     })])
 
+  console.log('seeding reviews')
 
-  // console.log(`seeded ${carts.length} carts`)
-  //   Cart.create({
-  //   })])
   const reviews = await Promise.all([
     Review.create({
       rating: 5,
@@ -138,6 +146,31 @@ async function seed() {
     }),
   ])
 
+  console.log('Seeding categories')
+
+  const categories = await Promise.all([
+    Category.create({ label: 'Pirate' }),
+    Category.create({ label: 'Superhero' }),
+    Category.create({ label: 'Dog' }),
+    Category.create({ label: 'Cat' }),
+    Category.create({ label: 'Bird' }),
+  ])
+
+  await Promise.all([
+    categories[0].addProduct([
+      products[0], products[1], products[2]
+    ]),
+    categories[1].addProduct([
+      products[3]
+    ]),
+    categories[2].addProduct([
+      products[0], products[1], products[2]
+    ]),
+    categories[3].addProduct([
+      products[3]
+    ]),
+  ])
+
   // Wowzers! We can even `await` on the right-hand side of the assignment operator
   // and store the result that the promise resolves to in a variable! This is nice!
   console.log(`seeded ${users.length} users`)
@@ -146,6 +179,7 @@ async function seed() {
   console.log(`seeded ${carts.length} carts`)
   console.log(`seeded ${cartItems.length} cart items`)
   console.log(`seeded ${reviews.length} reviews`)
+  console.log(`seeded ${categories.length} categories`)
   console.log(`seeded successfully`)
 }
 
