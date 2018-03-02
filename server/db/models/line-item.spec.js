@@ -4,9 +4,9 @@ import { expect } from 'chai'
 
 describe('LineItem model', () => {
   describe('properties', () => {
-    it('should have a userId', () => {
-      expect(LineItem.attributes.userId).to.be.an('object')
-      expect(LineItem.attributes.userId.allowNull).to.equal(false)
+    it('should have a productId', () => {
+      expect(LineItem.attributes.productId).to.be.an('object')
+      expect(LineItem.attributes.productId.allowNull).to.equal(false)
     })
     it('should have an orderId', () => {
       expect(LineItem.attributes.orderId).to.be.an('object')
