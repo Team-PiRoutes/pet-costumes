@@ -30,8 +30,8 @@ User.belongsToMany(Cart, { through: 'userCarts' })
 
 
 Category.belongsToMany(Product, { through: 'ProductCategory' })
-Product.belongsToMany(Order, { through: 'lineItems' })
-Order.belongsToMany(Product, { through: 'lineItems' })
+Product.belongsToMany(Order, { through: 'LineItem' })
+Order.belongsToMany(Product, { through: 'LineItem' })
 Review.belongsTo(User, { as: 'customer' })
 Product.hasMany(Review)
 
