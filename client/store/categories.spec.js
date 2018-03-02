@@ -1,71 +1,75 @@
-import reducer, { addCategory, removeCategory, clearCategories } from './categories'
+import reducer, { gotCategories, fetchCategories } from './categories'
 import { expect } from 'chai'
+import axios from 'axios'
+import MockAdapter from 'axios-mock-adapter'
+import configureMockStore from 'redux-mock-store'
+import thunkMiddleware from 'redux-thunk'
+
+const middlewares = [thunkMiddleware]
+const mockStore = configureMockStore(middlewares)
 
 describe('Categories Store', () => {
   describe('action creators', () => {
-    describe('addCategory', () => {
-      let category = {}
+    describe('gotCategories', () => {
+      let categories = []
 
       beforeEach(() => {
-        category = { id: 99 }
+        categories = [{ id: 1, name: 'pirate costume' }]
       })
 
       it('should create an action with correct id', () => {
-        const action = addCategory(category)
-        expect(action.type).to.be.equal('ADD_CATEGORY')
-        expect(action.categoryId).to.be.equal(99)
-      })
-    })
-
-    describe('removeCategory', () => {
-      let category = {}
-
-      beforeEach(() => {
-        category = { id: 99 }
-      })
-
-      it('should create an action with correct id', () => {
-        const action = removeCategory(category)
-        expect(action.type).to.be.equal('REMOVE_CATEGORY')
-        expect(action.categoryId).to.be.equal(99)
-      })
-    })
-
-    describe('clearCategories', () => {
-      it('should create an action of correct type', () => {
-        const action = clearCategories()
-        expect(action.type).to.be.equal('CLEAR_CATEGORIES')
+        const action = gotCategories(categories)
+        expect(action.type).to.be.equal('GOT_CATEGORIES')
+        expect(action.categories).to.be.deep.equal([{ id: 1, name: 'pirate costume' }])
       })
     })
   })
 
   describe('reducer', () => {
     let state = []
+    let categories = []
 
     beforeEach(() => {
-      state = [99]
+      state = [{ id: 2, name: 'pirates' }]
+      categories = [{ id: 1, name: 'superheros' }]
     })
 
-    it('should add an id to the list of categories', () => {
+    it('should get replace the state with new array of categories ', () => {
       const newState = reducer(state, {
-        type: 'ADD_CATEGORY',
-        categoryId: 1
+        type: 'GOT_CATEGORIES',
+        categories
       })
-      expect(newState).to.be.deep.equal([99, 1])
+      expect(newState).to.be.deep.equal([{ id: 1, name: 'superheros' }])
     })
-    it('should remove an id from the list of categories', () => {
-      const newState = reducer(state, {
-        type: 'REMOVE_CATEGORY',
-        categoryId: 99
-      })
-      expect(newState).to.be.deep.equal([])
+  })
+
+  describe('thunk creators', () => {
+    let store
+    let mockAxios
+
+    const initialState = { categories: [] }
+
+    beforeEach(() => {
+      mockAxios = new MockAdapter(axios)
+      store = mockStore(initialState)
     })
 
-    it('should clear the list of categories', () => {
-      const newState = reducer(state, {
-        type: 'CLEAR_CATEGORIES'
+    afterEach(() => {
+      mockAxios.restore()
+      store.clearActions()
+    })
+
+    describe('fetchCategories', () => {
+      it('fetches categories from the db', () => {
+        const fakeCategories = [{ name: 'pirate', id: 2 }]
+        mockAxios.onGet('/api/categories').replyOnce(200, fakeCategories)
+        return store.dispatch(fetchCategories())
+          .then(() => {
+            const actions = store.getActions()
+            expect(actions[0].type).to.be.equal('GOT_CATEGORIES')
+            expect(actions[0].categories).to.be.deep.equal(fakeCategories)
+          })
       })
-      expect(newState).to.be.deep.equal([])
     })
   })
 })

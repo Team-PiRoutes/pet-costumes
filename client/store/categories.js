@@ -1,13 +1,9 @@
-/*  A reducer to keep track of which categories are being
-    used to filter the products on the products listing
-*/
+import axios from 'axios'
 
 /**
  * ACTION TYPES
  */
-const ADD_CATEGORY = 'ADD_CATEGORY'
-const REMOVE_CATEGORY = 'REMOVE_CATEGORY'
-const CLEAR_CATEGORIES = 'CLEAR_CATEGORIES'
+const GOT_CATEGORIES = 'GOT_CATEGORIES'
 
 /**
  * INITIAL STATE
@@ -17,29 +13,31 @@ const defaultCategories = []
 /**
  * ACTION CREATORS
  */
-export const addCategory = category => ({
-  type: ADD_CATEGORY,
-  categoryId: category.id
+export const gotCategories = categories => ({
+  type: GOT_CATEGORIES,
+  categories: categories
 })
 
-export const removeCategory = category => ({
-  type: REMOVE_CATEGORY,
-  categoryId: category.id
-})
+/**
+ * THUNK CREATORS
+ */
+export const fetchCategories = () =>
+  dispatch =>
+    axios.get('/api/categories')
+      .then(res => res.data)
+      .then(categories => {
+        dispatch(gotCategories(categories))
+      })
+      .catch(err => console.error('fetching categories went wrong', err))
 
-export const clearCategories = () => ({ type: CLEAR_CATEGORIES })
 
 /**
  * REDUCER
  */
-export default function (state = defaultCategories, action){
+export default function (state = defaultActiveCategories, action){
   switch (action.type) {
-    case ADD_CATEGORY:
-      return [...state, action.categoryId]
-    case REMOVE_CATEGORY:
-      return state.filter(catId => catId !== action.categoryId)
-    case CLEAR_CATEGORIES:
-      return []
+    case GOT_CATEGORIES:
+      return action.categories
     default: return state
   }
 }
