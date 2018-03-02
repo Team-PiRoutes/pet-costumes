@@ -32,3 +32,75 @@ form div {
 .larger {
   font-size: 1.5rem;
 }
+
+nav.navbar, div.navmenu {
+  display: flex;
+}
+
+nav.navbar {
+  justify-content: space-between;
+  padding: 0.4rem 2rem;
+  align-items: center;
+}
+
+div.navmenu {
+  justify-content: flex-end;
+}
+
+span.nav-brand {
+  font-size: 1.4rem;
+}
+
+div.main {
+  padding: 2vw;
+  display: flex;
+}
+
+div.content {
+  /* background-color: lightgray; */
+  width: 100%;
+}
+
+a {
+  color: black;
+}
+
+div.products-list {
+  display: flex;
+  padding: 0 0 1vw 0;
+}
+
+div.product-item {
+  margin: 0;
+  background-color: white;
+  width: 26vw;
+  padding: 2vw;
+  margin-right: 2vw;
+}
+
+.product-img {
+  width: 21vw;
+  height: 21vw;
+}
+
+.product-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.product-price {
+  text-align: center;
+}
+
+/* Sidebar */
+
+div.sidebar-header {
+  font-weight: bold
+}
+
+div.sidebar {
+  width: 12vw;
+  margin-right: 2vw;
+  padding-top: 7vw;
+}
