@@ -18,55 +18,68 @@ router.get('/:id', (req, res, next) => {
     .catch(next)
 })
 
-router.put('/update', (req, res, next) => {
-  let cookie = req.body.cookie
-  console.log('/add cookie', cookie)
-  Cart.findById(cookie.cartId, {
-    include: {
-      model: CartItem,
-      where: { ordered: false },
-      as: 'cartItems'
-    }
-  })
-    .then(cart => {
-
-      if (!!cookie.cartToken && cookie.cartToken === cart.cartToken) {
-        console.log('Cart created, added, updated by database', cart.cartItems[0])
-
-        const cartItemsIndex = cart.cartItems.findIndex(cartItem => {
-          return cartItem.id === cookie.cartId
-        })
-        console.log(cart.cartItems[cartItemsIndex])
-        return cart.cartItems[cartItemsIndex].id
-      } else {
-        res.sendStatus(411)
+router.put('/update', async (req, res, next) => {
+  try {
+    console.log('/update route req.body', req.body)
+    let cart = await Cart.findById(req.body.cartId, {
+      include: {
+        model: CartItem,
+        where: { ordered: false },
+        as: 'cartItems'
       }
-
     })
-    .then(itemId => CartItem.findById(itemId))
-    .then(item => item.update(req.body.itemForCart))
-    .then(item => res.status(200).json(item))
-    .catch(next)
+    if (!!req.body.cartToken && req.body.cartToken === cart.cartToken) {
+
+      const cartItemsIndex = cart.cartItems.findIndex(cartItem => {
+        return cartItem.id === req.body.cartId
+      })
+
+      if (cartItemsIndex >= 0) {
+
+        const itemId = cart.cartItems[cartItemsIndex].id
+
+        let oldCartItem = await CartItem.findById(itemId)
+        let updatedCartItem = await oldCartItem.update(req.body.itemForCart)
+
+        res.status(200).json({ updatedCartItem, cartId: cart.id, cartToken: cart.cartToken })
+      } else {
+        let createdCartItem = await CartItem.create(req.body.itemForCart)
+        cart.addCartItem(createdCartItem)
+        res.status(200).json({
+          updatedCartItem: createdCartItem,
+          cartId: cart.id,
+          cartToken: cart.cartToken
+        })
+      }
+    }
+    else {
+      addNewCart(req, res, next)
+    }
+  }
+  catch (error) {
+    next(error)
+  }
+
 
 })
 
-router.put('/newCart', (req, res, next) => {
-  Cart.create()
-    .then(cart => {
-      const cartItem = CartItem.create(req.body.itemForCart)
+router.put('/newCart', addNewCart)
 
-      console.log(cartItem)
-      // return { cartId: cart.id, cart: cart.token, cartItem }
-      Promise.all([cart, cartItem])
-    })
-    .then(([cart, cartItem]) => {
-      cart.addCartItem(cartItem)
-      return Promise.all([cart, cartItem])
-    })
-    .then(([cart, cartItem]) => {
-      let responseObj = { cartId: cart.id, cart: cart.token, cartItem }
-      res.status(200).json(responseObj)
-    })
-    .catch(next)
 
-})
+async function addNewCart(req, res, next) {
+
+  try {
+    let [cart, cartItem] = await Promise.all(
+      [Cart.create(),
+      CartItem.create(req.body.itemForCart)])
+    // let cart = await Cart.create()
+    // let cartItem = await CartItem.create(req.body.itemForCart)
+    await cart.addCartItem(cartItem)
+
+    let responseObj = { cartId: cart.id, cartToken: cart.cartToken, cartItem }
+    res.status(200).json(responseObj)
+  }
+  catch (err) {
+    next(err)
+  }
+}
