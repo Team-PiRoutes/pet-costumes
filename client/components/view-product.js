@@ -32,6 +32,11 @@ class ViewProduct extends Component {
       })
       .then(() => {
         this.enoughStock()
+        /*below is jquery that allows the materialbox
+        class to function when navigated to. Without it
+        it the image will not expand if navigated to from
+        the products list*/
+        $('.materialboxed').materialbox()
       })
       .catch(err => console.error(err))
   }

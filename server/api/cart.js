@@ -30,15 +30,17 @@ router.put('/update', (req, res, next) => {
   })
     .then(cart => {
 
-      // if (!!cookie.cartToken && cookie.cartToken === cart.cartToken) {
-      console.log('Cart created, added, updated by database', cart.cartItems[1])
+      if (!!cookie.cartToken && cookie.cartToken === cart.cartToken) {
+        console.log('Cart created, added, updated by database', cart.cartItems[0])
 
-      const cartItemsIndex = cart.cartItems.findIndex(cartItem => {
-        return cartItem.id === cookie.cartId
-      })
-      console.log(cart.cartItems[cartItemsIndex])
-      return cart.cartItems[1].id
-      //}
+        const cartItemsIndex = cart.cartItems.findIndex(cartItem => {
+          return cartItem.id === cookie.cartId
+        })
+        console.log(cart.cartItems[cartItemsIndex])
+        return cart.cartItems[cartItemsIndex].id
+      } else {
+        res.sendStatus(411)
+      }
 
     })
     .then(itemId => CartItem.findById(itemId))
@@ -52,10 +54,19 @@ router.put('/newCart', (req, res, next) => {
   Cart.create()
     .then(cart => {
       const cartItem = CartItem.create(req.body.itemForCart)
-      cart.addCartItem(cartItem)
-      return cartItem
 
+      console.log(cartItem)
+      // return { cartId: cart.id, cart: cart.token, cartItem }
+      Promise.all([cart, cartItem])
     })
-    .cart(cartWithItem())
+    .then(([cart, cartItem]) => {
+      cart.addCartItem(cartItem)
+      return Promise.all([cart, cartItem])
+    })
+    .then(([cart, cartItem]) => {
+      let responseObj = { cartId: cart.id, cart: cart.token, cartItem }
+      res.status(200).json(responseObj)
+    })
+    .catch(next)
 
 })
