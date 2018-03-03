@@ -18,11 +18,23 @@ function ReviewForm() {
             <input name="reviewText" id="reviewText" type="text" />
             <label htmlFor="reviewText">Review text</label>
           </div>
+          <div>
+            <button className="waves-effect waves-light btn" type="submit">Submit</button>
+          </div>
         </form>
       </div>
     </div>
   )
 }
 
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     handleSubmit: function (event) {
+//       event.preventDefault()
+//       let review = {
 
+//       }
+//     }
+//   }
+// }
 export default ReviewForm
