@@ -1,4 +1,3 @@
-require('babel-polyfill')
 const router = require('express').Router()
 
 const { Cart, CartItem } = require('../db/models')
