@@ -1,4 +1,6 @@
+require('babel-polyfill')
 const router = require('express').Router()
+
 const { Cart, CartItem } = require('../db/models')
 module.exports = router
 
@@ -18,7 +20,7 @@ router.get('/:id', (req, res, next) => {
     .catch(next)
 })
 
-router.put('/update', async (req, res, next) => {
+router.put('/update', async function (req, res, next) {
   try {
     console.log('/update route req.body', req.body)
     let cart = await Cart.findById(req.body.cartId, {
