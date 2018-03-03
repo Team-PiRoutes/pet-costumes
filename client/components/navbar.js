@@ -7,11 +7,15 @@ import { logout } from '../store'
 const Navbar = ({ handleClick, isLoggedIn }) => (
   <nav className="navbar">
     <span className="nav-brand">
-      Pet Costumes by πRoutes
+      <Link to="/">Pet Costumes by πRoutes</Link>
     </span>
     <span className="navmenu">
+      <Link to="/products">Products</Link>
       {isLoggedIn
-      ? <a href="#" onClick={handleClick} >Logout</a>
+      ? <span>
+          <Link to="/me">Me</Link>
+          <a href="#" onClick={handleClick} >Logout</a>
+        </span>
       : <span>
           <Link to="/login">Login</Link>
           <Link to="/signup">Sign Up</Link>
