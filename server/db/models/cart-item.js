@@ -10,6 +10,10 @@ const CartItem = db.define('cartItem', {
   quantity: {
     type: Sequelize.INTEGER,
     allowNull: false
+  },
+  ordered: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
   }
 
 })
