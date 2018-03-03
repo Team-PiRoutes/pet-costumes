@@ -36,10 +36,8 @@ class ViewProduct extends Component {
       .catch(err => console.error(err))
   }
   enoughStock() {
-    console.log('enoughStock runs')
     let qtyInStock = this.state.product.quantity
     let qtySelected = document.getElementById('qty').value
-    console.log(qtySelected)
     if (qtyInStock <= 0) {
 
       this.setState({
@@ -66,17 +64,13 @@ class ViewProduct extends Component {
     }
   }
   addToCart() {
-
     let qty = document.getElementById('qty').value
     const { priceInCents, id } = this.state.product
-    console.log('id log', id)
-    console.log(priceInCents)
     const itemToSend = {
       priceInCents,
       quantity: +qty,
       productId: id
     }
-    console.log('Add To Cart Ran! Sent:', itemToSend)
     this.props.updateCartItem(itemToSend)
   }
 
@@ -86,7 +80,6 @@ class ViewProduct extends Component {
     const reviews = product.reviews
     let stock = product.quantity
 
-    console.log('this has loaded', this.state.hasLoaded)
     return (
       <div className="container">
         <div className="container">
@@ -105,7 +98,6 @@ class ViewProduct extends Component {
                   <p className="badge teal-text inline" > {this.state.stockMessage}</p>
               }
             </div>
-            {this.state.hasLoaded && console.log('render', document.getElementById('qty').value)}
             <div className="inline" >
               <p>Quantity: </p>
               <input id="qty" type="number" defaultValue="1" name="quantity" min="1" max={stock} onChange={() => this.enoughStock()} />

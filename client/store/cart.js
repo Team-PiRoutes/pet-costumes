@@ -22,15 +22,20 @@ const updateItem = (cartItem) => ({ type: UPDATE_CART_ITEM, cartItem })
  */
 export const updateCartItem = (itemForCart) => {
   //expects object passed in to have at least the  below keys
-  const { priceInCents, quantity, productId } = itemForCart
-  const cartItem = { priceInCents, quantity, productId }
-
-  //else update
-
-
-  return dispatch =>
-    dispatch(updateItem(cartItem))
+  // const { priceInCents, quantity, productId } = itemForCart
+  // const cartItem = { priceInCents, quantity, productId }
+  let route = (!!document.cookie && document.cookie.cartId && document.cookie.cartToken) ?
+    '/api/cart/update' : '/api/cart/newCart'
+  axios.put(route, { itemForCart, cookie: document.cookie })
+    .then(res => res.data)
+    .then(updatedItem => {
+      console.log('updated item from database', updatedItem)
+      return dispatch =>
+        dispatch(updateItem(updatedItem))
+    })
+    .catch(err => console.error(err))
 }
+//else update
 
 
 /**
@@ -48,6 +53,7 @@ export default function (state = defaultCart, action) {
         {},
         state[indexInCart],
         { quantity: action.cartItem.quantity }
+
       ) //end object.assign
 
 

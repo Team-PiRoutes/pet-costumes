@@ -110,10 +110,10 @@ async function seed() {
       cartId: 1
     }),
     CartItem.create({
-      productId: 1,
+      // productId: 1,
       priceInCents: 1340,
       quantity: 2,
-      cartId: 2
+      // cartId: 2
     })])
 
   console.log('seeding reviews')

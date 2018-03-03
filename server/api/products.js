@@ -12,7 +12,7 @@ router.get('/', (req, res, next) => {
 
 //get product by id
 router.get('/:id', (req, res, next) => {
-  Product.findById(req.params.id, { include: [ Review ] })
+  Product.findById(req.params.id, { include: [Review] })
     .then(product => res.json(product))
     .catch(next)
 })

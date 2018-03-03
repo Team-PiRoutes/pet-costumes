@@ -23,15 +23,16 @@ const CartItem = require('./cart-item')
  * instead of: const User = require('../db/models/user')
  */
 
-
-Product.belongsToMany(Cart, { through: 'CartItem' })
+// Cart.belongsToMany(Product, { through: CartItem })
+// Product.belongsToMany(Cart, { through: CartItem })
 Cart.hasMany(CartItem)
+Product.hasMany(CartItem)
 User.belongsToMany(Cart, { through: 'userCarts' })
 
 
 Category.belongsToMany(Product, { through: 'ProductCategory' })
-Product.belongsToMany(Order, { through: 'LineItem' })
-Order.belongsToMany(Product, { through: 'LineItem' })
+Product.belongsToMany(Order, { through: 'lineItems' })
+Order.belongsToMany(Product, { through: 'lineItems' })
 Review.belongsTo(User, { as: 'customer' })
 Product.hasMany(Review)
 
