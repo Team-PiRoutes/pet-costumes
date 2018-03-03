@@ -27,6 +27,7 @@ class Routes extends Component {
     this.props.loadInitialData()
   }
 
+  //sdjfs
   render() {
     const { isLoggedIn, isAdmin } = this.props
 

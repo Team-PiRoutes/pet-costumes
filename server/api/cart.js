@@ -21,18 +21,21 @@ router.get('/:id', (req, res, next) => {
 
 router.put('/update', async function (req, res, next) {
   try {
+    let cartId = +req.body.cartInfo.cartId
+    let cartToken = req.body.cartToken
+
     console.log('/update route req.body', req.body)
-    let cart = await Cart.findById(req.body.cartId, {
+    let cart = await Cart.findById(cartId, {
       include: {
         model: CartItem,
         where: { ordered: false },
         as: 'cartItems'
       }
     })
-    if (!!req.body.cartToken && req.body.cartToken === cart.cartToken) {
+    if (!!cartToken && cartToken === cart.cartToken) {
 
       const cartItemsIndex = cart.cartItems.findIndex(cartItem => {
-        return cartItem.id === req.body.cartId
+        return cartItem.id === cartId
       })
 
       if (cartItemsIndex >= 0) {
@@ -68,8 +71,9 @@ router.put('/newCart', addNewCart)
 
 
 async function addNewCart(req, res, next) {
-
+  console.log('in newCart fun fun function')
   try {
+
     let [cart, cartItem] = await Promise.all(
       [Cart.create(),
       CartItem.create(req.body.itemForCart)])

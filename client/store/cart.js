@@ -20,19 +20,29 @@ const updateItem = (cartItem) => ({ type: UPDATE_CART_ITEM, cartItem })
 /**
  * THUNK CREATORS
  */
+const cartInfo = {
+  cartId: localStorage.getItem('cartId'),
+  tokenId: localStorage.getItem('tokenId')
+}
 export const updateCartItem = (itemForCart) => {
+  console.log('thunked about it')
   //expects object passed in to have at least the  below keys
   // const { priceInCents, quantity, productId } = itemForCart
   // const cartItem = { priceInCents, quantity, productId }
-  let route = (!!document.cookie && document.cookie.cartId && document.cookie.cartToken) ?
-    '/api/cart/update' : '/api/cart/newCart'
-  axios.put(route, { itemForCart, cookie: document.cookie })
+  let route = (cartInfo.cartId !== null &&
+    cartInfo.tokenId !== null ?
+    '/api/cart/update' : '/api/cart/newCart')
+
+  axios.put(route, { itemForCart, cartInfo })
     .then(res => res.data)
     .then(cartUpdate => {
-      // const cartId = cartUpdate.cartId
-      //const cartToken = cartUpdate.cartToken
+      console.log('thunked about it and the server has thunked about', cartUpdate)
+      localStorage.setItem('cartId', '' + cartUpdate.cartId)
+      localStorage.setItem('tokenId', '' + cartUpdate.tokenId)
+
+
       const updatedItem = cartUpdate.cartItem
-      console.log('updated item from database', updatedItem)
+
       return dispatch =>
         dispatch(updateItem(updatedItem))
     })
