@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
+const { sizes } = require('../../../sizes')
 
 const Product = db.define('product', {
   title: {
@@ -26,7 +27,7 @@ const Product = db.define('product', {
     defaultValue: '/img/defaultDogCostume.jpg'
   },
   size: {
-    type: Sequelize.STRING,
+    type: Sequelize.ENUM(sizes), // eslint-disable-line
     allowNull: true
   }
 }, {

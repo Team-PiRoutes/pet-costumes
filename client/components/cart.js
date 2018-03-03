@@ -38,7 +38,6 @@ const Cart = (props) => {
 
 
 const mapStateToProps = function (state) {
-
   return {
     cart: state.cart
   }

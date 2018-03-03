@@ -7,7 +7,7 @@ router.get('/', (req, res, next) => {
   Product.findAll({
     include: [
       { model: Review },
-      { model: Category, through: ProductCategory}
+      { model: Category, through: ProductCategory }
     ]
   })
     .then(products => res.json(products))
@@ -17,11 +17,11 @@ router.get('/', (req, res, next) => {
 //get product by id
 router.get('/:id', (req, res, next) => {
   Product.findById(req.params.id, {
-      include: [
-        { model: Review },
-        { model: Category, through: ProductCategory}
-      ]
-    })
+    include: [
+      { model: Review },
+      { model: Category, through: ProductCategory }
+    ]
+  })
     .then(product => res.json(product))
     .catch(next)
 })
@@ -29,8 +29,8 @@ router.get('/:id', (req, res, next) => {
 //add product (by admin)
 router.post('/admin/new', (req, res, next) => {
   Product.create(req.body)
-  .then((newProduct) => res.json(newProduct))
-  .catch(next)
+    .then((newProduct) => res.json(newProduct))
+    .catch(next)
 })
 
 //add product review (by user)
