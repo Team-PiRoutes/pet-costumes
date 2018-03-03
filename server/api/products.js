@@ -17,10 +17,17 @@ router.get('/:id', (req, res, next) => {
     .catch(next)
 })
 
-//add product (admin)
+//add product (by admin)
 router.post('/admin/new', (req, res, next) => {
   Product.create(req.body)
   .then((newProduct) => res.json(newProduct))
+  .catch(next)
+})
+
+//add product review (by user)
+router.post('/:id/reviews', (req, res, next) => {
+  Review.create(req.body)
+  .then((newReview) => res.json(newReview))
   .catch(next)
 })
 

@@ -14,6 +14,7 @@ import {
   AdminUsers,
   AdminViewUser,
   NewProductForm,
+  ReviewForm
 } from './components'
 
 
@@ -39,6 +40,7 @@ class Routes extends Component {
         <Route exact path="/cart" component={Cart} />
         <Route exact path="/products" component={Products} />
         <Route exact path="/products/:productId" component={ViewProduct} />
+        <Route exact path="/products/:productId/reviews" component={ReviewForm} />
         <Route exact path="/admin/products/new" component={NewProductForm} />
         <Route exact path="/admin/users" component={AdminUsers} />
         <Route exact path="/admin/users/:userId" component={AdminViewUser} />
