@@ -4,9 +4,6 @@ import Size from './size'
 
 const Sidebar = (props) => {
   const { categories, sizes } = props
-  console.log('sizes: ', sizes)
-  console.log('categories: ', categories)
-
 
   return (
     <div className="sidebar">

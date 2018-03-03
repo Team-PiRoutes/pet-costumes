@@ -4,7 +4,6 @@ import { addActiveCategory, removeActiveCategory } from '../store'
 
 const Category = (props) => {
   const { category, activeCategories, handleToggle } = props
-  console.log('category: ', category)
   const active = !!activeCategories.find(catId => catId === category.id)
   const activeClass = active ? 'active-category' : 'inactive-category'
 
