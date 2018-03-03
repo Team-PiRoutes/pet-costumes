@@ -13,10 +13,11 @@ import {
   AdminListOrders,
   AdminUsers,
   AdminViewUser,
+  NewProductForm,
 } from './components'
 
 
-import { me, fetchProducts } from './store'
+import { me, fetchProducts, fetchCategories } from './store'
 
 /**
  * COMPONENT
@@ -38,6 +39,7 @@ class Routes extends Component {
         <Route exact path="/cart" component={Cart} />
         <Route exact path="/products" component={Products} />
         <Route exact path="/products/:productId" component={ViewProduct} />
+        <Route exact path="/admin/products/new" component={NewProductForm} />
         <Route exact path="/admin/users" component={AdminUsers} />
         <Route exact path="/admin/users/:userId" component={AdminViewUser} />
         {
@@ -77,6 +79,7 @@ const mapDispatch = (dispatch) => {
     loadInitialData() {
       dispatch(me())
       dispatch(fetchProducts())
+      dispatch(fetchCategories())
     }
   }
 }
