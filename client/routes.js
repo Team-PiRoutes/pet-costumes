@@ -18,7 +18,7 @@ import {
 } from './components'
 
 
-import { me, fetchProducts } from './store'
+import { me, fetchProducts, fetchCategories } from './store'
 
 /**
  * COMPONENT
@@ -38,6 +38,7 @@ class Routes extends Component {
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         <Route exact path="/cart" component={Cart} />
+        <Route exact path="/" component={Products} />
         <Route exact path="/products" component={Products} />
         <Route exact path="/products/:productId" component={ViewProduct} />
         <Route exact path="/products/:productId/reviews" component={ReviewForm} />
@@ -48,7 +49,7 @@ class Routes extends Component {
           isLoggedIn &&
           <Switch>
             {/* Routes placed here are only available after logging in */}
-            <Route path="/home" component={UserHome} />
+            <Route path="/me" component={UserHome} />
             {
               isAdmin &&
               <Switch>
@@ -81,6 +82,7 @@ const mapDispatch = (dispatch) => {
     loadInitialData() {
       dispatch(me())
       dispatch(fetchProducts())
+      dispatch(fetchCategories())
     }
   }
 }

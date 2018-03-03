@@ -105,3 +105,26 @@ div.sidebar {
   margin-right: 2vw;
   padding-top: 7vw;
 }
+
+.active-category {
+  background: springgreen;
+  color: white;
+}
+
+.inactive-category {
+  background: white;
+  color: black;
+}
+
+.active-category, .inactive-category {
+  padding: 0 0.5rem;
+  border-radius: 0.3rem;
+  margin-bottom: 0.2rem;
+}
+
+/* auth form */
+
+#auth-form {
+  margin-top: 4rem;
+  padding: 2rem;
+}

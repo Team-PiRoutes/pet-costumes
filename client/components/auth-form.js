@@ -10,22 +10,24 @@ const AuthForm = (props) => {
   const {name, displayName, handleSubmit, error} = props
 
   return (
-    <div>
+    <div id="auth-form" className="container z-depth-3">
       <form onSubmit={handleSubmit} name={name}>
-        <div>
-          <label htmlFor="email"><small>Email</small></label>
-          <input name="email" type="text" />
+        <div className="input-field">
+          <input id="email" name="email" type="email" className="validate" />
+          <label htmlFor="email">Email</label>
+        </div>
+        <div className="input-field">
+          <input id="password" name="password" type="password" className="validate" />
+          <label htmlFor="password">Password</label>
         </div>
         <div>
-          <label htmlFor="password"><small>Password</small></label>
-          <input name="password" type="password" />
-        </div>
-        <div>
-          <button type="submit">{displayName}</button>
+          <button type="submit" className="waves-effect waves-light btn">{displayName}</button>
         </div>
         {error && error.response && <div> {error.response.data} </div>}
       </form>
-      <a href="/auth/google">{displayName} with Google</a>
+
+      <p>Or</p>
+      <a className="waves-effect waves-light btn orange" href="/auth/google">{displayName} with Google</a>
     </div>
   )
 }

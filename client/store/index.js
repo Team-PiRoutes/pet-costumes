@@ -5,8 +5,10 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import user from './user'
 import products from './products'
 import cart from './cart'
+import activeCategories from './active-categories'
+import categories from './categories'
 
-const reducer = combineReducers({ user, products, cart })
+const reducer = combineReducers({ user, products, cart, activeCategories, categories })
 const middleware = composeWithDevTools(applyMiddleware(
   thunkMiddleware,
   createLogger({ collapsed: true })
@@ -17,3 +19,5 @@ export default store
 export * from './user'
 export * from './products'
 export * from './cart'
+export * from './active-categories'
+export * from './categories'
