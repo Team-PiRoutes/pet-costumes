@@ -1,5 +1,7 @@
 const router = require('express').Router()
-const {User} = require('../db/models')
+const { User } = require('../db/models')
+const { adminOnly } = require('./authorization')
+
 module.exports = router
 
 router.get('/', (req, res, next) => {
@@ -26,7 +28,7 @@ router.put('/:id', (req, res, next) => {
     .catch(next)
 })
 
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id', adminOnly, (req, res, next) => {
   User.findById(req.params.id)
     .then(user => user.destroy())
     .then(updatedUser => res.status(200).json(updatedUser))
