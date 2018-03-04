@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import Product from './product'
 import Sidebar from './sidebar'
 import { sizes } from '../../sizes'
+import Search from './search'
 
 export const filterByCategories = (products, activeCategories) => {
   if (activeCategories.length === 0) return products
@@ -21,6 +22,11 @@ export const filterBySizes = (products, activeSizes) => {
   return products.filter(product => activeSizes.indexOf(product.size) !== -1)
 }
 
+export const filterByName = (products, searchTerm) => {
+  if (searchTerm === '') return products
+  return []
+}
+
 
 /**
  * COMPONENT
@@ -35,7 +41,10 @@ export const Products = (props) => {
     <div className="main">
       <Sidebar categories={categories} sizes={sizes} />
       <div className="content">
-        <h3>Our Products</h3>
+        <div className="products-list-title">
+          <span>Our Products</span>
+          <span><Search /></span>
+          </div>
         <div className="products-list">
           {
             filteredProducts.map(product => (

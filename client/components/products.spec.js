@@ -1,4 +1,4 @@
-import { filterByCategories, filterBySizes } from './products'
+import { filterByCategories, filterBySizes, filterByName } from './products'
 import { expect } from 'chai'
 
 
@@ -77,5 +77,51 @@ describe('filterBySizes', () => {
   it('should return no products if there are none matching any of the sizes in activeSizes', () => {
     const filteredProducts3 = filterBySizes(products, ['XS', 'M', 'XL'])
     expect(filteredProducts3).to.be.deep.equal([])
+  })
+})
+
+describe('filterByName', () => {
+  let products = []
+  let filteredProducts = []
+
+  beforeEach(() => {
+    products = [
+      {id: 1, name: 'pirate'},
+      {id: 2, name: 'hotdog'},
+      {id: 3, name: 'Wonder Kitty'},
+    ]
+  })
+
+  it('should return all products if searchTerm is an empty string or only white space', () => {
+    filteredProducts = filterByName(products, '')
+    expect(filteredProducts).to.be.deep.equal(products)
+
+    filteredProducts = filterByName(products, '  \n')
+    expect(filteredProducts).to.be.deep.equal(products)
+  })
+
+  it('should return all products whose names include the searchTerm', () => {
+    filteredProducts = filterByName(products, 'o')
+    expect(filteredProducts).to.be.deep.equal([
+      {id: 2, name: 'hotdog'},
+      {id: 3, name: 'Wonder Kitty'},
+    ])
+
+    filteredProducts = filterByName(products, 'hotdog')
+    expect(filteredProducts).to.be.deep.equal([
+      {id: 2, name: 'hotdog'}
+    ])
+  })
+
+  it('should return match product names regardless of case', () => {
+    filteredProducts = filterByName(products, 'PIRATE')
+    expect(filteredProducts).to.be.deep.equal([
+      {id: 1, name: 'pirate'},
+    ])
+
+    filteredProducts = filterByName(products, 'WONder k')
+    expect(filteredProducts).to.be.deep.equal([
+      {id: 3, name: 'Wonder Kitty'},
+    ])
   })
 })
