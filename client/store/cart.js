@@ -2,9 +2,11 @@ import axios from 'axios'
 /**
  * ACTION TYPES
  */
+const ADD_TO_CART = 'ADD_TO_CART'
 const UPDATE_CART_ITEM = 'UPDATE_CART_ITEM'
 const GOT_PREVIOUS_CART = 'GOT_PREVIOUS_CART'
 const GOT_USER_CART = 'GOT_USER_CART'
+
 
 /**
  * INITIAL STATE
@@ -15,29 +17,27 @@ const defaultCart = []
 /**
  * ACTION CREATORS
  */
+const updateItem = (cartItem) => ({ type: UPDATE_CART_ITEM, cartItem })
+const addItem = (cartItem) => ({ type: UPDATE_CART_ITEM, cartItem })
 
 const gotCart = cart => ({ type: GOT_PREVIOUS_CART, cart })
-const updateItem = (cartItem) => ({ type: UPDATE_CART_ITEM, cartItem })
+
 const gotUserCart = cart => ({ type: GOT_USER_CART, cart })
+
 /**
  * THUNK CREATORS
  */
 
 
+//UPDATE QUANTITY
 export const updateCartItem = (itemForCart) => dispatch => {
-  console.log('thunked about it')
-  //expects object passed in to have at least the  below keys
-  // const { priceInCents, quantity, productId } = itemForCart
-  // const cartItem = { priceInCents, quantity, productId }
+
   let cartInfo = getCartLocals()
-  let route = (cartInfo.cartId !== null &&
-    cartInfo.cartToken !== null ?
-    '/api/cart/update' : '/api/cart/newCart')
-  console.log('route to be sent', route)
-  axios.put(route, { itemForCart, cartInfo })
+
+  axios.put('/api/cart/update', { itemForCart, cartInfo })
     .then(res => res.data)
     .then(cartUpdate => {
-      console.log('thunked about it and the server has thunked about', cartUpdate)
+
       localStorage.setItem('cartId', '' + cartUpdate.cartId)
       localStorage.setItem('cartToken', '' + cartUpdate.cartToken)
 
@@ -48,6 +48,26 @@ export const updateCartItem = (itemForCart) => dispatch => {
     .catch(err => console.error(err))
 }
 
+//ADD TO CART/CREATE CART
+export const addItemToCart = (itemForCart) => async dispatch => {
+  try {
+    console.log('thunking it over')
+    let cartInfo = getCartLocals()
+    const res = await axios.post('/api/cart/addToCart', { itemForCart, cartInfo })
+    const cartUpdate = res.data
+    console.log('thunk it over and this is what I got', cartUpdate.cartItem)
+    console.log('cart Id we thunked about', cartUpdate.cartId)
+    localStorage.setItem('cartId', '' + cartUpdate.cartId)
+    localStorage.setItem('cartToken', '' + cartUpdate.cartToken)
+    const updatedItem = cartUpdate.cartItem
+
+
+    dispatch(updateItem(updatedItem))
+  } catch (err) {
+    console.error(err)
+  }
+
+}
 
 export function fetchCart() {
 
@@ -56,6 +76,7 @@ export function fetchCart() {
       const browserCartInfo = getCartLocals()
       if (browserCartInfo.cartId !== null && browserCartInfo.cartToken !== null) {
         let resOldCart = await axios.get(`/api/cart/${browserCartInfo.cartId}/${browserCartInfo.cartToken}`, browserCartInfo)
+        console.log('fetched cart from server', resOldCart.data)
         dispatch(gotCart(resOldCart.data))
       }
     } catch (err) {
@@ -85,7 +106,7 @@ export default function (state = defaultCart, action) {
       let indexInCart = state.findIndex(item => item.id === action.productId)
 
       if (indexInCart < 0) return [...state, action.cartItem]
-
+      console.log(action.cartItem)
       let updatedProduct = Object.assign(
         {},
         state[indexInCart],

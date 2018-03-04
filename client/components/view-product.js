@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import Reviews from './reviews'
 import { connect } from 'react-redux'
-import { updateCartItem } from '../store/cart'
+import { addItemToCart } from '../store/cart'
 
 class ViewProduct extends Component {
   constructor(props) {
@@ -11,7 +11,8 @@ class ViewProduct extends Component {
       hasLoaded: false,
       product: {},
       stockMessage: '',
-      addDiabled: false
+      addDiabled: false,
+      qtySelected: 1
     }
     this.addToCart = this.addToCart.bind(this)
     this.enoughStock = this.enoughStock.bind(this)
@@ -69,14 +70,14 @@ class ViewProduct extends Component {
     }
   }
   addToCart() {
-    let qty = document.getElementById('qty').value
+    let qty = this.state.qtySelected
     const { priceInCents, id } = this.state.product
     const itemToSend = {
       priceInCents,
       quantity: +qty,
       productId: id
     }
-    this.props.updateCartItem(itemToSend)
+    this.props.addItemToCart(itemToSend)
   }
 
   render() {
@@ -125,6 +126,6 @@ class ViewProduct extends Component {
 const mapStateToProps = null
 
 const mapDispatchToProps = (dispatch) => ({
-  updateCartItem: (item) => dispatch(updateCartItem(item))
+  addItemToCart: (item) => dispatch(addItemToCart(item))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(ViewProduct)
