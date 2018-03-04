@@ -4,8 +4,6 @@ const { adminOnly } = require('./authorization')
 
 module.exports = router
 
-router.use('/', adminOnly)
-
 router.get('/', (req, res, next) => {
   User.findAll({
     // explicitly select only the id and email fields - even though
@@ -30,7 +28,7 @@ router.put('/:id', (req, res, next) => {
     .catch(next)
 })
 
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id', adminOnly, (req, res, next) => {
   User.findById(req.params.id)
     .then(user => user.destroy())
     .then(updatedUser => res.status(200).json(updatedUser))
