@@ -1,6 +1,10 @@
 const router = require('express').Router()
-const {User} = require('../db/models')
+const { User } = require('../db/models')
+const { adminOnly } = require('./authorization')
+
 module.exports = router
+
+router.use('/', adminOnly)
 
 router.get('/', (req, res, next) => {
   User.findAll({
