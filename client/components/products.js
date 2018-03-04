@@ -4,38 +4,16 @@ import Product from './product'
 import Sidebar from './sidebar'
 import { sizes } from '../../sizes'
 import Search from './search'
-
-export const filterByCategories = (products, activeCategories) => {
-  if (activeCategories.length === 0) return products
-
-  return products.filter(product => {
-    const productCatIds = product.categories.map(cat => cat.id)
-    for (let i = 0; i < activeCategories.length; i++) {
-      if (productCatIds.indexOf(activeCategories[i]) === -1) return false
-    }
-    return true
-  })
-}
-
-export const filterBySizes = (products, activeSizes) => {
-  if (activeSizes.length === 0) return products
-  return products.filter(product => activeSizes.indexOf(product.size) !== -1)
-}
-
-export const filterByName = (products, searchTerm) => {
-  if (searchTerm === '') return products
-  return []
-}
-
+import { filterByCategories, filterByName, filterBySizes } from '../utils/product-filters'
 
 /**
  * COMPONENT
  */
 export const Products = (props) => {
 
-  const { products, categories, activeCategories, activeSizes } = props
+  const { products, categories, activeCategories, activeSizes, searchTerm } = props
 
-  let filteredProducts = filterByCategories(filterBySizes(products, activeSizes), activeCategories)
+  let filteredProducts = filterByName(filterByCategories(filterBySizes(products, activeSizes), activeCategories), searchTerm)
 
   return (
     <div className="main">
@@ -69,7 +47,8 @@ const mapStateToProps = function (state) {
     products: state.products,
     categories: state.categories,
     activeCategories: state.activeCategories,
-    activeSizes: state.activeSizes
+    activeSizes: state.activeSizes,
+    searchTerm: state.searchTerm,
   }
 }
 

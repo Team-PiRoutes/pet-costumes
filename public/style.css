@@ -103,6 +103,14 @@ div.product-item {
   text-align: center;
 }
 
+#product-search {
+  margin-top: 0.5rem;
+}
+
+#product-search-icon {
+  margin-top: 1rem;
+}
+
 /* Sidebar */
 
 div.sidebar-header {

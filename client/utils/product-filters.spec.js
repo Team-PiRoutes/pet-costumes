@@ -1,4 +1,4 @@
-import { filterByCategories, filterBySizes, filterByName } from './products'
+import { filterByCategories, filterBySizes, filterByName } from './product-filters'
 import { expect } from 'chai'
 
 
@@ -7,9 +7,9 @@ describe('filterByCategories', () => {
 
   beforeEach(() => {
     products = [
-      {id: 1, name: 'pirate', categories: [ { id: 1 }, { id: 2 } ]},
-      {id: 2, name: 'hotdog', categories: [ { id: 1 } ]},
-      {id: 3, name: 'wonderkitty', categories: [ { id: 2 } ]},
+      {id: 1, title: 'pirate', categories: [ { id: 1 }, { id: 2 } ]},
+      {id: 2, title: 'hotdog', categories: [ { id: 1 } ]},
+      {id: 3, title: 'wonderkitty', categories: [ { id: 2 } ]},
     ]
   })
   it('should return all products if activeCategories is empty', () => {
@@ -20,20 +20,20 @@ describe('filterByCategories', () => {
   it('should only return products which match all categories in active categories', () => {
     const filteredProducts1 = filterByCategories(products, [1])
     expect(filteredProducts1).to.be.deep.equal([
-      {id: 1, name: 'pirate', categories: [ { id: 1 }, { id: 2 } ]},
-      {id: 2, name: 'hotdog', categories: [ { id: 1 } ]}
+      {id: 1, title: 'pirate', categories: [ { id: 1 }, { id: 2 } ]},
+      {id: 2, title: 'hotdog', categories: [ { id: 1 } ]}
     ])
     const filteredProducts3 = filterByCategories(products, [2])
     expect(filteredProducts3).to.be.deep.equal([
-      {id: 1, name: 'pirate', categories: [ { id: 1 }, { id: 2 } ]},
-      {id: 3, name: 'wonderkitty', categories: [ { id: 2 } ]},
+      {id: 1, title: 'pirate', categories: [ { id: 1 }, { id: 2 } ]},
+      {id: 3, title: 'wonderkitty', categories: [ { id: 2 } ]},
     ])
   })
 
   it('should only return products which match all in activeCategories', () => {
     const filteredProducts2 = filterByCategories(products, [1, 2])
     expect(filteredProducts2).to.be.deep.equal([
-      {id: 1, name: 'pirate', categories: [ { id: 1 }, { id: 2 } ]},
+      {id: 1, title: 'pirate', categories: [ { id: 1 }, { id: 2 } ]},
     ])
   })
 
@@ -49,9 +49,9 @@ describe('filterBySizes', () => {
 
   beforeEach(() => {
     products = [
-      {id: 1, name: 'pirate', size: 'S'},
-      {id: 2, name: 'hotdog', size: 'L'},
-      {id: 3, name: 'wonderkitty', size: 'XXL'},
+      {id: 1, title: 'pirate', size: 'S'},
+      {id: 2, title: 'hotdog', size: 'L'},
+      {id: 3, title: 'wonderkitty', size: 'XXL'},
     ]
   })
 
@@ -63,14 +63,14 @@ describe('filterBySizes', () => {
   it('should return any products which match any of the sizes in activeSizes', () => {
     const filteredProducts1 = filterBySizes(products, ['S'])
     expect(filteredProducts1).to.be.deep.equal([
-      {id: 1, name: 'pirate', size: 'S'}
+      {id: 1, title: 'pirate', size: 'S'}
     ])
   })
 
   it('should return some products even if there are none of one of the activeSizes', () => {
     const filteredProducts2 = filterBySizes(products, ['S', 'M'])
     expect(filteredProducts2).to.be.deep.equal([
-      {id: 1, name: 'pirate', size: 'S'}
+      {id: 1, title: 'pirate', size: 'S'}
     ])
   })
 
@@ -86,9 +86,9 @@ describe('filterByName', () => {
 
   beforeEach(() => {
     products = [
-      {id: 1, name: 'pirate'},
-      {id: 2, name: 'hotdog'},
-      {id: 3, name: 'Wonder Kitty'},
+      {id: 1, title: 'pirate'},
+      {id: 2, title: 'hotdog'},
+      {id: 3, title: 'Wonder Kitty'},
     ]
   })
 
@@ -103,25 +103,25 @@ describe('filterByName', () => {
   it('should return all products whose names include the searchTerm', () => {
     filteredProducts = filterByName(products, 'o')
     expect(filteredProducts).to.be.deep.equal([
-      {id: 2, name: 'hotdog'},
-      {id: 3, name: 'Wonder Kitty'},
+      {id: 2, title: 'hotdog'},
+      {id: 3, title: 'Wonder Kitty'},
     ])
 
     filteredProducts = filterByName(products, 'hotdog')
     expect(filteredProducts).to.be.deep.equal([
-      {id: 2, name: 'hotdog'}
+      {id: 2, title: 'hotdog'}
     ])
   })
 
   it('should return match product names regardless of case', () => {
     filteredProducts = filterByName(products, 'PIRATE')
     expect(filteredProducts).to.be.deep.equal([
-      {id: 1, name: 'pirate'},
+      {id: 1, title: 'pirate'},
     ])
 
     filteredProducts = filterByName(products, 'WONder k')
     expect(filteredProducts).to.be.deep.equal([
-      {id: 3, name: 'Wonder Kitty'},
+      {id: 3, title: 'Wonder Kitty'},
     ])
   })
 })
