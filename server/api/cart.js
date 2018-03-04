@@ -4,21 +4,6 @@ const { Cart, CartItem } = require('../db/models')
 module.exports = router
 
 
-//get cart by id
-router.get('/:id', (req, res, next) => {
-  //need to alter to get current price
-  Cart.findById(req.params.id, {
-    include: {
-      model: CartItem,
-      where: { ordered: false },
-      as: 'cartItems',
-      attributes: ['id', 'quantity', 'priceInCents']
-    }
-  })
-    .then(cart => res.json(cart))
-    .catch(next)
-})
-
 router.put('/update', async function (req, res, next) {
   try {
     let cartId = +req.body.cartInfo.cartId
@@ -70,6 +55,69 @@ router.put('/update', async function (req, res, next) {
 router.put('/newCart', addNewCart)
 
 
+router.get('/:cartId/:cartToken', async (req, res, next) => {
+
+  try {
+
+    console.log('myCart Route has been hit..########', +req.params.cartId)
+    let cartId = +req.params.cartId
+    let cartToken = req.params.cartToken
+    let cart = await Cart.findById(cartId, {
+      include: {
+        model: CartItem,
+        where: { ordered: false },
+        as: 'cartItems',
+        attributes: ['id', 'quantity', 'priceInCents']
+      }
+    })
+    console.log('cartToken', cartToken, 'cart.token', cart.cartToken)
+    if (!!cartToken && cartToken === cart.cartToken) {
+      res.json(cart.cartItems)
+
+    } else {
+      res.sendStatus(404)
+    }
+  } catch (err) { next(err) }
+
+})
+
+router.put('/userCart', async (req, res, next) => {
+  try {
+    let visitorCartId = req.body.cartInfo.cartId
+    let visitorCartToken = req.body.cartInfo.cartToken
+    const user = req.body.user
+    let userCart
+    let visitorCart
+
+    if (user.cartId) {
+      userCart = await Cart.findById(user.cartId)
+      console.log(userCart)
+    }
+
+    if (!visitorCartId && !visitorCartToken) {
+
+      // get the cart form cart table
+      visitorCart = await Cart.findById(user.cartId)
+      console.log(visitorCart)
+      //authenticate cart
+    }
+
+    if (userCart && visitorCart) {
+      // stuff
+    } else if (userCart) {
+      // stuff
+    } else if (visitorCart) {
+      // stuff
+    }
+
+  }
+  catch (err) {
+    next(err)
+  }
+})
+
+
+/*----Callback function----*/
 async function addNewCart(req, res, next) {
   console.log('in newCart fun fun function')
   try {
@@ -88,3 +136,17 @@ async function addNewCart(req, res, next) {
     next(err)
   }
 }
+
+// router.get('/:id', (req, res, next) => {
+//   //need to alter to get current price
+//   Cart.findById(req.params.id, {
+//     include: {
+//       model: CartItem,
+//       where: { ordered: false },
+//       as: 'cartItems',
+//       attributes: ['id', 'quantity', 'priceInCents']
+//     }
+//   })
+//     .then(cart => res.json(cart))
+//     .catch(next)
+// })

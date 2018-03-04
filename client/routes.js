@@ -17,7 +17,7 @@ import {
 } from './components'
 
 
-import { me, fetchProducts, fetchCategories } from './store'
+import { me, fetchProducts, fetchCategories, fetchCart } from './store'
 
 /**
  * COMPONENT
@@ -27,7 +27,7 @@ class Routes extends Component {
     this.props.loadInitialData()
   }
 
-  //sdjfs
+
   render() {
     const { isLoggedIn, isAdmin } = this.props
 
@@ -82,6 +82,7 @@ const mapDispatch = (dispatch) => {
       dispatch(me())
       dispatch(fetchProducts())
       dispatch(fetchCategories())
+      dispatch(fetchCart())
     }
   }
 }
