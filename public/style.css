@@ -84,6 +84,15 @@ div.product-item {
   height: 21vw;
 }
 
+.products-list-title{
+  font-size: 2.0rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 4vw;
+}
+
 .product-title {
   font-size: 1.5rem;
   font-weight: bold;
@@ -94,32 +103,51 @@ div.product-item {
   text-align: center;
 }
 
+#product-search {
+  margin-top: 0.5rem;
+}
+
+#product-search-icon {
+  margin-top: 1rem;
+}
+
 /* Sidebar */
 
 div.sidebar-header {
-  font-weight: bold
+  font-weight: bold;
+  line-height: 1.2rem;
+  margin: 1.5rem 0 0 0;
 }
 
 div.sidebar {
   width: 12vw;
   margin-right: 2vw;
-  padding-top: 7vw;
+  padding-top: 8vw;
 }
 
 .active-category {
-  background: springgreen;
+  background: green;
   color: white;
 }
 
-.inactive-category {
+.active-size {
+  background: blue;
+  color: white;
+}
+
+.inactive-category, .inactive-size {
   background: white;
   color: black;
 }
 
-.active-category, .inactive-category {
+.active-category, .inactive-category, .inactive-size, .active-size {
   padding: 0 0.5rem;
   border-radius: 0.3rem;
   margin-bottom: 0.2rem;
+}
+
+.sidebar ul {
+  margin-top: 0.5rem;
 }
 
 /* auth form */

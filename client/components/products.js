@@ -2,30 +2,27 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Product from './product'
 import Sidebar from './sidebar'
+import { sizes } from '../../sizes'
+import Search from './search'
+import { filterByCategories, filterByName, filterBySizes } from '../utils/product-filters'
 
 /**
  * COMPONENT
  */
-const Products = (props) => {
+export const Products = (props) => {
 
-  const { products, categories, activeCategories } = props
+  const { products, categories, activeCategories, activeSizes, searchTerm } = props
 
-  let filteredProducts = products.filter(product => {
-    const productCatIds = product.categories.map(cat => cat.id)
-    for (let i = 0; i < activeCategories.length; i++) {
-      if (productCatIds.indexOf(activeCategories[i]) === -1) return false
-    }
-    return true
-  })
-
-  // loop through active cat ids
-  // if any of them are not present in product.catids then filter out
+  let filteredProducts = filterByName(filterByCategories(filterBySizes(products, activeSizes), activeCategories), searchTerm)
 
   return (
     <div className="main">
-      <Sidebar categories={categories} />
+      <Sidebar categories={categories} sizes={sizes} />
       <div className="content">
-        <h3>Our Products</h3>
+        <div className="products-list-title">
+          <span>Our Products</span>
+          <span><Search /></span>
+          </div>
         <div className="products-list">
           {
             filteredProducts.map(product => (
@@ -49,7 +46,9 @@ const mapStateToProps = function (state) {
   return {
     products: state.products,
     categories: state.categories,
-    activeCategories: state.activeCategories
+    activeCategories: state.activeCategories,
+    activeSizes: state.activeSizes,
+    searchTerm: state.searchTerm,
   }
 }
 
