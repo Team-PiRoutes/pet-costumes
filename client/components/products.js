@@ -3,39 +3,26 @@ import { connect } from 'react-redux'
 import Product from './product'
 import Sidebar from './sidebar'
 import { sizes } from '../../sizes'
-
-export const filterByCategories = (products, activeCategories) => {
-  if (activeCategories.length === 0) return products
-
-  return products.filter(product => {
-    const productCatIds = product.categories.map(cat => cat.id)
-    for (let i = 0; i < activeCategories.length; i++) {
-      if (productCatIds.indexOf(activeCategories[i]) === -1) return false
-    }
-    return true
-  })
-}
-
-export const filterBySizes = (products, activeSizes) => {
-  if (activeSizes.length === 0) return products
-  return products.filter(product => activeSizes.indexOf(product.size) !== -1)
-}
-
+import Search from './search'
+import { filterByCategories, filterByName, filterBySizes } from '../utils/product-filters'
 
 /**
  * COMPONENT
  */
 export const Products = (props) => {
 
-  const { products, categories, activeCategories, activeSizes } = props
+  const { products, categories, activeCategories, activeSizes, searchTerm } = props
 
-  let filteredProducts = filterByCategories(filterBySizes(products, activeSizes), activeCategories)
+  let filteredProducts = filterByName(filterByCategories(filterBySizes(products, activeSizes), activeCategories), searchTerm)
 
   return (
     <div className="main">
       <Sidebar categories={categories} sizes={sizes} />
       <div className="content">
-        <h3>Our Products</h3>
+        <div className="products-list-title">
+          <span>Our Products</span>
+          <span><Search /></span>
+          </div>
         <div className="products-list">
           {
             filteredProducts.map(product => (
@@ -60,7 +47,8 @@ const mapStateToProps = function (state) {
     products: state.products,
     categories: state.categories,
     activeCategories: state.activeCategories,
-    activeSizes: state.activeSizes
+    activeSizes: state.activeSizes,
+    searchTerm: state.searchTerm,
   }
 }
 
