@@ -21,7 +21,7 @@ class Orders extends Component {
         <h3>My orders</h3>
         {orders && orders.map(order => {
           return (
-            <NavLink key={order.id} to={`/orders/${order.id}`}>
+            <NavLink key={order.id} to={`/me/orders/${order.id}`}>
               <div className="z-depth-3 order-item">
                 <div className="chip">Order Id: {order.id}</div>
                 <div>Order submitted on: {Date(order.createdAt)}</div>
