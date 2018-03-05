@@ -1,6 +1,6 @@
 
 const router = require('express').Router()
-const { Order } = require('../db/models')
+const { Order, OrderItem } = require('../db/models')
 
 
 router.get('/', (req, res, next) => {
@@ -8,7 +8,9 @@ router.get('/', (req, res, next) => {
 
   Order.findAll({
     where: userQuery,
-    attributes: ['id', 'email', 'orderStatus', 'city', 'state']
+    include: [
+      { model: OrderItem }
+    ]
   })
     .then((orders) => res.json(orders))
     .catch(next)

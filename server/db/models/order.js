@@ -36,6 +36,10 @@ const Order = db.define('order', {
     type: Sequelize.STRING,
     allowNull: false
   }
+}, {
+  defaultScope: {
+    order: Sequelize.literal('"createdAt" DESC')
+  }
 })
 
 module.exports = Order
