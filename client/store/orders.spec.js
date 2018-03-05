@@ -1,4 +1,4 @@
-import reducer, { gotCategories, fetchCategories } from './categories'
+import reducer, { gotOrders, fetchOrders, fetchOrdersByUserId } from './orders'
 import { expect } from 'chai'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
@@ -8,38 +8,57 @@ import thunkMiddleware from 'redux-thunk'
 const middlewares = [thunkMiddleware]
 const mockStore = configureMockStore(middlewares)
 
-describe('Categories Store', () => {
+const fakeOrders = [
+  {
+    userId: 1,
+    email: 'billy-loves-dogs@puppybook.com',
+    orderStatus: 'created',
+    addressLine1: '123 Puppy Rd',
+    city: 'Dogville',
+    state: 'IL',
+    zip: '12345'
+  },
+  {
+    userId: 2,
+    email: 'kathy-loves-cats@puppybook.com',
+    orderStatus: 'created',
+    addressLine1: '123 Kitty Rd',
+    city: 'Meowville',
+    state: 'IL',
+    zip: '54321'
+  }
+]
+
+describe('Orders Store', () => {
   describe('action creators', () => {
-    describe('gotCategories', () => {
-      let categories = []
+    describe('gotOrders', () => {
+      let orders = []
 
       beforeEach(() => {
-        categories = [{ id: 1, name: 'pirate costume' }]
+        orders = fakeOrders
       })
 
       it('should create an action with correct id', () => {
-        const action = gotCategories(categories)
-        expect(action.type).to.be.equal('GOT_CATEGORIES')
-        expect(action.categories).to.be.deep.equal([{ id: 1, name: 'pirate costume' }])
+        const action = gotOrders(orders)
+        expect(action.type).to.be.equal('GOT_ORDERS')
+        expect(action.orders[0].zip).to.be.equal('12345')
       })
     })
   })
 
   describe('reducer', () => {
     let state = []
-    let categories = []
 
     beforeEach(() => {
-      state = [{ id: 2, name: 'pirates' }]
-      categories = [{ id: 1, name: 'superheros' }]
+      state = []
     })
 
-    it('should get replace the state with new array of categories ', () => {
+    it('should replace the state with new array of orders ', () => {
       const newState = reducer(state, {
-        type: 'GOT_CATEGORIES',
-        categories
+        type: 'GOT_ORDERS',
+        orders: fakeOrders
       })
-      expect(newState).to.be.deep.equal([{ id: 1, name: 'superheros' }])
+      expect(newState).to.be.deep.equal(fakeOrders)
     })
   })
 
@@ -47,7 +66,7 @@ describe('Categories Store', () => {
     let store
     let mockAxios
 
-    const initialState = { categories: [] }
+    const initialState = fakeOrders
 
     beforeEach(() => {
       mockAxios = new MockAdapter(axios)
@@ -59,15 +78,26 @@ describe('Categories Store', () => {
       store.clearActions()
     })
 
-    describe('fetchCategories', () => {
-      it('fetches categories from the db', () => {
-        const fakeCategories = [{ name: 'pirate', id: 2 }]
-        mockAxios.onGet('/api/categories').replyOnce(200, fakeCategories)
-        return store.dispatch(fetchCategories())
+    describe('fetchOrders', () => {
+      it('fetches orders from the db', () => {
+        mockAxios.onGet('/api/orders').replyOnce(200, fakeOrders)
+        return store.dispatch(fetchOrders())
           .then(() => {
             const actions = store.getActions()
-            expect(actions[0].type).to.be.equal('GOT_CATEGORIES')
-            expect(actions[0].categories).to.be.deep.equal(fakeCategories)
+            expect(actions[0].type).to.be.equal('GOT_ORDERS')
+            expect(actions[0].orders).to.be.deep.equal(fakeOrders)
+          })
+      })
+    })
+
+    describe('fetchOrdersByUserId', () => {
+      it('fetches orders from the db matching a user id', () => {
+        mockAxios.onGet('/api/orders/?userid=1').replyOnce(200, fakeOrders.slice(0, 1))
+        return store.dispatch(fetchOrdersByUserId(1))
+          .then(() => {
+            const actions = store.getActions()
+            expect(actions[0].type).to.be.equal('GOT_ORDERS')
+            expect(actions[0].orders).to.be.deep.equal(fakeOrders.slice(0, 1))
           })
       })
     })

@@ -8,7 +8,7 @@ const GOT_ORDERS = 'GOT_ORDERS'
 /**
  * INITIAL STATE
  */
-const defaultCategories = []
+const defaultOrders = []
 
 /**
  * ACTION CREATORS
@@ -21,23 +21,31 @@ export const gotOrders = orders => ({
 /**
  * THUNK CREATORS
  */
-// export const fetchCategories = () =>
-//   dispatch =>
-//     axios.get('/api/categories')
-//       .then(res => res.data)
-//       .then(categories => {
-//         dispatch(gotCategories(categories))
-//       })
-//       .catch(err => console.error('fetching categories went wrong', err))
+export const fetchOrders = () =>
+  dispatch =>
+    axios.get('/api/orders')
+      .then(res => res.data)
+      .then(orders => {
+        dispatch(gotOrders(orders))
+      })
+      .catch(err => console.error('fetching orders went wrong', err))
 
+export const fetchOrdersByUserId = (userid) =>
+  dispatch =>
+    axios.get(`/api/orders/?userid=${userid}`)
+      .then(res => res.data)
+      .then(orders => {
+        dispatch(gotOrders(orders))
+      })
+      .catch(err => console.error('fetching orders went wrong', err))
 
 /**
  * REDUCER
  */
-// export default function (state = defaultCategories, action){
-//   switch (action.type) {
-//     case GOT_CATEGORIES:
-//       return action.categories
-//     default: return state
-//   }
-// }
+export default function (state = defaultOrders, action){
+  switch (action.type) {
+    case GOT_ORDERS:
+      return action.orders
+    default: return state
+  }
+}

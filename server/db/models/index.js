@@ -35,6 +35,8 @@ Order.hasMany(OrderItem)
 Review.belongsTo(User, { as: 'customer' })
 Product.hasMany(Review)
 
+Order.belongsTo(User, { as: 'customer' })
+
 module.exports = {
   User,
   Order,
