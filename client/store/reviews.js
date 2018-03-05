@@ -1,4 +1,5 @@
 import axios from 'axios'
+import history from '../history'
 
 /**
  * ACTION TYPES
@@ -24,6 +25,7 @@ export const postReview = (review) =>
       .then(res => res.data)
       .then(newReview => {
         dispatch(addReview(newReview))
+        history.push('/products/')
       })
       .catch(err => console.error('posting new review went wrong', err))
 
@@ -33,7 +35,7 @@ export const postReview = (review) =>
  */
 export default function (state = defaultReviews, action) {
   switch (action.type) {
-    case ADD_REVIEW: return [... state, action.review]
+    case ADD_REVIEW: return [...state, action.review]
     default: return state
   }
 }

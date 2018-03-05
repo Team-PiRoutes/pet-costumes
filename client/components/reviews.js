@@ -1,4 +1,5 @@
 import React from 'react'
+import { displayStarRating } from '../../server/utils/starRating'
 
 const Reviews = (props) => {
 
@@ -6,11 +7,20 @@ const Reviews = (props) => {
 
   return (
     <div>
+      <p>Avarage rating:</p>
+      {displayStarRating(
+        reviews && reviews.length > 0 ?
+          Math.floor((reviews.reduce((sum, review) => {
+            return sum + review.rating
+          }, 0)) / reviews.length)
+          : 0
+      )
+      }
       <p>Reviews:</p>
       {
         reviews && reviews.map(review => (
           <div key={review.id}>
-            <div>{review.rating} </div>
+            <div>{displayStarRating(review.rating)} </div>
             <p>{review.message} </p>
           </div>
         ))

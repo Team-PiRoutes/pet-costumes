@@ -1,3 +1,5 @@
+//import products from '../../client/components/products';
+
 const router = require('express').Router()
 const { Product, Review, Category, ProductCategory } = require('../db/models')
 module.exports = router
@@ -27,7 +29,7 @@ router.get('/:id', (req, res, next) => {
 })
 
 //add product (by admin)
-router.post('/admin/new', (req, res, next) => {
+router.post('/', (req, res, next) => {
   Product.create(req.body)
     .then((newProduct) => res.json(newProduct))
     .catch(next)

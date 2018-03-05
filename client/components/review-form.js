@@ -1,22 +1,27 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { postReview } from '../store'
+import {displayStarRating, starRatingButtons } from '../../server/utils/starRating'
 
-function ReviewForm() {
+
+function ReviewForm(props) {
+
+  const { handleSubmit } = props
 
   return (
-    <div className="container">
+    <div id="review-form" className="container">
       <div className="row">
-        <form className="col s12" id="reviewForm">
+        <form onSubmit={handleSubmit} className="col s12" id="reviewForm">
           <h3>Review</h3>
-          <div className="input-field col s12" >
+          <div className="input-field col s5" >
             <div />
-            <input name="rating" id="rating" type="text" />
+            <input id="rating" name="rating" type="number" min="0" max="5" placeholder="choose between 0-5" />
             <label htmlFor="rating">Rating</label>
-            <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
           </div>
           <div className="input-field col s12" >
             <div className="row" />
-            <input name="reviewText" id="reviewText" type="text" />
-            <label htmlFor="reviewText">Review text</label>
+            <input id="message" name="message" type="text" placeholder="write your review here" />
+            <label htmlFor="message">Review text</label>
           </div>
           <div>
             <button className="waves-effect waves-light btn" type="submit">Submit</button>
@@ -27,14 +32,18 @@ function ReviewForm() {
   )
 }
 
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     handleSubmit: function (event) {
-//       event.preventDefault()
-//       let review = {
-
-//       }
-//     }
-//   }
-// }
-export default ReviewForm
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    handleSubmit: function (event) {
+      event.preventDefault()
+      let review = {
+        rating: event.target.rating.value,
+        message: event.target.message.value,
+        productId: ownProps.match.params.productId
+      }
+      dispatch(postReview(review))
+      document.getElementById('reviewForm').reset()
+    }
+  }
+}
+export default connect(null, mapDispatchToProps)(ReviewForm)

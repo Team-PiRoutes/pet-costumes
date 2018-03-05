@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { NavLink } from 'react-router-dom'
 import axios from 'axios'
 import Reviews from './reviews'
 import { connect } from 'react-redux'
@@ -112,11 +113,14 @@ class ViewProduct extends Component {
               </button>
             </div>
             <p>Size: {product.size}</p>
+            <NavLink to={`/products/${product.id}/reviews/new`}>
+              <button className="waves-effect waves-light btn" type="submit">Write a review
+              </button>
+            </NavLink>
           </div>
         </div>
         <Reviews reviews={reviews} />
       </div>
-
     )
   }
 }
