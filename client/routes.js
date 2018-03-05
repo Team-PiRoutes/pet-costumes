@@ -20,7 +20,7 @@ import {
 } from './components'
 
 
-import { me, fetchProducts, fetchCategories } from './store'
+import { me, fetchProducts, fetchCategories, fetchCart } from './store'
 
 /**
  * COMPONENT
@@ -29,6 +29,7 @@ class Routes extends Component {
   componentDidMount() {
     this.props.loadInitialData()
   }
+
 
   render() {
     const { isLoggedIn, isAdmin } = this.props
@@ -87,6 +88,7 @@ const mapDispatch = (dispatch) => {
       dispatch(me())
       dispatch(fetchProducts())
       dispatch(fetchCategories())
+      dispatch(fetchCart())
     }
   }
 }

@@ -4,6 +4,7 @@ import Product from './product'
 import Sidebar from './sidebar'
 import { sizes } from '../../sizes'
 import Search from './search'
+import { addItemToCart } from '../store/cart'
 import { filterByCategories, filterByName, filterBySizes } from '../utils/product-filters'
 
 /**
@@ -12,7 +13,7 @@ import { filterByCategories, filterByName, filterBySizes } from '../utils/produc
 export const Products = (props) => {
 
   const { products, categories, activeCategories, activeSizes, searchTerm } = props
-
+  console.log(props.addItemToCart)
   let filteredProducts = filterByName(filterByCategories(filterBySizes(products, activeSizes), activeCategories), searchTerm)
 
   return (
@@ -22,12 +23,12 @@ export const Products = (props) => {
         <div className="products-list-title">
           <span>Our Products</span>
           <span><Search /></span>
-          </div>
+        </div>
         <div className="products-list">
           {
             filteredProducts.map(product => (
               <div id={`product-${product.id}`} key={product.id} className="product-item z-depth-3" >
-                <Product product={product} />
+                <Product product={product} addItemToCart={props.addItemToCart} />
               </div>
             ))
           }
@@ -52,4 +53,11 @@ const mapStateToProps = function (state) {
   }
 }
 
-export default connect(mapStateToProps)(Products)
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addItemToCart: (item) => dispatch(addItemToCart(item))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Products)
