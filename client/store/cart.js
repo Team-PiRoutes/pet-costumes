@@ -77,7 +77,10 @@ export function fetchCart() {
       if (browserCartInfo.cartId !== null && browserCartInfo.cartToken !== null) {
         let resOldCart = await axios.get(`/api/cart/${browserCartInfo.cartId}/${browserCartInfo.cartToken}`, browserCartInfo)
         console.log('fetched cart from server', resOldCart.data)
-        dispatch(gotCart(resOldCart.data))
+        const cart = resOldCart.data
+        dispatch(gotCart(cart.cartItems))
+        localStorage.setItem(cart.id)
+        localStorage.setItem(cart.cartToken)
       }
     } catch (err) {
       console.error(err)
@@ -91,6 +94,7 @@ export async function fetchUserCart(user) {
   // token from the user modell (not yet implemented)
   let cartInfo = getCartLocals()
   let userCart = await axios.put('/cart/userCart', { cartInfo, user })
+
   // console.log(userCart.data)
 }
 /**

@@ -31,7 +31,11 @@ router.put('/update', async function (req, res, next) {
         let oldCartItem = await CartItem.findById(itemId)
         let updatedCartItem = await oldCartItem.update(req.body.itemForCart)
 
-        res.status(200).json({ updatedCartItem, cartId: cart.id, cartToken: cart.cartToken })
+        res.status(200).json({
+          updatedCartItem,
+          cartId: cart.id,
+          cartToken: cart.cartToken
+        })
       }
       // else { //maybe not needed. leaving until determined
       //   let createdCartItem = await CartItem.create(req.body.itemForCart)
@@ -125,7 +129,8 @@ router.post('/addToCart', async function (req, res, next) {
 //get cart upon arrival
 router.get('/:cartId/:cartToken', async (req, res, next) => {
   try {
-    console.log('myCart Route has been hit..########', +req.params.cartId)
+
+    console.log('myCart Route has been hit..########', +req.params.cartId, req.params.cartToken)
     let cartId = +req.params.cartId
     let cartToken = req.params.cartToken
     let cart = await Cart.findById(cartId, {
@@ -133,15 +138,19 @@ router.get('/:cartId/:cartToken', async (req, res, next) => {
         model: CartItem,
         where: { ordered: false },
         as: 'cartItems',
-        attributes: ['cartId', 'quantity', 'priceInCents']
+        attributes: ['cartId', 'quantity', 'priceInCents', 'productId']
       }
     })
-    console.log('cartToken', cartToken, 'cart.token', cart.cartToken)
     if (!!cartToken && cartToken === cart.cartToken) {
-      res.json(cart.cartItems)
+      res.json(cart)
 
     } else {
-      res.sendStatus(404)
+      const clearBadCart = {
+        cartToken: null,
+        cartId: null,
+        cartItems: {}
+      }
+      res.status(404).json({ clearBadCart })
     }
   } catch (err) { next(err) }
 
