@@ -75,9 +75,8 @@ describe('Cart routes', () => {
     }) //end it(Get /:cartId/:cartToken' for correct tokens,)
 
     it(`Get /:cartId/:cartToken gets cart if cartId does not`, () => {
-
       route = `/api/cart/100000/${testCart.cartToken}`
-      console.log('############', route)
+
       return request(app)
         .get(route)
         .expect(404)

@@ -51,12 +51,11 @@ export const updateCartItem = (itemForCart) => dispatch => {
 //ADD TO CART/CREATE CART
 export const addItemToCart = (itemForCart) => async dispatch => {
   try {
-    console.log('thunking it over', itemForCart)
+
     let cartInfo = getCartLocals()
     const res = await axios.post('/api/cart/addToCart', { itemForCart, cartInfo })
     const cartUpdate = res.data
-    console.log('thunk it over and this is what I got', cartUpdate.cartItem)
-    console.log('cart Id we thunked about', cartUpdate.cartId)
+
     localStorage.setItem('cartId', '' + cartUpdate.cartId)
     localStorage.setItem('cartToken', '' + cartUpdate.cartToken)
     const updatedItem = cartUpdate.cartItem
@@ -76,7 +75,7 @@ export function fetchCart() {
       const browserCartInfo = getCartLocals()
       if (browserCartInfo.cartId !== null && browserCartInfo.cartToken !== null) {
         let resOldCart = await axios.get(`/api/cart/${browserCartInfo.cartId}/${browserCartInfo.cartToken}`, browserCartInfo)
-        console.log('fetched cart from server', resOldCart.data)
+
         const cart = resOldCart.data
 
         dispatch(gotCart(cart.cartItems))
@@ -104,20 +103,18 @@ export function fetchUserCart(user) {
  * REDUCER
  */
 export default function (state = defaultCart, action) {
-  console.log('Reducer received action', action)
+
 
   switch (action.type) {
 
     case UPDATE_CART_ITEM: {
 
       let indexInCart = state.findIndex(item => {
-        console.table(action, item)
-        console.log(item.productId === action.cartItem.productId)
         return item.productId === action.productId
       })
 
       if (indexInCart < 0) return [...state, action.cartItem]
-      console.log(action.cartItem)
+
       let updatedProduct = Object.assign(
         {},
         state[indexInCart],
