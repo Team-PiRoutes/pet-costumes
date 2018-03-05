@@ -78,9 +78,10 @@ export function fetchCart() {
         let resOldCart = await axios.get(`/api/cart/${browserCartInfo.cartId}/${browserCartInfo.cartToken}`, browserCartInfo)
         console.log('fetched cart from server', resOldCart.data)
         const cart = resOldCart.data
+
         dispatch(gotCart(cart.cartItems))
-        localStorage.setItem(cart.id)
-        localStorage.setItem(cart.cartToken)
+        setLocals(cart.id, cart.cartToken)
+
       }
     } catch (err) {
       console.error(err)
@@ -107,7 +108,11 @@ export default function (state = defaultCart, action) {
 
     case UPDATE_CART_ITEM: {
 
-      let indexInCart = state.findIndex(item => item.id === action.productId)
+      let indexInCart = state.findIndex(item => {
+        console.table(action, item)
+        console.log(item.productId === action.cartItem.productId)
+        return item.productId === action.productId
+      })
 
       if (indexInCart < 0) return [...state, action.cartItem]
       console.log(action.cartItem)
@@ -117,13 +122,12 @@ export default function (state = defaultCart, action) {
         { quantity: action.cartItem.quantity }
       ) //end object.assign
 
-
-      return [...state.slice(0, indexInCart),
-        updatedProduct,
-      ...state.slice(indexInCart + 1)]
+      let newState = [...state]
+      newState[indexInCart] = updatedProduct
+      return newState
     }
     case GOT_PREVIOUS_CART:
-      return action.cart
+      return [...action.cart]
 
     case GOT_USER_CART:
       return [...state, ...action.cart]
@@ -137,5 +141,15 @@ function getCartLocals() {
   return {
     cartId: localStorage.getItem('cartId'),
     cartToken: localStorage.getItem('cartToken')
+  }
+}
+
+function setLocals(cartId, cartToken) {
+  if (!cartId || !cartToken) {
+    localStorage.removeItem('cartId')
+    localStorage.removeItem('cartToken')
+  } else {
+    localStorage.setItem('cartId', cartId)
+    localStorage.setItem('cartToken', cartToken)
   }
 }

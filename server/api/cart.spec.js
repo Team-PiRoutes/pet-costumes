@@ -74,22 +74,13 @@ describe('Cart routes', () => {
         })
     }) //end it(Get /:cartId/:cartToken' for correct tokens,)
 
-    // it(`Get /:cartId/:cartToken gets cart if cartId does not`, () => {
+    it(`Get /:cartId/:cartToken gets cart if cartId does not`, () => {
 
-    //   route = `/api/cart/100000/${testCart.cartToken}`
-    //   console.log('############', route)
-    //   return request(app)
-    //     .get(route)
-    //     .expect(200)
-    //     .then(res => {
-    //       let cart = res.body
-    //       console.log('cart[0].productId', cart[0].productId)
-    //       expect(cart.cartItems).to.be.an('array')
-    //       expect(cart.cartItems.length).to.be.equal(0)
-    //       expect(cart.cartToken).to.be.equal(null)
-    //       expect(cart.cartId).to.be.equal(null)
-
-    //     })
-    // }) //end if(Get /:cartId/:cartToken gets cart if cartId does not)
+      route = `/api/cart/100000/${testCart.cartToken}`
+      console.log('############', route)
+      return request(app)
+        .get(route)
+        .expect(404)
+    }) //end it(Get /:cartId/:cartToken gets cart if cartId does not)
   }) // end describe('Get /:cartId/:cartToken' if token does not match)
 }) // end describe('Order routes')

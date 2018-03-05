@@ -80,9 +80,9 @@ router.post('/addToCart', async function (req, res, next) {
 
     // if cart is falsy/not there or if cart id and token to not match
     //create new cart
-    console.log(cartToken)
-    console.log(cart.cartToken)
-    console.log(' checking token match :', cartToken === cart.cartToken)
+    // console.log(cartToken)
+    // console.log(cart.cartToken)
+    // console.log(' checking token match :', cartToken === cart.cartToken)
     if (!cart || (cart && (cartToken !== cart.cartToken))) {
       cart = await Cart.create()
       cartId = cart.id
@@ -96,9 +96,9 @@ router.post('/addToCart', async function (req, res, next) {
         cartItem.ordered === false)
     })
 
-
+    const itemId = cart.cartItems[cartItemsIndex].id
     if (cartItemsIndex >= 0) {
-      const itemId = cart.cartItems[cartItemsIndex].id
+
       let oldCartItem = await CartItem.findById(itemId)
       updateObject.quantity = oldCartItem.quantity + itemForCart.quantity
       cartItemToUpdate = oldCartItem
@@ -129,8 +129,6 @@ router.post('/addToCart', async function (req, res, next) {
 //get cart upon arrival
 router.get('/:cartId/:cartToken', async (req, res, next) => {
   try {
-
-    console.log('myCart Route has been hit..########', +req.params.cartId, req.params.cartToken)
     let cartId = +req.params.cartId
     let cartToken = req.params.cartToken
     let cart = await Cart.findById(cartId, {
@@ -138,21 +136,27 @@ router.get('/:cartId/:cartToken', async (req, res, next) => {
         model: CartItem,
         where: { ordered: false },
         as: 'cartItems',
-        attributes: ['cartId', 'quantity', 'priceInCents', 'productId']
+        attributes: ['id', 'quantity', 'priceInCents', 'productId']
       }
     })
-    if (!!cartToken && cartToken === cart.cartToken) {
+
+    if (!!cartToken && cart && cartToken === cart.cartToken) {
       res.json(cart)
 
     } else {
       const clearBadCart = {
         cartToken: null,
         cartId: null,
-        cartItems: {}
+        cartItems: []
       }
-      res.status(404).json({ clearBadCart })
+      console.log('header error below this..########')
+      res.status(404).json(clearBadCart)
+
     }
-  } catch (err) { next(err) }
+  } catch (err) {
+    next(err)
+  }
+  // } catch (err) { next(err) }
 
 })
 router.put('/userCart', async (req, res, next) => {
@@ -225,9 +229,11 @@ function createCartItemResponseObject(modelObject, cart) {
     cartId: cart.id,
     cartToken: cart.cartToken,
     cartItem: {
-      productId: modelObject.productId,
+      id: modelObject.id,
       quantity: modelObject.quantity,
-      priceInCents: modelObject.priceInCents
+      productId: modelObject.productId,
+      priceInCents: modelObject.priceInCents,
+
     }
   }
 }
