@@ -31,7 +31,7 @@ export const fetchProducts = () =>
 
 export const postProduct = (product) =>
   dispatch =>
-    axios.post('/api/products/admin/new', product)
+    axios.post('/api/products', product)
       .then(res => res.data)
       .then(newProduct => {
         dispatch(addProduct(newProduct))
