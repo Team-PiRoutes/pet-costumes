@@ -30,9 +30,9 @@ export const fetchOrders = () =>
       })
       .catch(err => console.error('fetching orders went wrong', err))
 
-export const fetchOrdersByUserId = (userid) =>
+export const fetchOrdersByCustomerId = (customerid) =>
   dispatch =>
-    axios.get(`/api/orders/?userid=${userid}`)
+    axios.get(`/api/orders/?customerid=${customerid}`)
       .then(res => res.data)
       .then(orders => {
         dispatch(gotOrders(orders))

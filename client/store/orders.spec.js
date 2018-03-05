@@ -1,4 +1,4 @@
-import reducer, { gotOrders, fetchOrders, fetchOrdersByUserId } from './orders'
+import reducer, { gotOrders, fetchOrders, fetchOrdersByCustomerId } from './orders'
 import { expect } from 'chai'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
@@ -90,10 +90,10 @@ describe('Orders Store', () => {
       })
     })
 
-    describe('fetchOrdersByUserId', () => {
+    describe('fetchOrdersByCustomerId', () => {
       it('fetches orders from the db matching a user id', () => {
-        mockAxios.onGet('/api/orders/?userid=1').replyOnce(200, fakeOrders.slice(0, 1))
-        return store.dispatch(fetchOrdersByUserId(1))
+        mockAxios.onGet('/api/orders/?customerid=1').replyOnce(200, fakeOrders.slice(0, 1))
+        return store.dispatch(fetchOrdersByCustomerId(1))
           .then(() => {
             const actions = store.getActions()
             expect(actions[0].type).to.be.equal('GOT_ORDERS')

@@ -68,7 +68,8 @@ async function seed() {
       addressLine1: '123 Puppy Rd',
       city: 'Dogville',
       state: 'IL',
-      zip: '12345'
+      zip: '12345',
+      customerId: 1
     }),
     Order.create({
       email: 'kathy-loves-cats@puppybook.com',
@@ -76,7 +77,8 @@ async function seed() {
       addressLine1: '123 Kitty Rd',
       city: 'Meowville',
       state: 'IL',
-      zip: '54321'
+      zip: '54321',
+      customerId: 1
     }),
     Order.create({
       email: 'whyNotALizard@gmail.com',
@@ -84,7 +86,8 @@ async function seed() {
       addressLine1: '123 Egon Rd',
       city: 'Coldblood Bluff',
       state: 'IL',
-      zip: '99299'
+      zip: '99299',
+      customerId: 2
     }),
   ])
 

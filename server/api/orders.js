@@ -4,7 +4,7 @@ const { Order } = require('../db/models')
 
 
 router.get('/', (req, res, next) => {
-  const userQuery = req.query.userid ? { userId: req.query.userid } : {}
+  const userQuery = req.query.customerid ? { customerId: req.query.customerid } : {}
 
   Order.findAll({
     where: userQuery,
