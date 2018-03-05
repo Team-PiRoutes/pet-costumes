@@ -84,6 +84,15 @@ div.product-item {
   height: 21vw;
 }
 
+.products-list-title{
+  font-size: 2.0rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 4vw;
+}
+
 .product-title {
   font-size: 1.5rem;
   font-weight: bold;
@@ -92,6 +101,14 @@ div.product-item {
 
 .product-price {
   text-align: center;
+}
+
+#product-search {
+  margin-top: 0.5rem;
+}
+
+#product-search-icon {
+  margin-top: 1rem;
 }
 
 /* Sidebar */

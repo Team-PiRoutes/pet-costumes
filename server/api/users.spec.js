@@ -36,8 +36,8 @@ describe('User routes', () => {
 
     beforeEach('create some users', (done) => {
       Promise.all([
-        User.create({ email: 'cody@email.com', password: '123' }),
-        User.create({ email: 'murphy@email.com', password: '123' })
+        User.create({ email: 'cody@email.com', password: '123', isAdmin: true }),
+        User.create({ email: 'murphy@email.com', password: '123' }),
       ])
       .then(users => {
         user = users[0]
