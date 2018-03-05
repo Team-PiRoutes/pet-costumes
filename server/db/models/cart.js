@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
-const crypto = require('crypto')
+// const crypto = require('crypto')
+const randToken = require('rand-token')
 
 const Cart = db.define('cart', {
   cartToken: {
@@ -14,7 +15,7 @@ const Cart = db.define('cart', {
 
 Cart.beforeCreate((cart) => {
   //32 character random string to be used as token
-  cart.cartToken = crypto.randomBytes(32).toString('base64')
+  cart.cartToken = randToken.generate(64)
 })
 
 
