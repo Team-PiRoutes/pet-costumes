@@ -117,7 +117,7 @@ class ViewProduct extends Component {
                 disabled={this.state.addDiabled} id="addItem" className="btn waves-effect waves-light" type="button" onClick={
                   () => this.addToCart()
                 } >
-                {this.state.inCart ? 'Update Quantity' : 'Add To Cart'} <i className="material-icons right">add_shopping_cart</i>
+                Add To Cart <i className="material-icons right">add_shopping_cart</i>
               </button>
             </div>
             <p>Size: {product.size}</p>

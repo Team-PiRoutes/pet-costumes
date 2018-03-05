@@ -51,7 +51,7 @@ export const updateCartItem = (itemForCart) => dispatch => {
 //ADD TO CART/CREATE CART
 export const addItemToCart = (itemForCart) => async dispatch => {
   try {
-    console.log('thunking it over')
+    console.log('thunking it over', itemForCart)
     let cartInfo = getCartLocals()
     const res = await axios.post('/api/cart/addToCart', { itemForCart, cartInfo })
     const cartUpdate = res.data
@@ -90,13 +90,15 @@ export function fetchCart() {
   }
 }
 
-export async function fetchUserCart(user) {
-  //  sending user object OR we can send the id and the cart
-  // token from the user modell (not yet implemented)
-  let cartInfo = getCartLocals()
-  let userCart = await axios.put('/cart/userCart', { cartInfo, user })
+export function fetchUserCart(user) {
+  return async dispatch => {
+    //  sending user object OR we can send the id and the cart
+    // token from the user modell (not yet implemented)
+    let cartInfo = getCartLocals()
+    let userCart = await axios.put('/cart/userCart', { cartInfo, user })
 
-  // console.log(userCart.data)
+    // console.log(userCart.data)
+  }
 }
 /**
  * REDUCER

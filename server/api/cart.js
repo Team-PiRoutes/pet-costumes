@@ -96,9 +96,9 @@ router.post('/addToCart', async function (req, res, next) {
         cartItem.ordered === false)
     })
 
-    const itemId = cart.cartItems[cartItemsIndex].id
+    let itemId
     if (cartItemsIndex >= 0) {
-
+      itemId = cart.cartItems[cartItemsIndex].id
       let oldCartItem = await CartItem.findById(itemId)
       updateObject.quantity = oldCartItem.quantity + itemForCart.quantity
       cartItemToUpdate = oldCartItem
