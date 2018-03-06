@@ -123,6 +123,7 @@ router.get('/:cartId/:cartToken', async (req, res, next) => {
       const responseObj = createRetrieveCartResponseObject(cart.cartItems, cart)
       res.json(responseObj)
     } else {
+
       res.sendStatus(204)
 
     }
