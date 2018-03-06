@@ -1,5 +1,5 @@
 import React from 'react'
-import { displayStarRating } from '../../server/utils/starRating'
+import { displayStarRating } from '../utils/starRating'
 
 const Reviews = (props) => {
 

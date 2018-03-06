@@ -19,7 +19,7 @@ class AdminOrders extends Component {
     return (
       <div>
         <h2>Order List:</h2>
-        <table>
+        <table className="highlight">
           <thead>
             <tr>
               <th>Order Number</th>
@@ -39,13 +39,24 @@ class AdminOrders extends Component {
                   </td>
                   <td>
                     <div>
-                      <select className="browser-default" value={order.orderStatus} onChange={(event) => handleChange(event, order.id)}>
+                      <select
+                        className="browser-default"
+                        value={order.orderStatus}
+                        onChange={(event) => handleChange(event, order.id)}>
                         <option value="created">Created</option>
                         <option value="processing">Processing</option>
                         <option value="cancelled">Cancelled</option>
                         <option value="completed">Completed</option>
                       </select>
                     </div>
+                  </td>
+                  <td>
+                      <input type="checkbox" className="filled-in" id="filled-in-box" />
+                      <label htmlFor="filled-in-box" />
+                  </td>
+                  <td>
+                      <input type="checkbox" className="filled-in" id="filled-in-box" />
+                      <label htmlFor="filled-in-box" />
                   </td>
                 </tr>
               )
