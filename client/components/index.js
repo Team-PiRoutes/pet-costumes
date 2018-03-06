@@ -14,4 +14,6 @@ export { default as AdminViewUser } from './admin/admin-view-user'
 export { default as ViewProduct } from './view-product'
 export { default as NewProductForm } from './new-product-form'
 export { default as ReviewForm } from './review-form'
+export { default as Orders } from './orders'
+export { default as ViewOrder } from './view-order'
 

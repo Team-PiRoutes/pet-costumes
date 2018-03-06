@@ -156,3 +156,9 @@ div.sidebar {
   margin-top: 4rem;
   padding: 2rem;
 }
+
+/* orders */
+.order-item {
+  padding: 2rem;
+  margin-bottom: 2rem;
+}

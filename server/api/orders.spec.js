@@ -11,7 +11,7 @@ describe('Order routes', () => {
     return db.sync({ force: true })
   })
 
-  describe('/api/orders/admin/list-orders', () => {
+  describe('/api/orders', () => {
     const codyOrder = {
       email: 'cody@puppybook.com',
       addressLine1: '123 Puppy Rd',
@@ -30,10 +30,10 @@ describe('Order routes', () => {
       })
     })
 
-    it(`Get /api/orders/admin/list-orders 
+    it(`Get /api/orders
     return 'id', 'email', 'city', 'state' `, () => {
         return request(app)
-          .get('/api/orders/admin/list-orders')
+          .get('/api/orders')
           .expect(200)
           .then(res => {
             let orders = res.body
