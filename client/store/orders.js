@@ -56,7 +56,6 @@ export const fetchOrdersByCustomerId = (customerid) =>
       })
       .catch(err => console.error('fetching orders went wrong', err))
 
-<<<<<<< HEAD
 export const postOrder = (order) =>
   dispatch =>
     axios.post('/api/orders', order)
@@ -65,7 +64,6 @@ export const postOrder = (order) =>
         dispatch(addOrder(newOrder))
       })
       .catch(err => console.error('posting new order', err))
-=======
 
 export const updateOrderStatus = (id, newStatus) =>
   dispatch => {
@@ -78,7 +76,6 @@ export const updateOrderStatus = (id, newStatus) =>
       .catch(err => console.error('updating order status went wrong', err))
 
   }
->>>>>>> master
 
 /**
  * REDUCER
