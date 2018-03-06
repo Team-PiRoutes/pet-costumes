@@ -7,6 +7,12 @@ const priceInDollars = (price) => {
   else return `$${(price / 100).toFixed(2)}`
 }
 
+const getProductTitle = (products, id) => {
+  const product = products.find(prod => prod.id === id)
+  const productTitle = product.title || 'Costume'
+  return productTitle
+}
+
 /**
  * COMPONENT
  */
@@ -25,7 +31,7 @@ class ViewOrder extends Component {
   }
 
   render() {
-    const { orders } = this.props
+    const { orders, products } = this.props
     console.log('orders >>> ', orders)
     const order = orders.find(ord => ord.id === +this.props.match.params.orderId) || {}
 
@@ -44,7 +50,7 @@ class ViewOrder extends Component {
             {order.orderItems && order.orderItems.map(item => {
               return (
                 <li key={item.id}>
-                  {item.quantity} of {item.productId} for {priceInDollars(item.priceInCents)} totaling {priceInDollars(item.priceInCents * item.quantity)}
+                  {item.quantity} {getProductTitle(products, item.productId)} for {priceInDollars(item.priceInCents)} totaling {priceInDollars(item.priceInCents * item.quantity)}
                 </li>
               )
             })}
@@ -64,7 +70,8 @@ class ViewOrder extends Component {
 const mapStateToProps = function (state) {
   return {
     orders: state.orders,
-    userid: state.user.id
+    userid: state.user.id,
+    products: state.products
   }
 }
 

@@ -1,4 +1,4 @@
-import reducer, { gotOrders, fetchOrders, fetchOrdersByCustomerId } from './orders'
+import reducer, { gotOrders, fetchOrders, fetchOrdersByCustomerId, postOrder, addOrder } from './orders'
 import { expect } from 'chai'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
@@ -26,6 +26,14 @@ const fakeOrders = [
     city: 'Meowville',
     state: 'IL',
     zip: '54321'
+  },
+  { userId: 1,
+    email: 'kathy-loves-cats@puppybook.com',
+    addressLine1: 'my address',
+    addressLine2: '',
+    city: 'Chicago',
+    state: 'IL',
+    zip: '60626',
   }
 ]
 
@@ -101,5 +109,6 @@ describe('Orders Store', () => {
           })
       })
     })
+
   })
 })

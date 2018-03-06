@@ -92,7 +92,7 @@ export function fetchCart() {
 
           const cart = resOldCart.data
           dispatch(gotCart(cart.cartItems))
-          setCartLocals(cart.cartId, cart.cartTokenz)
+          setCartLocals(cart.cartId, cart.cartToken)
         }
         else if (resOldCart.status === 204) {
           setCartLocals(null, null)

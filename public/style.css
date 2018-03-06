@@ -162,3 +162,13 @@ div.sidebar {
   padding: 2rem;
   margin-bottom: 2rem;
 }
+
+/* submit order form */
+.submit-order-form {
+  padding: 2rem;
+  margin-top: 4rem;
+}
+
+.block {
+  display: block;
+}

@@ -5,6 +5,7 @@ import history from '../history'
  * ACTION TYPES
  */
 const GOT_ORDERS = 'GOT_ORDERS'
+const ADD_ORDER = 'ADD_ORDER'
 const CHANGE_ORDER_STATUS = 'CHANGE_ORDER_STATUS'
 const ORDER_SHIPPED = 'ORDER_SHIPPED'
 
@@ -19,6 +20,11 @@ const defaultOrders = []
 export const gotOrders = orders => ({
   type: GOT_ORDERS,
   orders
+})
+
+export const addOrder = order => ({
+  type: ADD_ORDER,
+  order
 })
 
 const changeOrderStatus = order => ({
@@ -47,6 +53,14 @@ export const fetchOrdersByCustomerId = (customerid) =>
       })
       .catch(err => console.error('fetching orders went wrong', err))
 
+export const postOrder = (order) =>
+  dispatch =>
+    axios.post('/api/orders', order)
+      .then(res => res.data)
+      .then(newOrder => {
+        dispatch(addOrder(newOrder))
+      })
+      .catch(err => console.error('posting new order', err))
 
 export const updateOrderStatus = (id, newStatus) =>
   dispatch => {
@@ -65,6 +79,8 @@ export const updateOrderStatus = (id, newStatus) =>
  */
 export default function (state = defaultOrders, action) {
   switch (action.type) {
+    case ADD_ORDER:
+      return [...state, action.order]
     case GOT_ORDERS:
       return action.orders
     case CHANGE_ORDER_STATUS: {

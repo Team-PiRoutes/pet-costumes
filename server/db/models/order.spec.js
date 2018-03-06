@@ -9,7 +9,6 @@ describe('Order model', () => {
     })
     it('should have an email', () => {
       expect(Order.attributes.email).to.be.an('object')
-      expect(Order.attributes.email.allowNull).to.equal(false)
     })
   })
 })

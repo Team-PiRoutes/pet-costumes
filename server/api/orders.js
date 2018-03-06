@@ -16,11 +16,22 @@ router.get('/', (req, res, next) => {
     .catch(next)
 })
 
-router.put('/:id', (req, res, next) => {
-  Order.findById(req.params.id)
-    .then(order => order.update(req.body))
-    .then(updatedOrder => res.status(200).json(updatedOrder))
+router.post('/', (req, res, next) => {
+  let order = {
+    customerId: req.body.customerId,
+    email: req.body.email,
+    addressLine1: req.body.addressLine1,
+    addressLine2: req.body.addressLine2,
+    city: req.body.city,
+    state: req.body.state,
+    zip: req.body.zip,
+    oderStatus: 'created'
+  }
+  Order.create(order)
+    .then(newOrder => res.status(201).json(newOrder))
     .catch(next)
 })
+
+module.exports = router
 
  module.exports = router

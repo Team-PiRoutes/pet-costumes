@@ -13,28 +13,22 @@ const Order = db.define('order', {
     type: Sequelize.DATE
   },
   email: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    unique: true
+    type: Sequelize.STRING
   },
   addressLine1: {
-    type: Sequelize.STRING,
-    allowNull: false
+    type: Sequelize.STRING
   },
   addressLine2: {
-    type: Sequelize.STRING,
+    type: Sequelize.STRING
   },
   city: {
-    type: Sequelize.STRING,
-    allowNull: false
+    type: Sequelize.STRING
   },
   state: {
-    type: Sequelize.STRING(2), // eslint-disable-line
-    allowNull: false
+    type: Sequelize.STRING(2) // eslint-disable-line
   },
   zip: {
-    type: Sequelize.STRING,
-    allowNull: false
+    type: Sequelize.STRING
   }
 }, {
   defaultScope: {

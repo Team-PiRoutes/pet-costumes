@@ -1,89 +1,81 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import CartItem from './cart-item'
-import { fetchCart } from '../store/cart'
-import Loading from 'react-loading-animation'
+// import { fetchCart } from '../store/cart'
+import SubmitOrderForm from './submit-order-form'
+
+const priceInDollars = (price) => {
+  if (!price) return 'free'
+  else return `$${(price / 100).toFixed(2)}`
+}
+
+const getProductTitle = (products, id) => {
+  const product = products.find(prod => prod.id === id)
+  const productTitle = product ? product.title : 'Costume'
+  return productTitle
+}
+
 /**
  * COMPONENT
  */
-class Cart extends React.Component {
-  constructor(props) {
-    super(props)
+const Cart = (props) => {
 
-    this.state = {
-      hasLoaded: false
-    }
-    this.totalCart = this.totalCart.bind(this)
-  }
+  const { cart, products } = props
+  let total = cart.reduce((tot, item) => {
+    return tot + item.priceInCents
+  }, 0)
+  console.log('cart: ', cart)
 
-  totalCart() {
-    let total = this.props.cart.reduce((total, item) => {
-      console.log(item)
-      total += item.priceInCents * item.quantity
-      return total
-    }, 0)
-    return total
-  }
+  return (cart.length === 0) ? (
+    <div className="container">
+      <h1>Your cart is empty.</h1>
+    </div>
+  ) : (
+    <div className="container">
+      <h3 className=""> Your Cart </h3>
+      {
+        <ul>
+          {cart.map(item => {
+            return (
+              <li key={item.id}>
+                {item.quantity} {getProductTitle(products, item.productId)} for {priceInDollars(item.priceInCents)} totaling {priceInDollars(item.priceInCents * item.quantity)}
+              </li>
+            )
+          })
+          // cart.length === 0 ? <h4> Your cart is empty! Your pet needs a πRoute outfit. </h4> :
+          //   cart.map(product => (
 
-  componentDidMount() {
+          //     <li id={`cart-item-${product.id}`} key={product.id}>
+          //       <CartItem product={product} />
+          //     </li>
 
-    this.setState({ hasLoaded: true })
-  }
-
-
-  render() {
-
-    console.log(this)
-    const { cart } = this.props || []
-    let total = this.totalCart()
-
-    return (
-      !this.state.hasLoaded ? <Loading /> : (
-        <div className="container">
-          <h3 className=""> Your Cart </h3>
-          {
-            <ul>
-              {
-                this.state.hasLoaded && cart.length === 0 ? <h4 /> :
-                  cart.map(product => (
-
-                    <li id={`cart-item-${product.id}`} key={product.id}>
-                      <CartItem product={product} />
-                    </li>
-
-                  ))
-              }
-            </ul>
+          // ))
           }
-          <h5>
-            {
-              this.state.hasLoaded && this.props.cart.length > 0 ? `Total : ${total}` :
-                <i className="material-icons large">shopping_cart</i>
-            }
-          </h5>
-
-        </div>
-      ))
-  }
+        </ul>
+      }
+      <h5>
+        {
+          `Total: ${priceInDollars(total)}`
+        }
+      </h5>
+      <SubmitOrderForm cart={cart} />
+    </div>
+  )
 }
 
 
-/**
- * CONTAINER
- */
+  /**
+   * CONTAINER
+   */
 
 
 const mapStateToProps = function (state) {
   return {
+    products: state.products,
     cart: state.cart
   }
 }
-const mapDispatch = (dispatch) => {
-  return { fetchCart: dispatch(fetchCart()) }
-}
 
-
-export default connect(mapStateToProps, mapDispatch)(Cart)
+export default connect(mapStateToProps)(Cart)
 
         /**
         * PROP TYPES
