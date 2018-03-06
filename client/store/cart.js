@@ -32,9 +32,7 @@ const emptyCart = () => ({ type: EMPTY_CART })
 //UPDATE QUANTITY
 export const updateCartItem = (itemForCart) => dispatch => {
 
-  let cartInfo = getCartLocals()
-
-  axios.put('/api/cart/update', { itemForCart, cartInfo })
+  axios.put('/api/cart', { itemForCart })
     .then(res => res.data)
     .then(cartUpdate => {
 
