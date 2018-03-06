@@ -13,7 +13,7 @@ import { filterByCategories, filterByName, filterBySizes } from '../utils/produc
 export const Products = (props) => {
 
   const { products, categories, activeCategories, activeSizes, searchTerm } = props
-  console.log(props.addItemToCart)
+
   let filteredProducts = filterByName(filterByCategories(filterBySizes(products, activeSizes), activeCategories), searchTerm)
 
   return (

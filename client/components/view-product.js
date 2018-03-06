@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 import axios from 'axios'
 import Reviews from './reviews'
 import { connect } from 'react-redux'
-import { addItemToCart, updateCartItem } from '../store/cart'
+import { addItemToCart } from '../store/cart'
 
 class ViewProduct extends Component {
   constructor(props) {

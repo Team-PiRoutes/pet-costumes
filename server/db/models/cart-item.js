@@ -14,8 +14,11 @@ const CartItem = db.define('cartItem', {
   ordered: {
     type: Sequelize.BOOLEAN,
     defaultValue: false
+  },
+  expired: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
   }
-
 })
 
 module.exports = CartItem

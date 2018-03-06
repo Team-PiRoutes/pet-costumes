@@ -2,7 +2,7 @@ import axios from 'axios'
 /**
  * ACTION TYPES
  */
-const ADD_TO_CART = 'ADD_TO_CART'
+
 const UPDATE_CART_ITEM = 'UPDATE_CART_ITEM'
 const GOT_PREVIOUS_CART = 'GOT_PREVIOUS_CART'
 const GOT_USER_CART = 'GOT_USER_CART'
@@ -89,14 +89,15 @@ export function fetchCart() {
   }
 }
 
-export function fetchUserCart(user) {
+export function fetchUserCartOnLogin(user) {
   return async dispatch => {
     //  sending user object OR we can send the id and the cart
     // token from the user modell (not yet implemented)
     let cartInfo = getCartLocals()
-    let userCart = await axios.put('/cart/userCart', { cartInfo, user })
-
-    // console.log(userCart.data)
+    let response = await axios.put('/cart/userCart', { cartInfo, user })
+    const userCart = response.data
+    setLocals(userCart.cartId, userCart.cartToken)
+    dispatch(gotCart(userCart.cartItems))
   }
 }
 /**
