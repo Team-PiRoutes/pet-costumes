@@ -6,7 +6,7 @@ import axios from 'axios'
 const UPDATE_CART_ITEM = 'UPDATE_CART_ITEM'
 const GOT_PREVIOUS_CART = 'GOT_PREVIOUS_CART'
 const GOT_USER_CART = 'GOT_USER_CART'
-
+const EMPTY_CART = 'EMPTY_CART'
 
 /**
  * INITIAL STATE
@@ -23,7 +23,7 @@ const addItem = (cartItem) => ({ type: UPDATE_CART_ITEM, cartItem })
 const gotCart = cart => ({ type: GOT_PREVIOUS_CART, cart })
 
 const gotUserCart = cart => ({ type: GOT_USER_CART, cart })
-
+const emptyCart = () => ({ type: EMPTY_CART })
 /**
  * THUNK CREATORS
  */
@@ -79,7 +79,7 @@ export function fetchCart() {
         const cart = resOldCart.data
 
         dispatch(gotCart(cart.cartItems))
-        setLocals(cart.id, cart.cartToken)
+        setCartLocals(cart.id, cart.cartToken)
 
       }
     } catch (err) {
@@ -91,15 +91,25 @@ export function fetchCart() {
 
 export function fetchUserCartOnLogin(user) {
   return async dispatch => {
+    console.log(user)
     //  sending user object OR we can send the id and the cart
     // token from the user modell (not yet implemented)
     let cartInfo = getCartLocals()
     let response = await axios.put('/cart/userCart', { cartInfo, user })
     const userCart = response.data
-    setLocals(userCart.cartId, userCart.cartToken)
+    setCartLocals(userCart.cartId, userCart.cartToken)
     dispatch(gotCart(userCart.cartItems))
   }
 }
+
+
+export function logOutOfCart() {
+  return dispatch => {
+    setCartLocals(null, null)
+    dispatch(emptyCart())
+  }
+}
+
 /**
  * REDUCER
  */
@@ -131,11 +141,13 @@ export default function (state = defaultCart, action) {
 
     case GOT_USER_CART:
       return [...state, ...action.cart]
-
+    case EMPTY_CART:
+      return []
     default:
       return state
   }
 }
+
 
 function getCartLocals() {
   return {
@@ -144,7 +156,7 @@ function getCartLocals() {
   }
 }
 
-function setLocals(cartId, cartToken) {
+export function setCartLocals(cartId, cartToken) {
   if (!cartId || !cartToken) {
     localStorage.removeItem('cartId')
     localStorage.removeItem('cartToken')
