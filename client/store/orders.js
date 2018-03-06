@@ -5,12 +5,9 @@ import history from '../history'
  * ACTION TYPES
  */
 const GOT_ORDERS = 'GOT_ORDERS'
-<<<<<<< HEAD
 const ADD_ORDER = 'ADD_ORDER'
-=======
 const CHANGE_ORDER_STATUS = 'CHANGE_ORDER_STATUS'
 const ORDER_SHIPPED = 'ORDER_SHIPPED'
->>>>>>> master
 
 /**
  * INITIAL STATE
@@ -25,13 +22,13 @@ export const gotOrders = orders => ({
   orders
 })
 
-<<<<<<< HEAD
 export const addOrder = order => ({
   type: ADD_ORDER,
-=======
+  order
+})
+
 const changeOrderStatus = order => ({
   type: CHANGE_ORDER_STATUS,
->>>>>>> master
   order
 })
 
