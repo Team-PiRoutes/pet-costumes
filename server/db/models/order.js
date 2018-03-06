@@ -2,17 +2,14 @@ const Sequelize = require('sequelize')
 const db = require('../db')
 
 const Order = db.define('order', {
-  userId: {
-    type: Sequelize.STRING
-  },
   orderStatus: {
     type: Sequelize.ENUM,
     values: ['created', 'processing', 'cancelled', 'completed']
   },
-  isShipped: {
+  shipDate: {
     type: Sequelize.DATE
   },
-  isDelivered: {
+  deliveryDate: {
     type: Sequelize.DATE
   },
   email: {
@@ -38,6 +35,10 @@ const Order = db.define('order', {
   zip: {
     type: Sequelize.STRING,
     allowNull: false
+  }
+}, {
+  defaultScope: {
+    order: Sequelize.literal('"createdAt" DESC')
   }
 })
 

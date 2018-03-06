@@ -14,7 +14,9 @@ import {
   AdminUsers,
   AdminViewUser,
   NewProductForm,
-  ReviewForm
+  ReviewForm,
+  Orders,
+  ViewOrder
 } from './components'
 
 
@@ -50,6 +52,8 @@ class Routes extends Component {
           isLoggedIn &&
           <Switch>
             {/* Routes placed here are only available after logging in */}
+            <Route exact path="/me/orders" component={Orders} />
+            <Route exact path="/me/orders/:orderId" component={ViewOrder} />
             <Route path="/me" component={UserHome} />
             {
               isAdmin &&
