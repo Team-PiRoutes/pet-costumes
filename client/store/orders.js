@@ -6,6 +6,7 @@ import history from '../history'
  */
 const GOT_ORDERS = 'GOT_ORDERS'
 const CHANGE_ORDER_STATUS = 'CHANGE_ORDER_STATUS'
+const ORDER_SHIPPED = 'ORDER_SHIPPED'
 
 /**
  * INITIAL STATE
