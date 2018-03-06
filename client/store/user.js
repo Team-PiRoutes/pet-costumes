@@ -35,7 +35,7 @@ export const auth = (email, password, method) =>
         const user = res.data
         console.log('this thing')
         dispatch(getUser(user))
-        // dispatch(fetchUserCartOnLogin(user))
+        dispatch(fetchUserCartOnLogin(user))
         //yay
         history.push('/')
       }, authError => { // rare example: a good use case for parallel (non-catch) error handler

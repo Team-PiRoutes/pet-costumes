@@ -160,7 +160,7 @@ router.get('/:cartId/:cartToken', async (req, res, next) => {
 })
 router.put('/userCart', async (req, res, next) => {
   try {
-
+    console.log('made it to the route')
     let visitorCartId = req.body.cartInfo.cartId
     let visitorCartToken = req.body.cartInfo.cartToken
     const user = req.body.user

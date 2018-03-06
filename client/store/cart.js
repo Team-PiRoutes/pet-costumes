@@ -91,12 +91,14 @@ export function fetchCart() {
 
 export function fetchUserCartOnLogin(user) {
   return async dispatch => {
-    console.log(user)
+    console.log('user recieved by thunk', user)
     //  sending user object OR we can send the id and the cart
     // token from the user modell (not yet implemented)
     let cartInfo = getCartLocals()
-    let response = await axios.put('/cart/userCart', { cartInfo, user })
-    const userCart = response.data
+    let userCart = await axios.put('/api/cart/userCart', { cartInfo, user })
+      .then(res => res.data)
+      .catch(console.error)
+    console.log('userCart', userCart)
     setCartLocals(userCart.cartId, userCart.cartToken)
     dispatch(gotCart(userCart.cartItems))
   }
