@@ -1,15 +1,18 @@
 
 const router = require('express').Router()
 const { Order } = require('../db/models')
+module.exports = router
 
 
-router.get('/admin/list-orders', (req, res, next) => {
-  Order.findAll({
-    attributes: ['id', 'email', 'orderStatus', 'city', 'state']
-  })
+router.get('/', (req, res, next) => {
+  Order.findAll()
     .then((orders) => res.json(orders))
     .catch(next)
 })
 
-module.exports = router
-
+router.put('/:id', (req, res, next) => {
+  Order.findById(req.params.id)
+    .then(order => order.update(req.body))
+    .then(updatedOrder => res.status(200).json(updatedOrder))
+    .catch(next)
+})

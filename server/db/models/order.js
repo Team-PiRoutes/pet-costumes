@@ -9,10 +9,10 @@ const Order = db.define('order', {
     type: Sequelize.ENUM,
     values: ['created', 'processing', 'cancelled', 'completed']
   },
-  isShipped: {
+  shipDate: {
     type: Sequelize.DATE
   },
-  isDelivered: {
+  deliveryDate: {
     type: Sequelize.DATE
   },
   email: {

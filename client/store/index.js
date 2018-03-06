@@ -10,6 +10,7 @@ import categories from './categories'
 import activeSizes from './active-sizes'
 import reviews from './reviews'
 import searchTerm from './search-term'
+import orderStatus from './order-status'
 
 const reducer = combineReducers({
   user,
@@ -19,7 +20,8 @@ const reducer = combineReducers({
   categories,
   activeSizes,
   searchTerm,
-  reviews
+  reviews,
+  orderStatus
 })
 const middleware = composeWithDevTools(applyMiddleware(
   thunkMiddleware,
@@ -36,3 +38,4 @@ export * from './categories'
 export * from './active-sizes'
 export * from './reviews'
 export * from './search-term'
+export * from './order-status'
