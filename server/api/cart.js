@@ -1,8 +1,8 @@
 const router = require('express').Router()
 
-const { Cart, CartItem, Product } = require('../db/models')
+const { Cart, CartItem, Product, User } = require('../db/models')
 module.exports = router
-
+const cartItemAttributes = ['id', 'quantity', 'priceInCents', 'productId']
 
 router.put('/update', async function (req, res, next) {
   try {
@@ -134,9 +134,9 @@ router.get('/:cartId/:cartToken', async (req, res, next) => {
     let cart = await Cart.findById(cartId, {
       include: {
         model: CartItem,
-        where: { ordered: false },
+        where: { ordered: false, expired: false },
         as: 'cartItems',
-        attributes: ['id', 'quantity', 'priceInCents', 'productId']
+        attributes: cartItemAttributes
       }
     })
 
@@ -149,7 +149,6 @@ router.get('/:cartId/:cartToken', async (req, res, next) => {
         cartId: null,
         cartItems: []
       }
-      console.log('header error below this..########')
       res.status(404).json(clearBadCart)
 
     }
@@ -161,41 +160,68 @@ router.get('/:cartId/:cartToken', async (req, res, next) => {
 })
 router.put('/userCart', async (req, res, next) => {
   try {
-    let visitorCartId = +req.body.cartInfo.cartId
+
+    let visitorCartId = req.body.cartInfo.cartId
     let visitorCartToken = req.body.cartInfo.cartToken
     const user = req.body.user
     let userCart, visitorCart, resultCart
+    let userInstance = User.findById(user.id) //awaited much later
 
+    userCart = Cart.findById(user.cartId, {
+      include: {
+        model: CartItem,
+        where: { ordered: false, expired: false },
+        as: 'cartItems',
+        attributes: cartItemAttributes
+      }
+    })
+    if (visitorCartId && visitorCartToken) {
 
-    if (user.cartId) {
-      userCart = await Cart.findById(user.cartId)
-      console.log(userCart)
-    }
-    if (!visitorCartId && !visitorCartToken) {
-      // get the cart form cart table
-      visitorCart = await Cart.findById(user.cartId)
-      console.log(visitorCart)
+      visitorCart = Cart.findById(visitorCartId, {
+        include: {
+          model: CartItem,
+          where: { ordered: false, expired: false },
+          as: 'cartItems',
+          attributes: cartItemAttributes
+        }
+      })
       //authenticate cart
     }
+    userCart = await userCart
+    visitorCart = await visitorCart
 
-    if (userCart && visitorCart) {
-      // stuff
+
+    //are both carts there and the same cart?
+    if (userCart && visitorCart && user.cartId === visitorCart.id) {
+      res.json(
+        createRetrieveCartResponseObject(userCart.cartItems, userCart)
+      )
+    } else if (userCart && visitorCart) {
+      //both carts are here, but not the same cart
+      const activeItems = await userCart.takeCartItems(visitorCart)
+      console.log(activeItems)
+      resultCart = createRetrieveCartResponseObject(activeItems, userCart)
+      console.log(resultCart)
+      res.json(resultCart)
     } else if (userCart) {
-      // res.json({
-      //   cart: userCart.cartItems,
-      //   cartId: userCart.id,
-      //   cartToken: userCart.cartToken
-      // })
+
+      res.json(
+        createRetrieveCartResponseObject(userCart.cartItems, userCart)
+      )
     } else if (visitorCart) {
-      // res.json({
-      //   cart: visitorCart.cartItems,
-      //   cartId: visitorCart.id,
-      //   cartToken: visitorCart.cartToken
-      // })
+      userInstance = await userInstance
+      userInstance.update({ cartId: visitorCart.id })
+      res.json(
+        createRetrieveCartResponseObject(visitorCart.cartItems, visitorCart)
+      )
+    } else {
+      userInstance = await userInstance
+      const firstCart = await Cart.create()
+      userInstance.update({ cartId: firstCart.id })
+      res.json(createRetrieveCartResponseObject([], firstCart))
     }
+
   }
-
-
   catch (err) {
     next(err)
   }
@@ -204,19 +230,15 @@ router.put('/userCart', async (req, res, next) => {
 
 /*----Callback function----*/
 async function addNewCart(req, res, next) {
-  console.log('in newCart fun fun function', req.body.itemForCart)
+
   try {
 
     let [cart, cartItem] = await Promise.all(
       [Cart.create(),
       CartItem.create(req.body.itemForCart)])
-    console.log('cartItem product id', cartItem.productId)
     cart.addCartItem(cartItem)
 
     let responseObj = createCartItemResponseObject(cartItem, cart)
-
-
-    console.log('new cart response object', responseObj)
     res.status(200).json(responseObj)
   }
   catch (err) {
@@ -224,16 +246,28 @@ async function addNewCart(req, res, next) {
   }
 }
 
-function createCartItemResponseObject(modelObject, cart) {
+function createCartItemResponseObject(cartItems, cart) {
   return {
     cartId: cart.id,
     cartToken: cart.cartToken,
     cartItem: {
-      id: modelObject.id,
-      quantity: modelObject.quantity,
-      productId: modelObject.productId,
-      priceInCents: modelObject.priceInCents,
+      id: cartItems.id,
+      quantity: cartItems.quantity,
+      productId: cartItems.productId,
+      priceInCents: cartItems.priceInCents,
 
     }
+  }
+}
+
+function createRetrieveCartResponseObject(cartItems, cart) {
+  console.log('##### where I want to be ######')
+
+  console.log('cartItems', cartItems)
+  console.log('cart   ', cart)
+  return {
+    cartId: cart.id,
+    cartToken: cart.cartToken,
+    cartItems: [...cartItems]
   }
 }

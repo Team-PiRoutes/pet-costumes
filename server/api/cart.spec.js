@@ -8,7 +8,6 @@ const Product = db.model('product')
 const Cart = db.model('cart')
 const CartItem = db.model('cartItem')
 
-
 describe('Cart routes', () => {
   beforeEach(() => {
     return db.sync({ force: true })
@@ -19,9 +18,7 @@ describe('Cart routes', () => {
       testItem,
       product,
       route,
-      correctCartInfo,
-      incorrectCart,
-      incorrectCartToken
+      correctCartInfo
 
 
     beforeEach(async () => {
@@ -42,15 +39,11 @@ describe('Cart routes', () => {
         productId: product.id
       })
       testCart = await testCart
-      testCart.addCartItem(testItem)
+      await testCart.addCartItem(testItem)
 
       correctCartInfo = {
         cartId: '' + testCart.id,
         cartToken: testCart.cartToken
-      }
-      incorrectCart = {
-        cartId: '1000',
-        cartToken: 'bob'
       }
 
       route = `/api/cart/${correctCartInfo.id}/${correctCartInfo.cartToken}`
@@ -77,9 +70,33 @@ describe('Cart routes', () => {
     it(`Get /:cartId/:cartToken gets cart if cartId does not`, () => {
       route = `/api/cart/100000/${testCart.cartToken}`
 
+
       return request(app)
         .get(route)
         .expect(404)
-    }) //end it(Get /:cartId/:cartToken gets cart if cartId does not)
-  }) // end describe('Get /:cartId/:cartToken' if token does not match)
+        .then(res => {
+
+          let cart = res.body
+          expect(cart.cartItems).to.be.an('array')
+          expect(cart.cartItems.length).to.be.equal(0)
+          expect(cart.cartId).to.be.equal(null)
+          expect(cart.cartToken).to.be.equal(null)
+        }) //end it(Get /:cartId/:cartToken gets cart if cartId does not)
+    }) // end describe('Get /:cartId/:cartToken' if token does not match)
+    // describe('Helper functions', () => {
+    //   const cartItems = [{
+    //     productId: 1,
+    //     priceInCents: 4550,
+    //     quantity: 5,
+    //     cartId: 1
+    //   }]
+    //   const cart = {
+    //     cartId: 1,
+    //     token: 'token string'
+    //   }
+    //   // const result = createRetrieveCartResponseObject(cartItems, cart)
+    //   it('returns an object', () => {
+    //     expect(result).to.be.an('objectç')
+    //   })
+  })
 }) // end describe('Order routes')
