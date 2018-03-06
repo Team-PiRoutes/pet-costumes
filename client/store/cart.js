@@ -70,14 +70,23 @@ export function fetchCart() {
 
   return async dispatch => {
     try {
+
+      console.log('fetching cart')
       const browserCartInfo = getCartLocals()
       if (browserCartInfo.cartId !== null && browserCartInfo.cartToken !== null) {
-        let resOldCart = await axios.get(`/api/cart/${browserCartInfo.cartId}/${browserCartInfo.cartToken}`, browserCartInfo)
+        let resOldCart = await axios
+          .get(`/api/cart/${browserCartInfo.cartId}/${browserCartInfo.cartToken}`,
+            browserCartInfo)
 
-        const cart = resOldCart.data
-
-        dispatch(gotCart(cart.cartItems))
-        setCartLocals(cart.id, cart.cartToken)
+        if (resOldCart.status === 200) {
+          console.log('#########BOPE@')
+          const cart = resOldCart.data
+          dispatch(gotCart(cart.cartItems))
+          setCartLocals(cart.cartId, cart.cartTokenz)
+        }
+        else if (resOldCart.status === 204) {
+          setCartLocals(null, null)
+        }
 
       }
     } catch (err) {
@@ -89,16 +98,18 @@ export function fetchCart() {
 
 export function fetchUserCartOnLogin(user) {
   return async dispatch => {
-    console.log('user recieved by thunk', user)
-    //  sending user object OR we can send the id and the cart
-    // token from the user modell (not yet implemented)
-    let cartInfo = getCartLocals()
-    let userCart = await axios.put('/api/cart/userCart', { cartInfo, user })
-      .then(res => res.data)
-      .catch(console.error)
-    console.log('userCart', userCart)
-    setCartLocals(userCart.cartId, userCart.cartToken)
-    dispatch(gotCart(userCart.cartItems))
+    try {
+      console.log('user recieved by thunk', user)
+      //  sending user object OR we can send the id and the cart
+      // token from the user modell (not yet implemented)
+      let cartInfo = getCartLocals()
+      let userCart = await axios.put('/api/cart/userCart', { cartInfo, user })
+        .then(res => res.data)
+        .catch(console.error)
+      console.log('userCart', userCart)
+      setCartLocals(userCart.cartId, userCart.cartToken)
+      dispatch(gotCart(userCart.cartItems))
+    } catch (err) { console.error(err) }
   }
 }
 

@@ -18,8 +18,19 @@ router.put('/', async function (req, res, next) {
   catch (error) {
     next(error)
   }
+})
 
+router.delete('/:cartItemId', async function (req, res, next) {
+  try {
+    const item = +req.params.cartItemId
 
+    let dbItem = await CartItem.findById(item)
+    await dbItem.destroy()
+    res.sendStatus(204)
+  }
+  catch (error) {
+    next(error)
+  }
 })
 
 router.post('/addToCart', async function (req, res, next) {
@@ -108,15 +119,11 @@ router.get('/:cartId/:cartToken', async (req, res, next) => {
     })
 
     if (!!cartToken && cart && cartToken === cart.cartToken) {
-      res.json(cart)
 
+      const responseObj = createRetrieveCartResponseObject(cart.cartItems, cart)
+      res.json(responseObj)
     } else {
-      const clearBadCart = {
-        cartToken: null,
-        cartId: null,
-        cartItems: []
-      }
-      res.status(404).json(clearBadCart)
+      res.sendStatus(204)
 
     }
   } catch (err) {

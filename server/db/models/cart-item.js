@@ -19,6 +19,12 @@ const CartItem = db.define('cartItem', {
     type: Sequelize.BOOLEAN,
     defaultValue: false
   }
-})
+}
+  , {
+    /* this causes a soft delete when we .destroy
+    the 'deleteAt' collumn will get a date and time of deletion
+    to really destroy the record user.destroy({force:true}) */
+    paranoid: true
+  })
 
 module.exports = CartItem
