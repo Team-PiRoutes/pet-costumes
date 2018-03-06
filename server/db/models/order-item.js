@@ -1,8 +1,7 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
 
-const CartItem = db.define('cartItem', {
-
+const OrderItem = db.define('orderItem', {
   priceInCents: {
     type: Sequelize.INTEGER,
     allowNull: false
@@ -10,15 +9,7 @@ const CartItem = db.define('cartItem', {
   quantity: {
     type: Sequelize.INTEGER,
     allowNull: false
-  },
-  ordered: {
-    type: Sequelize.BOOLEAN,
-    defaultValue: false
-  },
-  expired: {
-    type: Sequelize.BOOLEAN,
-    defaultValue: false
   }
 })
 
-module.exports = CartItem
+module.exports = OrderItem

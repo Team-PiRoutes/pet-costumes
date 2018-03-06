@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 import axios from 'axios'
 import Reviews from './reviews'
 import { connect } from 'react-redux'
-import { updateCartItem } from '../store/cart'
+import { addItemToCart } from '../store/cart'
 
 class ViewProduct extends Component {
   constructor(props) {
@@ -12,7 +12,9 @@ class ViewProduct extends Component {
       hasLoaded: false,
       product: {},
       stockMessage: '',
-      addDiabled: false
+      addDiabled: false,
+      qtySelected: 1,
+      inCart: false
     }
     this.addToCart = this.addToCart.bind(this)
     this.enoughStock = this.enoughStock.bind(this)
@@ -24,6 +26,7 @@ class ViewProduct extends Component {
     axios.get(`/api/products/${productId}`)
       .then(res => res.data)
       .then(product => {
+
         this.setState({ product })
       })
       .then(() => {
@@ -38,6 +41,8 @@ class ViewProduct extends Component {
         it the image will not expand if navigated to from
         the products list*/
         $('.materialboxed').materialbox()
+
+
       })
       .catch(err => console.error(err))
   }
@@ -70,14 +75,14 @@ class ViewProduct extends Component {
     }
   }
   addToCart() {
-    let qty = document.getElementById('qty').value
+    let qty = this.state.qtySelected
     const { priceInCents, id } = this.state.product
     const itemToSend = {
       priceInCents,
       quantity: +qty,
       productId: id
     }
-    this.props.updateCartItem(itemToSend)
+    this.props.addItemToCart(itemToSend)
   }
 
   render() {
@@ -108,8 +113,11 @@ class ViewProduct extends Component {
               <p>Quantity: </p>
               <input id="qty" type="number" defaultValue="1" name="quantity" min="1" max={stock} onChange={() => this.enoughStock()} />
 
-              <button disabled={this.state.addDiabled} id="addItem" className="btn waves-effect waves-light" type="button" onClick={() => this.addToCart()} >
-                Add To Cart<i className="material-icons right">add_shopping_cart</i>
+              <button
+                disabled={this.state.addDiabled} id="addItem" className="btn waves-effect waves-light" type="button" onClick={
+                  () => this.addToCart()
+                } >
+                Add To Cart <i className="material-icons right">add_shopping_cart</i>
               </button>
             </div>
             <p>Size: {product.size}</p>
@@ -126,9 +134,12 @@ class ViewProduct extends Component {
 }
 
 
-const mapStateToProps = null
-
+const mapStateToProps = function (state) {
+  return {
+    cart: state.cart
+  }
+}
 const mapDispatchToProps = (dispatch) => ({
-  updateCartItem: (item) => dispatch(updateCartItem(item))
+  addItemToCart: (item) => dispatch(addItemToCart(item))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(ViewProduct)

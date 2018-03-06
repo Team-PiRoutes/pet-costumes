@@ -15,11 +15,13 @@ import {
   AdminViewUser,
   NewProductForm,
   ReviewForm,
-  AdminOrders
+  AdminOrders,
+  Orders,
+  ViewOrder
 } from './components'
 
 
-import { me, fetchProducts, fetchCategories } from './store'
+import { me, fetchProducts, fetchCategories, fetchCart } from './store'
 
 /**
  * COMPONENT
@@ -28,6 +30,7 @@ class Routes extends Component {
   componentDidMount() {
     this.props.loadInitialData()
   }
+
 
   render() {
     const { isLoggedIn, isAdmin } = this.props
@@ -51,6 +54,8 @@ class Routes extends Component {
           isLoggedIn &&
           <Switch>
             {/* Routes placed here are only available after logging in */}
+            <Route exact path="/me/orders" component={Orders} />
+            <Route exact path="/me/orders/:orderId" component={ViewOrder} />
             <Route path="/me" component={UserHome} />
             {
               isAdmin &&
@@ -85,6 +90,7 @@ const mapDispatch = (dispatch) => {
       dispatch(me())
       dispatch(fetchProducts())
       dispatch(fetchCategories())
+      dispatch(fetchCart())
     }
   }
 }

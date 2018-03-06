@@ -1,11 +1,17 @@
 
 const router = require('express').Router()
-const { Order } = require('../db/models')
-module.exports = router
+const { Order, OrderItem } = require('../db/models')
 
 
 router.get('/', (req, res, next) => {
-  Order.findAll()
+  const userQuery = req.query.customerid ? { customerId: req.query.customerid } : {}
+
+  Order.findAll({
+    where: userQuery,
+    include: [
+      { model: OrderItem }
+    ]
+  })
     .then((orders) => res.json(orders))
     .catch(next)
 })
