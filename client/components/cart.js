@@ -1,44 +1,70 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import CartItem from './cart-item'
-
+import { fetchCart } from '../store/cart'
+import Loading from 'react-loading-animation'
 /**
  * COMPONENT
  */
-const Cart = (props) => {
+class Cart extends React.Component {
+  constructor(props) {
+    super(props)
 
-  const { cart } = props
-  let total = cart.reduce((total, item) => {
-    console.log('Total', total)
-    console.log('Item', item.priceInCents)
-    return total += item.priceInCents
-  }, 0)
-  console.log(total)
-  return (
-    <div>
-      <h3> Your Cart </h3>
-      {
-        <ul>
+    this.state = {
+      hasLoaded: false
+    }
+    this.totalCart = this.totalCart.bind(this)
+  }
+
+  totalCart() {
+    let total = this.props.cart.reduce((total, item) => {
+      console.log(item)
+      total += item.priceInCents * item.quantity
+      return total
+    }, 0)
+    return total
+  }
+
+  componentDidMount() {
+
+    this.setState({ hasLoaded: true })
+  }
+
+
+  render() {
+
+    console.log(this)
+    const { cart } = this.props || []
+    let total = this.totalCart()
+
+    return (
+      !this.state.hasLoaded ? <Loading /> : (
+        <div className="container">
+          <h3 className=""> Your Cart </h3>
           {
-            // cart.length === 0 ? <h4> Your cart is empty! Your pet needs a πRoute outfit. </h4> :
-            //   cart.map(product => (
+            <ul>
+              {
+                this.state.hasLoaded && cart.length === 0 ? <h4 /> :
+                  cart.map(product => (
 
-            //     <li id={`cart-item-${product.id}`} key={product.id}>
-            //       <CartItem product={product} />
-            //     </li>
+                    <li id={`cart-item-${product.id}`} key={product.id}>
+                      <CartItem product={product} />
+                    </li>
 
-            // ))
+                  ))
+              }
+            </ul>
           }
-        </ul>
-      }
-      <h5>
-        {
-          `Total : ${total}`
-        }
-      </h5>
+          <h5>
+            {
+              this.state.hasLoaded && this.props.cart.length > 0 ? `Total : ${total}` :
+                <i className="material-icons large">shopping_cart</i>
+            }
+          </h5>
 
-    </div>
-  )
+        </div>
+      ))
+  }
 }
 
 
@@ -52,8 +78,12 @@ const mapStateToProps = function (state) {
     cart: state.cart
   }
 }
+const mapDispatch = (dispatch) => {
+  return { fetchCart: dispatch(fetchCart()) }
+}
 
-export default connect(mapStateToProps)(Cart)
+
+export default connect(mapStateToProps, mapDispatch)(Cart)
 
         /**
         * PROP TYPES

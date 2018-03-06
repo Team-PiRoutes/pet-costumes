@@ -73,15 +73,8 @@ describe('Cart routes', () => {
 
       return request(app)
         .get(route)
-        .expect(404)
-        .then(res => {
-
-          let cart = res.body
-          expect(cart.cartItems).to.be.an('array')
-          expect(cart.cartItems.length).to.be.equal(0)
-          expect(cart.cartId).to.be.equal(null)
-          expect(cart.cartToken).to.be.equal(null)
-        }) //end it(Get /:cartId/:cartToken gets cart if cartId does not)
+        .expect(204)
+      //end it(Get /:cartId/:cartToken gets cart if cartId does not)
     }) // end describe('Get /:cartId/:cartToken' if token does not match)
     // describe('Helper functions', () => {
     //   const cartItems = [{

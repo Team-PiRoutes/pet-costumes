@@ -6,7 +6,6 @@ import { NavLink } from 'react-router-dom'
  */
 const CartItem = (props) => {
   const product = props.product
-
   return (
     <NavLink to={`/products/${product.id}`}>
       {
