@@ -8,25 +8,35 @@ import CartItem from './cart-item'
 const Cart = (props) => {
 
   const { cart } = props
-
+  let total = cart.reduce((total, item) => {
+    console.log('Total', total)
+    console.log('Item', item.priceInCents)
+    return total += item.priceInCents
+  }, 0)
+  console.log(total)
   return (
     <div>
       <h3> Your Cart </h3>
-
       {
         <ul>
           {
-            cart.length === 0 ? <h4> Your cart is empty! Your pet needs a πRoute outfit. </h4> :
-              cart.map(product => (
+            // cart.length === 0 ? <h4> Your cart is empty! Your pet needs a πRoute outfit. </h4> :
+            //   cart.map(product => (
 
-                <li id={`cart-item-${product.id}`} key={product.id}>
-                  <CartItem product={product} />
-                </li>
+            //     <li id={`cart-item-${product.id}`} key={product.id}>
+            //       <CartItem product={product} />
+            //     </li>
 
-              ))
+            // ))
           }
         </ul>
       }
+      <h5>
+        {
+          `Total : ${total}`
+        }
+      </h5>
+
     </div>
   )
 }
@@ -45,6 +55,6 @@ const mapStateToProps = function (state) {
 
 export default connect(mapStateToProps)(Cart)
 
-      /**
-      * PROP TYPES
-      */
+        /**
+        * PROP TYPES
+        */

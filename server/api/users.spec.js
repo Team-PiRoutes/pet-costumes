@@ -1,6 +1,6 @@
 /* global describe beforeEach it */
 
-const {expect} = require('chai')
+const { expect } = require('chai')
 const request = require('supertest')
 const db = require('../db')
 const app = require('../index')
@@ -8,7 +8,8 @@ const User = db.model('user')
 
 describe('User routes', () => {
   beforeEach(() => {
-    return db.sync({force: true})
+    return db.sync({ force: true })
+      .then(fin => fin)
   })
 
   describe('/api/users/', () => {
@@ -17,7 +18,7 @@ describe('User routes', () => {
     beforeEach(() => {
       return User.create({
         email: codysEmail
-      })
+      }).then(user => user)
     })
 
     it('GET /api/users', () => {
@@ -39,10 +40,10 @@ describe('User routes', () => {
         User.create({ email: 'cody@email.com', password: '123', isAdmin: true }),
         User.create({ email: 'murphy@email.com', password: '123' }),
       ])
-      .then(users => {
-        user = users[0]
-        done()
-      })
+        .then(users => {
+          user = users[0]
+          done()
+        })
     })
 
     it('GET /api/users/:id', () => {
