@@ -8,7 +8,7 @@ const priceInDollars = (price) => {
 }
 
 const getProductTitle = (products, id) => {
-  const product = products.find(product => product.id = id)
+  const product = products.find(prod => prod.id === id)
   const productTitle = product.title || 'Costume'
   return productTitle
 }

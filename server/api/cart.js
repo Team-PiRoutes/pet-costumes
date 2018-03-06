@@ -119,7 +119,6 @@ router.get('/:cartId/:cartToken', async (req, res, next) => {
     })
 
     if (!!cartToken && cart && cartToken === cart.cartToken) {
-
       const responseObj = createRetrieveCartResponseObject(cart.cartItems, cart)
       res.json(responseObj)
     } else {
@@ -135,7 +134,6 @@ router.get('/:cartId/:cartToken', async (req, res, next) => {
 })
 router.put('/userCart', async (req, res, next) => {
   try {
-    console.log('made it to the route')
     let visitorCartId = req.body.cartInfo.cartId
     let visitorCartToken = req.body.cartInfo.cartToken
     const user = req.body.user
@@ -174,9 +172,7 @@ router.put('/userCart', async (req, res, next) => {
     } else if (userCart && visitorCart) {
       //both carts are here, but not the same cart
       const activeItems = await userCart.takeCartItems(visitorCart)
-      console.log(activeItems)
       resultCart = createRetrieveCartResponseObject(activeItems, userCart)
-      console.log(resultCart)
       res.json(resultCart)
     } else if (userCart) {
 

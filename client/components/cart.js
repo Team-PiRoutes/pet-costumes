@@ -1,25 +1,46 @@
 import React from 'react'
 import { connect } from 'react-redux'
-// import CartItem from './cart-item'
 // import { fetchCart } from '../store/cart'
 import SubmitOrderForm from './submit-order-form'
+
+const priceInDollars = (price) => {
+  if (!price) return 'free'
+  else return `$${(price / 100).toFixed(2)}`
+}
+
+const getProductTitle = (products, id) => {
+  const product = products.find(prod => prod.id === id)
+  const productTitle = product ? product.title : 'Costume'
+  return productTitle
+}
+
 /**
  * COMPONENT
  */
 const Cart = (props) => {
 
-  const { cart } = props
+  const { cart, products } = props
   let total = cart.reduce((tot, item) => {
     return tot + item.priceInCents
   }, 0)
-  console.log('total: ', total)
+  console.log('cart: ', cart)
 
-  return (
+  return (cart.length === 0) ? (
+    <div className="container">
+      <h1>Your cart is empty.</h1>
+    </div>
+  ) : (
     <div className="container">
       <h3 className=""> Your Cart </h3>
       {
         <ul>
-          {
+          {cart.map(item => {
+            return (
+              <li key={item.id}>
+                {item.quantity} {getProductTitle(products, item.productId)} for {priceInDollars(item.priceInCents)} totaling {priceInDollars(item.priceInCents * item.quantity)}
+              </li>
+            )
+          })
           // cart.length === 0 ? <h4> Your cart is empty! Your pet needs a πRoute outfit. </h4> :
           //   cart.map(product => (
 
@@ -33,7 +54,7 @@ const Cart = (props) => {
       }
       <h5>
         {
-          `Total : ${total}`
+          `Total: ${priceInDollars(total)}`
         }
       </h5>
       <SubmitOrderForm cart={cart} />
@@ -47,17 +68,14 @@ const Cart = (props) => {
    */
 
 
-  const mapStateToProps = function (state) {
-    return {
-      cart: state.cart
-    }
+const mapStateToProps = function (state) {
+  return {
+    products: state.products,
+    cart: state.cart
   }
-  // const mapDispatch = (dispatch) => {
-  //   return { fetchCart: dispatch(fetchCart()) }
-  // }
+}
 
-
-  export default connect(mapStateToProps)(Cart)
+export default connect(mapStateToProps)(Cart)
 
         /**
         * PROP TYPES
