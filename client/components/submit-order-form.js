@@ -48,8 +48,7 @@ const mapDispatchToProps = (dispatch, props) => {
         addressLine2: event.target.addressLine2.value,
         city: event.target.city.value,
         state: event.target.state.value,
-        zip: event.target.zip.value,
-        cart: props.cart
+        zip: event.target.zip.value
       }
       console.log('order', JSON.stringify(order))
       dispatch(postOrder(order))

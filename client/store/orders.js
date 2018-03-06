@@ -4,7 +4,7 @@ import axios from 'axios'
  * ACTION TYPES
  */
 const GOT_ORDERS = 'GOT_ORDERS'
-const ADD_ORDER = 'GOT_ORDER'
+const ADD_ORDER = 'ADD_ORDER'
 
 /**
  * INITIAL STATE
@@ -46,13 +46,13 @@ export const fetchOrdersByCustomerId = (customerid) =>
       .catch(err => console.error('fetching orders went wrong', err))
 
 export const postOrder = (order) =>
-      dispatch =>
-        axios.post('/api/orders', order)
-          .then(res => res.data)
-          .then(newOrder => {
-            dispatch(gotOrder(newOrder))
-          })
-          .catch(err => console.error('posting new order', err))
+  dispatch =>
+    axios.post('/api/orders', order)
+      .then(res => res.data)
+      .then(newOrder => {
+        dispatch(addOrder(newOrder))
+      })
+      .catch(err => console.error('posting new order', err))
 
 /**
  * REDUCER
