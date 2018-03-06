@@ -1,6 +1,6 @@
 
 const router = require('express').Router()
-const { Order, OrderItem } = require('../db/models')
+const { Order, OrderItem, CartItem } = require('../db/models')
 
 
 router.get('/', (req, res, next) => {
@@ -16,7 +16,7 @@ router.get('/', (req, res, next) => {
     .catch(next)
 })
 
-router.post('/', (req, res, next) => {
+router.post('/', async (req, res, next) => {
   let order = {
     customerId: req.body.customerId,
     email: req.body.email,
@@ -27,11 +27,36 @@ router.post('/', (req, res, next) => {
     zip: req.body.zip,
     oderStatus: 'created'
   }
-  Order.create(order)
-    .then(newOrder => res.status(201).json(newOrder))
-    .catch(next)
+
+  let newOrder = await Order.create(order)
+  const cartItems = await CartItem.findAll({
+    where: { cartId: req.body.cartId }
+  })
+  console.log('newOrder: ', newOrder)
+  console.log('cartItems: ', cartItems)
+
+  const orderItems = cartItems.map(cartItem => {
+    return {
+      orderId: newOrder.id,
+      priceInCents: cartItem.priceInCents,
+      quantity: cartItem.quantity,
+      productId: cartItem.productId
+    }
+  })
+
+  await OrderItem.bulkCreate(orderItems)
+  newOrder = await Order.findById(newOrder.id, {
+    include: [
+      { model: OrderItem }
+    ]
+  })
+
+  await CartItem.update(
+    { ordered: true },
+    { where: { cartId: req.body.cartId } }
+  )
+
+  res.status(201).json(newOrder)
 })
 
 module.exports = router
-
- module.exports = router
