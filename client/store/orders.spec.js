@@ -1,4 +1,4 @@
-import reducer, { gotOrders, fetchOrders, fetchOrdersByCustomerId } from './orders'
+import reducer, { gotOrders, fetchOrders, fetchOrdersByCustomerId, postOrder } from './orders'
 import { expect } from 'chai'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
@@ -26,6 +26,31 @@ const fakeOrders = [
     city: 'Meowville',
     state: 'IL',
     zip: '54321'
+  },
+  { email: 'kathy-loves-cats@puppybook.com',
+    addressLine1: 'my address',
+    addressLine2: '',
+    city: 'Chicago',
+    state: 'IL',
+    zip: '60626',
+    cart: [{
+      id: 4,
+      quantity: 1,
+      priceInCents: 1999,
+      productId: 3
+    },
+    {
+      id: 5,
+      quantity: 1,
+      priceInCents: 1999,
+      productId: 2
+    },
+    {
+      id: 6,
+      quantity: 1,
+      priceInCents: 1399,
+      productId: 4
+    }]
   }
 ]
 
@@ -98,6 +123,19 @@ describe('Orders Store', () => {
             const actions = store.getActions()
             expect(actions[0].type).to.be.equal('GOT_ORDERS')
             expect(actions[0].orders).to.be.deep.equal(fakeOrders.slice(0, 1))
+          })
+      })
+    })
+
+    describe('postOrder', () => {
+      it('posts a new order to the database', () => {
+        mockAxios.onPost('/api/orders/').replyOnce(200, fakeOrders[2])
+        return store.dispatch(postOrder(fakeOrders[2]))
+          .then(() => {
+            const actions = store.getActions()
+            console.log('ACTIONS: ', actions)
+            expect(actions[0].type).to.be.equal('ADD_ORDER')
+            expect(actions[0].orders).to.be.deep.equal(fakeOrders[2])
           })
       })
     })

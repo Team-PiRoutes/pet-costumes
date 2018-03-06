@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import CartItem from './cart-item'
+import SubmitOrderForm from './submit-order-form'
 
 /**
  * COMPONENT
@@ -15,7 +16,7 @@ const Cart = (props) => {
   }, 0)
   console.log(total)
   return (
-    <div>
+    <div className="container">
       <h3> Your Cart </h3>
       {
         <ul>
@@ -36,7 +37,7 @@ const Cart = (props) => {
           `Total : ${total}`
         }
       </h5>
-
+      <SubmitOrderForm cart={cart} />
     </div>
   )
 }
