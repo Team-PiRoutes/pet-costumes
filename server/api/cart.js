@@ -4,55 +4,33 @@ const { Cart, CartItem, Product, User } = require('../db/models')
 module.exports = router
 const cartItemAttributes = ['id', 'quantity', 'priceInCents', 'productId']
 
-router.put('/update', async function (req, res, next) {
+router.put('/', async function (req, res, next) {
   try {
-    let cartId = +req.body.cartInfo.cartId
-    let cartToken = req.body.cartToken
-    let itemForCart = req.body.itemForCart
+    const item = req.body
 
-    console.log('/update route req.body', req.body)
-    let cart = await Cart.findById(cartId, {
-      include: {
-        model: CartItem,
-        where: { ordered: false },
-        as: 'cartItems'
-      }
-    })
-    if (!!cartToken && cartToken === cart.cartToken) {
+    let dbItem = await CartItem.findById(item.id)
+    let updatedItem = await dbItem.update(item)
 
-      const cartItemsIndex = cart.cartItems.findIndex(cartItem => {
-        return cartItem.productId === itemForCart.productId
-      })
-
-      if (cartItemsIndex >= 0) {
-
-        const itemId = cart.cartItems[cartItemsIndex].id
-
-        let oldCartItem = await CartItem.findById(itemId)
-        let updatedCartItem = await oldCartItem.update(req.body.itemForCart)
-
-        res.status(200).json({
-          updatedCartItem,
-          cartId: cart.id,
-          cartToken: cart.cartToken
-        })
-      }
-      // else { //maybe not needed. leaving until determined
-      //   let createdCartItem = await CartItem.create(req.body.itemForCart)
-      //   cart.addCartItem(createdCartItem)
-      //   res.status(200).json({
-      //     updatedCartItem: createdCartItem,
-      //     cartId: cart.id,
-      //     cartToken: cart.cartToken
-      //   })
-      // }
-    }
+    const { id, quantity, priceInCents, productId } = updatedItem
+    const responseObj = { id, quantity, priceInCents, productId }
+    res.status(200).json(responseObj)
   }
   catch (error) {
     next(error)
   }
+})
 
+router.delete('/:cartItemId', async function (req, res, next) {
+  try {
+    const item = +req.params.cartItemId
 
+    let dbItem = await CartItem.findById(item)
+    await dbItem.destroy()
+    res.sendStatus(204)
+  }
+  catch (error) {
+    next(error)
+  }
 })
 
 router.post('/addToCart', async function (req, res, next) {
@@ -141,15 +119,12 @@ router.get('/:cartId/:cartToken', async (req, res, next) => {
     })
 
     if (!!cartToken && cart && cartToken === cart.cartToken) {
-      res.json(cart)
 
+      const responseObj = createRetrieveCartResponseObject(cart.cartItems, cart)
+      res.json(responseObj)
     } else {
-      const clearBadCart = {
-        cartToken: null,
-        cartId: null,
-        cartItems: []
-      }
-      res.status(404).json(clearBadCart)
+
+      res.sendStatus(204)
 
     }
   } catch (err) {
@@ -160,7 +135,7 @@ router.get('/:cartId/:cartToken', async (req, res, next) => {
 })
 router.put('/userCart', async (req, res, next) => {
   try {
-
+    console.log('made it to the route')
     let visitorCartId = req.body.cartInfo.cartId
     let visitorCartToken = req.body.cartInfo.cartToken
     const user = req.body.user
