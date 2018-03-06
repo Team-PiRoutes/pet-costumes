@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
-import { fetchOrders, updateOrderStatus } from '../../store/index'
+import { fetchOrders, updateOrderStatus, shipOrder, deliverOrder } from '../../store/index'
 
 class AdminOrders extends Component {
 
@@ -14,7 +14,7 @@ class AdminOrders extends Component {
 
   render() {
 
-    const { orders, handleChange } = this.props
+    const { orders, handleChange, handleShip, handleDeliver } = this.props
 
     return (
       <div>
@@ -51,12 +51,20 @@ class AdminOrders extends Component {
                     </div>
                   </td>
                   <td>
-                      <input type="checkbox" className="filled-in" id="filled-in-box" />
-                      <label htmlFor="filled-in-box" />
+                    <form action="ship" onChange={(event) => handleShip(event, order.id)}>
+                      <p>
+                        <input type="checkbox" className="filled-in" id={`${order.id}A`} />
+                        <label htmlFor={`${order.id}A`} />
+                      </p>
+                    </form>
                   </td>
                   <td>
-                      <input type="checkbox" className="filled-in" id="filled-in-box" />
-                      <label htmlFor="filled-in-box" />
+                    <form action="deliver" onChange={(event) => handleDeliver(event, order.id)}>
+                      <p>
+                        <input type="checkbox" className="filled-in" id={`${order.id}B`} />
+                        <label htmlFor={`${order.id}B`} />
+                      </p>
+                    </form>
                   </td>
                 </tr>
               )
@@ -82,6 +90,14 @@ const mapDispatch = (dispatch) => {
     },
     handleChange(event, orderId) {
       dispatch(updateOrderStatus(orderId, event.target.value))
+    },
+    handleShip(event, orderId) {
+      const today = new Date()
+      dispatch(shipOrder(orderId, today))
+    },
+    handleDeliver(event, orderId) {
+      const today = new Date()
+      dispatch(deliverOrder(orderId, today))
     }
   }
 }

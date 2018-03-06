@@ -6,7 +6,8 @@ import history from '../history'
  */
 const GOT_ORDERS = 'GOT_ORDERS'
 const CHANGE_ORDER_STATUS = 'CHANGE_ORDER_STATUS'
-const ORDER_SHIPPED = 'ORDER_SHIPPED'
+const CONFIRM_ORDER_SHIPPED = 'CONFIRM_ORDER_SHIPPED'
+const CONFIRM_ORDER_DELIVERED = 'CONFIRM_ORDER_DELIVERED'
 
 /**
  * INITIAL STATE
@@ -23,6 +24,16 @@ export const gotOrders = orders => ({
 
 const changeOrderStatus = order => ({
   type: CHANGE_ORDER_STATUS,
+  order
+})
+
+const confirmOrderShipped = order => ({
+  type: CONFIRM_ORDER_SHIPPED,
+  order
+})
+
+const confirmOrderDelivered = order => ({
+  type: CONFIRM_ORDER_DELIVERED,
   order
 })
 
@@ -57,8 +68,30 @@ export const updateOrderStatus = (id, newStatus) =>
         history.push('/admin/orders/')
       })
       .catch(err => console.error('updating order status went wrong', err))
-
   }
+
+export const shipOrder = (id, shipDate) =>
+  dispatch => {
+    return axios.put(`/api/orders/${id}/`, { shipDate: shipDate })
+      .then(res => res.data)
+      .then(order => {
+        dispatch(confirmOrderShipped(order))
+        history.push('/admin/orders/')
+      })
+      .catch(err => console.error('updating order ship date went wrong', err))
+  }
+
+  export const deliverOrder = (id, deliveryDate) =>
+  dispatch => {
+    return axios.put(`/api/orders/${id}/`, { deliveryDate: deliveryDate })
+      .then(res => res.data)
+      .then(order => {
+        dispatch(confirmOrderDelivered(order))
+        history.push('/admin/orders/')
+      })
+      .catch(err => console.error('updating order ship date went wrong', err))
+  }
+
 
 /**
  * REDUCER
@@ -68,6 +101,14 @@ export default function (state = defaultOrders, action) {
     case GOT_ORDERS:
       return action.orders
     case CHANGE_ORDER_STATUS: {
+      return state.map(order => (
+        action.order.id === order.id ? action.order : order))
+    }
+    case CONFIRM_ORDER_SHIPPED: {
+      return state.map(order => (
+        action.order.id === order.id ? action.order : order))
+    }
+    case CONFIRM_ORDER_DELIVERED: {
       return state.map(order => (
         action.order.id === order.id ? action.order : order))
     }
