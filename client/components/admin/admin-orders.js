@@ -1,20 +1,20 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
-import { fetchOrders } from '../../store/index'
+import { fetchOrders, updateOrderStatus } from '../../store/index'
 
 class AdminOrders extends Component {
 
   componentDidMount() {
     this.props.loadInitialData(this.props.orders)
-    $(document).ready(function() {
+    $(document).ready(function () {
       $('select').material_select()
     })
   }
 
   render() {
 
-    const { orders } = this.props
+    const { orders, handleChange } = this.props
 
     return (
       <div>
@@ -38,8 +38,8 @@ class AdminOrders extends Component {
                     </NavLink>
                   </td>
                   <td>
-                    <div className="input-field">
-                      <select value={order.orderStatus}>
+                    <div>
+                      <select className="browser-default" value={order.orderStatus} onChange={(event) => handleChange(event, order.id)}>
                         <option value="created">Created</option>
                         <option value="processing">Processing</option>
                         <option value="cancelled">Cancelled</option>
@@ -59,7 +59,8 @@ class AdminOrders extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    orders: state.orders
+    orders: state.orders,
+    orderId: state.orders.id
   }
 }
 
@@ -67,6 +68,9 @@ const mapDispatch = (dispatch) => {
   return {
     loadInitialData() {
       dispatch(fetchOrders())
+    },
+    handleChange(event, orderId) {
+      dispatch(updateOrderStatus(orderId, event.target.value))
     }
   }
 }
