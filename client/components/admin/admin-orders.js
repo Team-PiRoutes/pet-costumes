@@ -1,36 +1,37 @@
 import React, { Component } from 'react'
-import axios from 'axios'
+import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import AdminOrder from './admin-order'
+import { fetchOrders } from '../../store/index'
 
 class AdminOrders extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      orders: []
-    }
-  }
+
+  // componentDidMount() {
+  //   axios.get('/api/orders')
+  //     .then(res => res.data)
+  //     .then(orders => this.setState({ orders }))
+  //     .then(() => {
+  //       $(document).ready(function() {
+  //         $('select').material_select()
+  //       })
+  //     })
+  //     .catch(err => console.error(err))
+  // }
 
   componentDidMount() {
-    axios.get('/api/orders')
-      .then(res => res.data)
-      .then(orders => this.setState({ orders }))
-      .then(() => {
-        $(document).ready(function() {
-          $('select').material_select()
-        })
-      })
-      .catch(err => console.error(err))
+    this.props.loadInitialData(this.props.orders)
+    $(document).ready(function() {
+      $('select').material_select()
+    })
   }
 
   render() {
 
-    const { orders } = this.state
+    const { orders } = this.props
 
     return (
       <div>
         <h2>Order List:</h2>
-
         <table>
           <thead>
             <tr>
@@ -69,4 +70,17 @@ class AdminOrders extends Component {
   }
 }
 
-export default AdminOrders
+const mapStateToProps = (state) => {
+  return {
+    orders: state.orders
+  }
+}
+
+const mapDispatch = (dispatch) => {
+  return {
+    loadInitialData() {
+      dispatch(fetchOrders())
+    }
+  }
+}
+export default connect(mapStateToProps, mapDispatch)(AdminOrders)

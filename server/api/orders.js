@@ -22,3 +22,5 @@ router.put('/:id', (req, res, next) => {
     .then(updatedOrder => res.status(200).json(updatedOrder))
     .catch(next)
 })
+
+ module.exports = router
