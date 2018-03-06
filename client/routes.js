@@ -10,11 +10,11 @@ import {
   Products,
   Cart,
   ViewProduct,
-  AdminListOrders,
   AdminUsers,
   AdminViewUser,
   NewProductForm,
   ReviewForm,
+  AdminOrders,
   Orders,
   ViewOrder
 } from './components'
@@ -48,6 +48,7 @@ class Routes extends Component {
         <Route exact path="/admin/products/new" component={NewProductForm} />
         <Route exact path="/admin/users" component={AdminUsers} />
         <Route exact path="/admin/users/:userId" component={AdminViewUser} />
+        <Route exact path="/admin/orders" component={AdminOrders} />
         {
           isLoggedIn &&
           <Switch>
@@ -58,7 +59,7 @@ class Routes extends Component {
             {
               isAdmin &&
               <Switch>
-                <Route exact path="/admin/orderList" component={AdminListOrders} />
+                <Route exact path="/admin/orders-lis" component={AdminOrders} />
               </Switch>
             }
           </Switch>

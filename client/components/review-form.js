@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { postReview } from '../store'
-import {displayStarRating, starRatingButtons } from '../../server/utils/starRating'
 
 
 function ReviewForm(props) {
