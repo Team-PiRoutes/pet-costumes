@@ -7,6 +7,7 @@ const UPDATE_CART_ITEM = 'UPDATE_CART_ITEM'
 const GOT_PREVIOUS_CART = 'GOT_PREVIOUS_CART'
 const GOT_USER_CART = 'GOT_USER_CART'
 const EMPTY_CART = 'EMPTY_CART'
+const DELETE_ITEM_FROM_CART = 'DELETE_ITEM_FROM_CART'
 
 /**
  * INITIAL STATE
@@ -18,12 +19,11 @@ const defaultCart = []
  * ACTION CREATORS
  */
 const updateItem = (cartItem) => ({ type: UPDATE_CART_ITEM, cartItem })
-const addItem = (cartItem) => ({ type: UPDATE_CART_ITEM, cartItem })
 
 const gotCart = cart => ({ type: GOT_PREVIOUS_CART, cart })
 
-const gotUserCart = cart => ({ type: GOT_USER_CART, cart })
 const emptyCart = () => ({ type: EMPTY_CART })
+const deleteItem = (cartItem) => ({ type: DELETE_ITEM_FROM_CART, cartItem })
 /**
  * THUNK CREATORS
  */
@@ -65,13 +65,23 @@ export const addItemToCart = (itemForCart) => async dispatch => {
   }
 
 }
+export const deleteItemFromCart = (itemId) => async dispatch => {
+  try {
+    dispatch(deleteItem(itemId))
+    const res = await axios.delete(`/api/cart/${itemId}`)
+
+  } catch (err) {
+    console.error(err)
+  }
+
+}
 
 export function fetchCart() {
 
   return async dispatch => {
     try {
 
-      console.log('fetching cart')
+
       const browserCartInfo = getCartLocals()
       if (browserCartInfo.cartId !== null && browserCartInfo.cartToken !== null) {
         let resOldCart = await axios
@@ -79,7 +89,7 @@ export function fetchCart() {
             browserCartInfo)
 
         if (resOldCart.status === 200) {
-          console.log('#########BOPE@')
+
           const cart = resOldCart.data
           dispatch(gotCart(cart.cartItems))
           setCartLocals(cart.cartId, cart.cartTokenz)
@@ -106,7 +116,7 @@ export function fetchUserCartOnLogin(user) {
       let userCart = await axios.put('/api/cart/userCart', { cartInfo, user })
         .then(res => res.data)
         .catch(console.error)
-      console.log('userCart', userCart)
+
       setCartLocals(userCart.cartId, userCart.cartToken)
       dispatch(gotCart(userCart.cartItems))
     } catch (err) { console.error(err) }
@@ -154,8 +164,21 @@ export default function (state = defaultCart, action) {
       return [...state, ...action.cart]
     case EMPTY_CART:
       return []
+    case DELETE_ITEM_FROM_CART: {
+      let indexInCart = state.findIndex(item => {
+        return item.productId === action.productId
+      })
+
+      if (indexInCart < 0) return [...state]
+
+      let newState = [...state.slice(0, indexInCart),
+      ...state.slice(indexInCart + 1)]
+
+      return newState
+    }
     default:
       return state
+
   }
 }
 

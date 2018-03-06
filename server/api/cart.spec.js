@@ -73,7 +73,7 @@ describe('Cart routes', () => {
 
       return request(app)
         .get(route)
-        .expect(404)
+        .expect(204)
         .then(res => {
 
           let cart = res.body
