@@ -1,22 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
-import AdminOrder from './admin-order'
 import { fetchOrders } from '../../store/index'
 
 class AdminOrders extends Component {
-
-  // componentDidMount() {
-  //   axios.get('/api/orders')
-  //     .then(res => res.data)
-  //     .then(orders => this.setState({ orders }))
-  //     .then(() => {
-  //       $(document).ready(function() {
-  //         $('select').material_select()
-  //       })
-  //     })
-  //     .catch(err => console.error(err))
-  // }
 
   componentDidMount() {
     this.props.loadInitialData(this.props.orders)

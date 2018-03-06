@@ -10,7 +10,6 @@ import {
   Products,
   Cart,
   ViewProduct,
-  AdminListOrders,
   AdminUsers,
   AdminViewUser,
   NewProductForm,
@@ -60,7 +59,7 @@ class Routes extends Component {
             {
               isAdmin &&
               <Switch>
-                <Route exact path="/admin/orderList" component={AdminListOrders} />
+                <Route exact path="/admin/orders-lis" component={AdminOrders} />
               </Switch>
             }
           </Switch>
