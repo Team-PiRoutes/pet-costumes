@@ -2,12 +2,15 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { postOrder } from '../store'
 
-const SubmitOrderForm = ({ handleSubmit }) => {
+const SubmitOrderForm = (props) => {
+  const { handleSubmit, userId } = props
+  console.log('userId: ', userId)
 
   return (
     <div className="submit-order-form z-depth-4">
       <p>Please enter your details to submit your order:</p>
       <form onSubmit={handleSubmit}>
+        <input type="hidden" value={userId} id="userId" />
         <div className="input-field block">
           <input id="email" type="email" className="validate" />
           <label htmlFor="email" data-error="Please supply a valid email">email</label>
@@ -38,22 +41,30 @@ const SubmitOrderForm = ({ handleSubmit }) => {
   )
 }
 
+const mapStateToProps = function (state) {
+  return {
+    userId: state.user.id
+  }
+}
+
 const mapDispatchToProps = (dispatch, props) => {
   return {
     handleSubmit: function (event) {
       event.preventDefault()
       let order = {
+        customerId: event.target.userId.value,
         email: event.target.email.value,
         addressLine1: event.target.addressLine1.value,
         addressLine2: event.target.addressLine2.value,
         city: event.target.city.value,
         state: event.target.state.value,
-        zip: event.target.zip.value
+        zip: event.target.zip.value,
+        cartId: localStorage.getItem('cartId')
       }
-      console.log('order', JSON.stringify(order))
+      console.log('customerId: ', order.customerId)
       dispatch(postOrder(order))
     }
   }
 }
 
-export default connect(null, mapDispatchToProps)(SubmitOrderForm)
+export default connect(mapStateToProps, mapDispatchToProps)(SubmitOrderForm)
