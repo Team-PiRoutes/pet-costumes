@@ -10,7 +10,39 @@
  * Now that you've got the main idea, check it out in practice below!
  */
 const db = require('../server/db')
+const faker = require('faker')
+const { sizes } = require('../sizes')
+const costumeTypes = [
+  'Batman', 'Ben', 'Girl Scout', 'Wonder Woman', 'Pirate', 'Mermaid', 'Nurse', 'Vicar', 'Doctor', 'Robin Hood', 'Grace Hopper', 'Clown'
+]
+const costumeAdjectives = [
+  'Vintage', 'Sexy', 'Rainbow', 'Zombie', 'Baby', 'Amazing', 'Waterproof'
+]
+const costumeAnimals = [
+  'Dog', 'Cat', 'Bird', 'Turtle'
+]
+
+const randomFromArray = (arr) => {
+  return arr[Math.floor(Math.random() * arr.length)]
+}
+
 const { User, Product, Order, Cart, CartItem, Review, Category, OrderItem } = require('../server/db/models')
+
+const makeProducts = (quantity) => {
+  const products = []
+  for (let i = 1; i <= quantity; i++) {
+    products.push({
+      size: randomFromArray(sizes),
+      title: `${randomFromArray(costumeAdjectives)} ${randomFromArray(costumeAnimals)} ${randomFromArray(costumeTypes)}`,
+      description: faker.lorem.sentences(2),
+      priceInCents: Math.floor(Math.random() * 10000),
+      quantity: Math.floor(Math.random() * 100)
+    })
+  }
+  return products
+}
+
+// console.log(makeProducts(10))
 
 async function seed() {
   await db.sync({ force: true })
@@ -114,10 +146,10 @@ async function seed() {
       cartId: 1
     }),
     CartItem.create({
-      // productId: 1,
+      productId: 1,
       priceInCents: 1340,
       quantity: 2,
-      // cartId: 2
+      cartId: 2
     })])
 
   console.log(`seeding orderItems`)
@@ -180,7 +212,25 @@ async function seed() {
     Category.create({ label: 'Dog' }),
     Category.create({ label: 'Cat' }),
     Category.create({ label: 'Bird' }),
+    Category.create({ label: 'Turtle' }),
   ])
+
+  console.log('seeding random products')
+
+  makeProducts(99).forEach(async prod => {
+    let product = await Product.create(prod)
+    if (product.title.indexOf('Dog') >= 0) {
+      await categories[2].addProduct(product)
+    } else if (product.title.indexOf('Cat') >= 0) {
+      await categories[3].addProduct(product)
+    } else if (product.title.indexOf('Bird') >= 0) {
+      await categories[4].addProduct(product)
+    } else if (product.title.indexOf('Turtle') >= 0) {
+      await categories[5].addProduct(product)
+    }
+  })
+
+  const randomProducts = await Product.bulkCreate(makeProducts(99))
 
   await Promise.all([
     categories[0].addProduct([
@@ -207,6 +257,7 @@ async function seed() {
   console.log(`seeded ${reviews.length} reviews`)
   console.log(`seeded ${categories.length} categories`)
   console.log(`seeded ${orderItems.length} order items`)
+  console.log(`seeded ${randomProducts.length} random products`)
   console.log(`seeded successfully`)
 }
 
@@ -222,7 +273,10 @@ seed()
   })
   .then(() => {
     console.log('closing db connection')
-    db.close()
+    setTimeout(() => {
+      db.close()
+    }, 3000)
+
     console.log('db connection closed')
   })
 
