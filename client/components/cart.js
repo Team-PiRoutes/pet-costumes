@@ -2,7 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 // import { fetchCart } from '../store/cart'
 import SubmitOrderForm from './submit-order-form'
-
+import { deleteItemFromCart } from '../store'
+import DeleteItemButton from './composibles/deleteItemButton'
 const priceInDollars = (price) => {
   if (!price) return 'free'
   else return `$${(price / 100).toFixed(2)}`
@@ -18,6 +19,10 @@ const getProductTitle = (products, id) => {
  * COMPONENT
  */
 const Cart = (props) => {
+  function deleteItem(e) {
+    e.preventDefault()
+    console.log('button event', e)
+  }
 
   const { cart, products } = props
   let total = cart.reduce((tot, item) => {
@@ -30,42 +35,45 @@ const Cart = (props) => {
       <h1>Your cart is empty.</h1>
     </div>
   ) : (
-    <div className="container">
-      <h3 className=""> Your Cart </h3>
-      {
-        <ul>
-          {cart.map(item => {
-            return (
-              <li key={item.id}>
-                {item.quantity} {getProductTitle(products, item.productId)} for {priceInDollars(item.priceInCents)} totaling {priceInDollars(item.priceInCents * item.quantity)}
-              </li>
-            )
-          })
-          // cart.length === 0 ? <h4> Your cart is empty! Your pet needs a πRoute outfit. </h4> :
-          //   cart.map(product => (
-
-          //     <li id={`cart-item-${product.id}`} key={product.id}>
-          //       <CartItem product={product} />
-          //     </li>
-
-          // ))
-          }
-        </ul>
-      }
-      <h5>
+      <div className="container">
+        <h3 className=""> Your Cart </h3>
         {
-          `Total: ${priceInDollars(total)}`
+          <ul>
+            {cart.map(item => {
+              return (
+                <li key={item.id}>
+                  {item.quantity} {getProductTitle(products, item.productId)
+                  } for {priceInDollars(item.priceInCents)} totaling {
+                    priceInDollars(item.priceInCents * item.quantity)
+                  }   <DeleteItemButton itemId={item.id} deleteHandler={deleteItemFromCart} />
+                </li>
+              )
+            })
+              // cart.length === 0 ? <h4> Your cart is empty! Your pet needs a πRoute outfit. </h4> :
+              //   cart.map(product => (
+
+              //     <li id={`cart-item-${product.id}`} key={product.id}>
+              //       <CartItem product={product} />
+              //     </li>
+
+              // ))
+            }
+          </ul>
         }
-      </h5>
-      <SubmitOrderForm cart={cart} />
-    </div>
-  )
+        <h5>
+          {
+            `Total: ${priceInDollars(total)}`
+          }
+        </h5>
+        <SubmitOrderForm cart={cart} />
+      </div>
+    )
 }
 
 
-  /**
-   * CONTAINER
-   */
+/**
+ * CONTAINER
+ */
 
 
 const mapStateToProps = function (state) {
@@ -74,8 +82,16 @@ const mapStateToProps = function (state) {
     cart: state.cart
   }
 }
+const mapDispatch = dispatch => {
+  return {
+    deleteItemFromCart: (cartId) => {
+      console.log(cartId)
+      deleteItemFromCart(cartId)
+    }
+  }
+}
 
-export default connect(mapStateToProps)(Cart)
+export default connect(mapStateToProps, mapDispatch)(Cart)
 
         /**
         * PROP TYPES
