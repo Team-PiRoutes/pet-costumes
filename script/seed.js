@@ -13,13 +13,29 @@ const db = require('../server/db')
 const faker = require('faker')
 const { sizes } = require('../sizes')
 const costumeTypes = [
-  'Batman', 'Ben', 'Girl Scout', 'Wonder Woman', 'Pirate', 'Mermaid', 'Nurse', 'Vicar', 'Doctor', 'Robin Hood', 'Grace Hopper', 'Clown'
+  'Batman', 'Ben', 'Girl Scout', 'Wonder Woman', 'Pirate', 'Mermaid', 'Nurse', 'Vicar', 'Doctor', 'Robin Hood', 'Grace Hopper', 'Clown', 'Bantha', 'Cop'
 ]
 const costumeAdjectives = [
-  'Vintage', 'Sexy', 'Rainbow', 'Zombie', 'Baby', 'Amazing', 'Waterproof'
+  'Vintage', 'Sexy', 'Rainbow', 'Zombie', 'Baby', 'Amazing', 'Waterproof', 'Ninja', 'Mutant'
 ]
 const costumeAnimals = [
-  'Dog', 'Cat', 'Bird', 'Turtle'
+  'Dog', 'Dog', 'Dog', 'Dog', 'Dog', 'Cat', 'Bird', 'Turtle'
+]
+const dogImages = [
+  '/img/bad-dog.png',
+  '/img/bantha-dog.png',
+  '/img/batman-dog.png',
+  '/img/iron-man-dog.png',
+  '/img/pirate-dog.png',
+  '/img/pope-dog.png',
+  '/img/southern-belle-dog.png',
+  '/img/spider-dog.png',
+  '/img/yoda-dog.png',
+]
+
+const catImages = [
+  '/img/cop-cat.png',
+  '/img/wonder-kitty.jpg',
 ]
 
 const randomFromArray = (arr) => {
@@ -31,13 +47,19 @@ const { User, Product, Order, Cart, CartItem, Review, Category, OrderItem } = re
 const makeProducts = (quantity) => {
   const products = []
   for (let i = 1; i <= quantity; i++) {
-    products.push({
+    const product = {
       size: randomFromArray(sizes),
       title: `${randomFromArray(costumeAdjectives)} ${randomFromArray(costumeAnimals)} ${randomFromArray(costumeTypes)}`,
       description: faker.lorem.sentences(2),
       priceInCents: Math.floor(Math.random() * 10000),
       quantity: Math.floor(Math.random() * 100)
-    })
+    }
+    if (product.title.indexOf('Dog') >= 0) {
+      product.photoUrl = randomFromArray(dogImages)
+    } else {
+      product.photoUrl = randomFromArray(catImages)
+    }
+    products.push(product)
   }
   return products
 }
