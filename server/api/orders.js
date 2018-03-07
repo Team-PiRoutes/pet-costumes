@@ -30,7 +30,11 @@ router.post('/', async (req, res, next) => {
 
   let newOrder = await Order.create(order)
   const cartItems = await CartItem.findAll({
-    where: { cartId: req.body.cartId }
+    where: {
+      cartId: req.body.cartId,
+      ordered: false,
+      expired: false
+    }
   })
 
   const orderItems = cartItems.map(cartItem => {

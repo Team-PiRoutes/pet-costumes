@@ -23,7 +23,7 @@ const updateItem = (cartItem) => ({ type: UPDATE_CART_ITEM, cartItem })
 const gotCart = cart => ({ type: GOT_PREVIOUS_CART, cart })
 
 const emptyCart = () => ({ type: EMPTY_CART })
-const deleteItem = (cartItem) => ({ type: DELETE_ITEM_FROM_CART, cartItem })
+const deleteItem = (itemId) => ({ type: DELETE_ITEM_FROM_CART, itemId })
 /**
  * THUNK CREATORS
  */
@@ -67,6 +67,7 @@ export const addItemToCart = (itemForCart) => async dispatch => {
 }
 export const deleteItemFromCart = (itemId) => async dispatch => {
   try {
+    console.log('we are thunking again', itemId)
     dispatch(deleteItem(itemId))
     const res = await axios.delete(`/api/cart/${itemId}`)
 
@@ -160,15 +161,12 @@ export default function (state = defaultCart, action) {
     case EMPTY_CART:
       return []
     case DELETE_ITEM_FROM_CART: {
-      let indexInCart = state.findIndex(item => {
-        return item.productId === action.productId
+
+
+      const newState = state.filter(item => {
+        console.log(item.id, action.itemId, item.id !== action.itemId)
+        return item.id !== action.itemId
       })
-
-      if (indexInCart < 0) return [...state]
-
-      let newState = [...state.slice(0, indexInCart),
-      ...state.slice(indexInCart + 1)]
-
       return newState
     }
     default:
