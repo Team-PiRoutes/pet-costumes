@@ -32,8 +32,6 @@ router.post('/', async (req, res, next) => {
   const cartItems = await CartItem.findAll({
     where: { cartId: req.body.cartId }
   })
-  console.log('newOrder: ', newOrder)
-  console.log('cartItems: ', cartItems)
 
   const orderItems = cartItems.map(cartItem => {
     return {
