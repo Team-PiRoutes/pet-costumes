@@ -16,25 +16,25 @@ export function displayStarRating(rating) {
   return starArray
 }
 
-export function starRatingButtons(rating) {
-  const ratingValue = Number(rating)
-  let starArray = []
+// export function starRatingButtons(rating) {
+//   const ratingValue = Number(rating)
+//   let starArray = []
 
-  for (let i = 1; i <= 5; i++) {
-    if (i <= ratingValue) {
-      starArray.push(
-        <button id={`star-${i}`} type="button" key={i} className="btn btn-default btn-grey btn-xs">
-        <span className="material-icons yellow-text half" >star_border</span>
-      </button>
-      )
-    }
-    else {
-      starArray.push(
-        <button id={`star-${i}`} type="button" key={i} className="btn btn-warning btn-xs">
-        <span className="material-icons yellow-text half" >star</span>
-        </button>
-      )
-    }
-  }
-  return starArray
-}
+//   for (let i = 1; i <= 5; i++) {
+//     if (i <= ratingValue) {
+//       starArray.push(
+//         <button id={`star-${i}`} type="button" key={i} className="btn btn-default btn-grey btn-xs">
+//         <span className="material-icons yellow-text half" >star_border</span>
+//       </button>
+//       )
+//     }
+//     else {
+//       starArray.push(
+//         <button id={`star-${i}`} type="button" key={i} className="btn btn-warning btn-xs">
+//         <span className="material-icons yellow-text half" >star</span>
+//         </button>
+//       )
+//     }
+//   }
+//   return starArray
+// }
