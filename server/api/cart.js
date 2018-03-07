@@ -232,10 +232,10 @@ function createCartItemResponseObject(cartItems, cart) {
 }
 
 function createRetrieveCartResponseObject(cartItems, cart) {
-  console.log('##### where I want to be ######')
+  // console.log('##### where I want to be ######')
 
-  console.log('cartItems', cartItems)
-  console.log('cart   ', cart)
+  // console.log('cartItems', cartItems)
+  // console.log('cart   ', cart)
   return {
     cartId: cart.id,
     cartToken: cart.cartToken,

@@ -70,6 +70,7 @@ export const postOrder = (order) =>
       .then(res => res.data)
       .then(newOrder => {
         dispatch(addOrder(newOrder))
+        history.push('/me/orders')
       })
       .catch(err => console.error('posting new order', err))
 
