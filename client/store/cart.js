@@ -142,19 +142,13 @@ export default function (state = defaultCart, action) {
     case UPDATE_CART_ITEM: {
 
       let indexInCart = state.findIndex(item => {
-        return item.productId === action.productId
+        return item.productId === action.cartItem.productId
       })
 
       if (indexInCart < 0) return [...state, action.cartItem]
 
-      let updatedProduct = Object.assign(
-        {},
-        state[indexInCart],
-        { quantity: action.cartItem.quantity }
-      ) //end object.assign
-
       let newState = [...state]
-      newState[indexInCart] = updatedProduct
+      newState[indexInCart] = action.cartItem
       return newState
     }
     case GOT_PREVIOUS_CART:
@@ -162,6 +156,7 @@ export default function (state = defaultCart, action) {
 
     case GOT_USER_CART:
       return [...state, ...action.cart]
+
     case EMPTY_CART:
       return []
     case DELETE_ITEM_FROM_CART: {
